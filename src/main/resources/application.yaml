@@ -1,11 +1,11 @@
 spring:
   application:
-    name: exe-teamup
+    name: ${SPRING_APPLICATION_NAME}
 
   datasource:
-    url: jdbc:mysql://localhost:3306/exe-teamup?useSSL=false&serverTimezone=UTC
-    username: root
-    password: 12345678
+    url: jdbc:mysql://${LOCAL_DB_URL}/${LOCAL_DB_NAME}?useSSL=false&serverTimezone=UTC
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
