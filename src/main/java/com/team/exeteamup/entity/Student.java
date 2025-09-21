@@ -1,10 +1,14 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.AccountRole;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,30 +16,22 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
+@Table(name = "student")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Account {
+public class Student {
     @Id
     @GeneratedValue(generator = "uuid-v7")
     @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    private UUID uuid;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
+    private UUID studentId;
+    private int studentCode;
     private String fullName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AccountRole role;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
+    private String phoneNumber;
+    private String email;
+    private String bio;
     private LocalDateTime createdAt;
-
-    @Column(nullable = false)
     private boolean status;
+
 }
