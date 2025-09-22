@@ -13,7 +13,7 @@ public class AccountMapper {
                 .accountId(account.getUuid())
                 .email(account.getEmail())
                 .fullName(account.getFullName())
-                .accountRole(account.getRole().toString())
+                .role(account.getRole())
                 .createdAt(account.getCreatedAt())
                 .status(String.valueOf(account.isStatus()))
                 .build();
