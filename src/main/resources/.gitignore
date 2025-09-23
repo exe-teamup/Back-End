@@ -39,6 +39,4 @@ build/
 /src/main/resources/.env
 
 .gitignore
-src/main/resources/firebase-admin.json
-target/classes/firebase-admin.json
-
+/src/main/resources/firebase-admin.json
