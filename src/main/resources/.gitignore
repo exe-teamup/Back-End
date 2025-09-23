@@ -40,3 +40,5 @@ build/
 
 .gitignore
 src/main/resources/firebase-admin.json
+target/classes/firebase-admin.json
+
