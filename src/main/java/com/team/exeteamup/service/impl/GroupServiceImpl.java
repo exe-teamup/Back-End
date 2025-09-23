@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +32,12 @@ public class GroupServiceImpl implements GroupService {
                 .groupStatus(true)
                 .build();
         return groupRepository.save(group);
+    }
+
+    @Override
+    public void deleteGroup(UUID groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
+        groupRepository.delete(group);
     }
 }

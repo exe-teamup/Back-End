@@ -5,15 +5,15 @@ import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.service.GroupService;
-import com.team.exeteamup.service.impl.GroupServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("group")
@@ -29,5 +29,13 @@ public class GroupController {
         Group group =  groupService.createGroup(groupRequest);
         GroupResponse response = groupMapper.mapToGroupResponse(group);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("{groupId}")
+    public ResponseEntity<Map<String, String>>deleteGroup(@PathVariable UUID groupId) {
+        groupService.deleteGroup(groupId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Đã xóa nhóm thành công");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
