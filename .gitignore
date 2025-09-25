@@ -38,6 +38,5 @@ build/
 ### .env ###
 /src/main/resources/.env
 
-.gitignore
 /src/main/resources/firebase-admin.json
 /target
