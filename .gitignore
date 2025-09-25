@@ -36,8 +36,7 @@ build/
 .vscode/
 
 ### .env ###
-/src/main/resources/.env
+src/main/resources/.env
 
 src/main/resources/firebase-admin.json
-/target
 
