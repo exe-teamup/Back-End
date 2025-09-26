@@ -2,6 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
+import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.mapper.GroupMapper;
@@ -51,6 +52,16 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
-
+    @PutMapping("{groupId}")
+    public ResponseEntity<?> updateGroup(
+            @PathVariable long groupId,
+            @RequestBody GroupUpdateRequest request) {
+        try {
+            GroupResponse response = groupService.updateGroup(groupId, request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     
 }

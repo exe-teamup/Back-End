@@ -2,6 +2,7 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
+import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.*;
 import com.team.exeteamup.enums.AccountRole;
@@ -96,5 +97,23 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public GroupResponse updateGroup(long groupId, GroupUpdateRequest request) {
+        Group group =  groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm với id: " + groupId));
+
+        if (request.getGroupName() != null) {
+            group.setGroupName(request.getGroupName());
+        }
+
+        if (request.getGroupStatus() != null) {
+            group.setGroupStatus(request.getGroupStatus());
+        }
+
+        groupRepository.save(group);
+        return groupMapper.toResponse(group);
     }
 }
