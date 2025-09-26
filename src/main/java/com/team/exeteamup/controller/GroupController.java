@@ -1,5 +1,6 @@
 package com.team.exeteamup.controller;
 
+import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
@@ -25,9 +26,15 @@ public class GroupController {
     private GroupMapper groupMapper;
 
     @PostMapping("")
-    public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
-        GroupResponse group =  groupService.createGroup(groupRequest);
-        return ResponseEntity.ok(group);
+    public ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest) {
+        try {
+            GroupResponse group = groupService.createGroup(groupRequest);
+            return ResponseEntity.ok(group);
+        } catch (AppException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi tạo group");
+        }
     }
 
     @DeleteMapping("{groupId}")

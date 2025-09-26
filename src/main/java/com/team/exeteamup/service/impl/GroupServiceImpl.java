@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.*;
@@ -50,9 +51,9 @@ public class GroupServiceImpl implements GroupService {
         if (groupRequest.getMemberEmails() != null && !groupRequest.getMemberEmails().isEmpty()) {
             for (String email : groupRequest.getMemberEmails()) {
                 Student member = studentRepository.findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên với email: " + email));
+                        .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với email: " + email));
                 if (member.getGroup() != null) {
-                    throw new RuntimeException("Sinh viên với email " + email + " đã ở trong một nhóm");
+                    throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
                 member.setGroup(group);
                 member.setLeader(false);
@@ -61,7 +62,7 @@ public class GroupServiceImpl implements GroupService {
         }
 
         if(members.size() < 3) {
-            throw new RuntimeException("Nhóm phải có ít nhất 3 thành viên");
+            throw new AppException("Nhóm phải có ít nhất 3 thành viên");
         }
 
         studentRepository.saveAll(members);
@@ -73,10 +74,23 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
-        groupRepository.delete(group);
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm với id: " + groupId));
+
+        List<Student> students = group.getStudents();
+        for (Student student : students) {
+            student.setGroup(null);
+            student.setLeader(false);
+        }
+        studentRepository.saveAll(students);
+
+        group.setGroupStatus(false);
+        group.setStudents(new ArrayList<>());
+        group.setMemberCount(0);
+
+        groupRepository.save(group);
     }
 
     @Override
