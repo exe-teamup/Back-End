@@ -8,6 +8,7 @@ import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,5 +40,10 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
         groupRepository.delete(group);
+    }
+
+    @Override
+    public List<Group> getAllGroups() {
+        return groupRepository.findAll();
     }
 }

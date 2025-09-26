@@ -7,11 +7,11 @@ import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,5 +37,11 @@ public class GroupController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Đã xóa nhóm thành công");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Group>> getAllGroups() {
+        List<Group> groups = groupService.getAllGroups();
+        return ResponseEntity.ok(groups);
     }
 }
