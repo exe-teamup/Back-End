@@ -18,14 +18,18 @@ import java.util.Date;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long studentId;
+    private Long studentId;
+
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = true)
     private Group group;
 
     @Column(name = "student_code")
-    private int studentCode;
+    private String studentCode;
 
     @Column(name = "full_name")
     private String fullName;
@@ -33,10 +37,7 @@ public class Student {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "bio")
+    @Column(name = "bio", nullable = true)
     private String bio;
 
     @Column(name = "created_at")
@@ -47,4 +48,5 @@ public class Student {
 
     @Column(name = "is_leader", nullable = true)
     private boolean isLeader;
+
 }

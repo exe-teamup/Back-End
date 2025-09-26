@@ -51,7 +51,7 @@ public class GroupServiceImpl implements GroupService {
 
         if (groupRequest.getMemberEmails() != null && !groupRequest.getMemberEmails().isEmpty()) {
             for (String email : groupRequest.getMemberEmails()) {
-                Student member = studentRepository.findByEmail(email)
+                Student member = studentRepository.findByAccount_Email(email)
                         .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với email: " + email));
                 if (member.getGroup() != null) {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
