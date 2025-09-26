@@ -1,6 +1,7 @@
 package com.team.exeteamup.service;
 
 import com.team.exeteamup.dto.request.GroupRequest;
+import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
 
@@ -11,4 +12,5 @@ public interface GroupService {
     GroupResponse createGroup(GroupRequest groupRequest);
     void deleteGroup(long groupId);
     List<Group> getAllGroups();
+    GroupResponse updateGroup(long groupId, GroupUpdateRequest request);
 }
