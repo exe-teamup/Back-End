@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class LoginResponse {
-    private UUID studentId;
+    private long studentId;
     private int studentCode;
     private String fullName;
     private String email;

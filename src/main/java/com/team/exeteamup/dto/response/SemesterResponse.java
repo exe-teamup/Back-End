@@ -13,8 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class SemesterResponse {
-    private UUID semesterId;
-    private UUID groupConstraintId;
+    private long semesterId;
+    private long groupConstraintId;
     private String semesterCode;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

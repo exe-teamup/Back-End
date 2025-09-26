@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "student_groups")
@@ -17,28 +16,33 @@ import java.util.UUID;
 @Builder
 public class Group {
     @Id
-    @GeneratedValue(generator = "uuid-v7")
-    @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    private UUID groupId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long groupId;
 
     @ManyToOne
     @JoinColumn(name = "semester_id")
     private Semester semester;
 
     @ManyToOne
-    @JoinColumn(name = "lecturer_id", nullable = true)
-    private Lecturer lecturer;
+    @JoinColumn(name = "leader_id", nullable = true)
+    private Student leader;
+
+    @Column(name = "group_name", nullable = true)
+    private String groupName;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @Column(name = "group_name", nullable = false)
-    private String groupName;
-
-    @Column(name = "member_count", nullable = false)
+    @Column(name = "member_count")
     private int memberCount;
 
-    @Column(name = "group_status", nullable = false)
-    private boolean groupStatus;
+    @Column(name = "group_status")
+    private Boolean groupStatus;
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<Student> students;
+
+//    @OneToMany(mappedBy = "group")
+//    private List<GroupLecturer> groupLecturers;
 }

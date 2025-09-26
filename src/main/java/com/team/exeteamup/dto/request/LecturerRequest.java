@@ -14,5 +14,5 @@ import java.util.UUID;
 public class LecturerRequest {
     private String lecturerName;
     private String department;
-    private UUID accountId;
+    private long accountId;
 }
