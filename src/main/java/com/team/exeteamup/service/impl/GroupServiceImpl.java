@@ -116,4 +116,12 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.save(group);
         return groupMapper.toResponse(group);
     }
+
+    @Override
+    @Transactional
+    public GroupResponse getGroupById(long groupId) {
+        Group group = groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+        return groupMapper.toResponse(group);
+    }
 }

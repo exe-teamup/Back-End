@@ -13,4 +13,5 @@ public interface GroupService {
     void deleteGroup(long groupId);
     List<Group> getAllGroups();
     GroupResponse updateGroup(long groupId, GroupUpdateRequest request);
+    GroupResponse getGroupById(long groupId);
 }

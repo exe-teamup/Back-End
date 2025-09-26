@@ -59,9 +59,18 @@ public class GroupController {
         try {
             GroupResponse response = groupService.updateGroup(groupId, request);
             return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
+        } catch (AppException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
+    @GetMapping("{groupId}")
+    public ResponseEntity<?> getGroupById(@PathVariable long groupId) {
+        try {
+            GroupResponse response = groupService.getGroupById(groupId);
+            return ResponseEntity.ok(response);
+        } catch (AppException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 }
