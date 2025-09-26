@@ -1,9 +1,12 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.TokenService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -40,19 +43,30 @@ public class TokenServiceImpl implements TokenService {
 
     //verify token
     public Account getAccountByToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigninKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-
-        String subject = claims.getSubject();
         try {
-            long accountId = Long.parseLong(subject);
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigninKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            long accountId = Long.parseLong(claims.getSubject());
+
             return accountRepository.findById(accountId)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
+                    .orElseThrow(() -> new AppException("Không tìm thấy tài khoản liên kết với token"));
+
+        } catch (ExpiredJwtException e) {
+            throw new AppException("Token đã hết hạn");
+        } catch (JwtException e) {
+            throw new AppException("Token không hợp lệ");
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid account ID format in token");
+            throw new AppException("Định dạng ID tài khoản trong token không hợp lệ");
+        } catch (Exception e) {
+            throw new AppException("Lỗi không xác định khi xử lý token");
         }
     }
 }

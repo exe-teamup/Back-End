@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountId;
+    private Long accountId;
 
     @Column(nullable = false, unique = true)
     private String email;
