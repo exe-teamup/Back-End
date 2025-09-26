@@ -2,20 +2,33 @@ package com.team.exeteamup.mapper;
 
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
+import com.team.exeteamup.entity.Student;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class GroupMapper {
 
-    public GroupResponse mapToGroupResponse(Group group) {
-        GroupResponse response = new GroupResponse();
-        response.setGroupId(group.getGroupId());
-        response.setGroupName(group.getGroupName());
-        response.setMemberCount(group.getMemberCount());
-        response.setGroupStatus(group.isGroupStatus());
-        if (group.getLecturer() != null) {
-            response.setLecturerId(group.getLecturer().getLecturerId()); // Giả sử Lecturer có phương thức getId()
-        }
-        return response;
+    public GroupResponse toResponse(Group group) {
+        if (group == null) return null;
+
+        List<Long> memberIds = group.getStudents() != null
+                ? group.getStudents()
+                .stream()
+                .filter(student -> !student.isLeader())
+                .map(Student::getStudentId)
+                .toList()
+                : List.of();
+
+        return GroupResponse.builder()
+                .groupId(group.getGroupId())
+                .groupName(group.getGroupName())
+                .leaderId(group.getLeader() != null ? group.getLeader().getStudentId() : null)
+                .memberIds(memberIds)
+                .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
+                .groupStatus(group.getGroupStatus())
+                .build();
     }
 }

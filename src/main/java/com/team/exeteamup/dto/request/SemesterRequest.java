@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class SemesterRequest {
-    private UUID groupConstraintId;
+    private long groupConstraintId;
     private String semesterCode;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

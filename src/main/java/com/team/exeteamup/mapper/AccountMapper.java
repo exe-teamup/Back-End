@@ -10,7 +10,7 @@ public class AccountMapper {
         if (account == null) return null;
 
         AccountResponse response = AccountResponse.builder()
-                .accountId(account.getUuid())
+                .accountId(account.getAccountId())
                 .email(account.getEmail())
                 .fullName(account.getFullName())
                 .role(account.getRole())

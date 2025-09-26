@@ -17,9 +17,8 @@ import java.util.UUID;
 @Builder
 public class Course {
     @Id
-    @GeneratedValue(generator = "uuid-v7")
-    @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    private UUID courseId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long courseId;
 
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)
@@ -29,12 +28,12 @@ public class Course {
     @JoinColumn(name = "lecturer_id", nullable = true)
     private Lecturer lecturer;
 
-    @JoinColumn(name = "class_code", nullable = false)
+    @JoinColumn(name = "class_code")
     private String classCode;
 
-    @Column(name = "max_group", nullable = false)
+    @Column(name = "max_group")
     private int maxGroup;
 
-    @Column(name = "group_count", nullable = false)
+    @Column(name = "group_count")
     private int groupCount;
 }

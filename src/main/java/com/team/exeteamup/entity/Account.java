@@ -19,10 +19,8 @@ import java.util.UUID;
 @Builder
 public class Account {
     @Id
-    @GeneratedValue(generator = "uuid-v7")
-    @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    @Column(name = "account_id")
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long accountId;
 
     @Column(nullable = false, unique = true)
     private String email;

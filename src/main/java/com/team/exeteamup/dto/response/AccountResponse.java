@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class AccountResponse {
-    private UUID accountId;
+    private long accountId;
     private String email;
     private String fullName;
     private AccountRole role;

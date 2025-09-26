@@ -17,9 +17,8 @@ import java.util.UUID;
 @Builder
 public class Lecturer {
     @Id
-    @GeneratedValue(generator = "uuid-v7")
-    @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    private UUID lecturerId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long lecturerId;
 
     @Column(name = "lecturer_name", nullable = false)
     private String lecturerName;
