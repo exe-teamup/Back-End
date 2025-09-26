@@ -40,7 +40,7 @@ public class Group {
     @Column(name = "group_status")
     private Boolean groupStatus;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> students;
 
 //    @OneToMany(mappedBy = "group")
