@@ -30,7 +30,7 @@ public class TokenServiceImpl implements TokenService {
     //create token
     public String generateToken(Account account) {
         String token = Jwts.builder()
-                .subject(account.getUuid() + "")
+                .subject(account.getAccountId() + "")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 *24))
                 .signWith(getSigninKey())
@@ -45,10 +45,14 @@ public class TokenServiceImpl implements TokenService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        String uuidString = claims.getSubject();
-        UUID uuid = UUID.fromString(uuidString);
 
-        return accountRepository.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+        String subject = claims.getSubject();
+        try {
+            long accountId = Long.parseLong(subject);
+            return accountRepository.findById(accountId)
+                    .orElseThrow(() -> new RuntimeException("Account not found"));
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid account ID format in token");
+        }
     }
 }

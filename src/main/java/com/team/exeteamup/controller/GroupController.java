@@ -26,13 +26,12 @@ public class GroupController {
 
     @PostMapping("")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
-        Group group =  groupService.createGroup(groupRequest);
-        GroupResponse response = groupMapper.mapToGroupResponse(group);
-        return ResponseEntity.ok(response);
+        GroupResponse group =  groupService.createGroup(groupRequest);
+        return ResponseEntity.ok(group);
     }
 
     @DeleteMapping("{groupId}")
-    public ResponseEntity<Map<String, String>>deleteGroup(@PathVariable UUID groupId) {
+    public ResponseEntity<Map<String, String>>deleteGroup(@PathVariable long groupId) {
         groupService.deleteGroup(groupId);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Đã xóa nhóm thành công");
@@ -44,4 +43,7 @@ public class GroupController {
         List<Group> groups = groupService.getAllGroups();
         return ResponseEntity.ok(groups);
     }
+
+
+    
 }

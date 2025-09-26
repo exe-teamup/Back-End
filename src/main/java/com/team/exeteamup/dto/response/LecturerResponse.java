@@ -12,8 +12,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class LecturerResponse {
-    private UUID lecturerId;
+    private long lecturerId;
     private String lecturerName;
     private String department;
-    private UUID accountId;
+    private long accountId;
 }

@@ -1,17 +1,13 @@
 package com.team.exeteamup.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.team.exeteamup.enums.AccountRole;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Date;
 
 @Entity
 @Table(name = "student")
@@ -21,15 +17,34 @@ import java.util.UUID;
 @Builder
 public class Student {
     @Id
-    @GeneratedValue(generator = "uuid-v7")
-    @GenericGenerator(name = "uuid-v7", strategy = "com.team.exeteamup.util.UUIDv7Generator")
-    private UUID studentId;
-    private int studentCode;
-    private String fullName;
-    private String phoneNumber;
-    private String email;
-    private String bio;
-    private LocalDateTime createdAt;
-    private boolean status;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long studentId;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = true)
+    private Group group;
+
+    @Column(name = "student_code")
+    private int studentCode;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "bio")
+    private String bio;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "student_status")
+    private boolean studentStatus;
+
+    @Column(name = "is_leader", nullable = true)
+    private boolean isLeader;
 }
