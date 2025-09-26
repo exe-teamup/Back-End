@@ -1,6 +1,7 @@
 package com.team.exeteamup.controller;
 
 import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.service.StudentProfileService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,20 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token không hợp lệ hoặc đã hết hạn");
+        }
+    }
+
+    @PutMapping("{studentId}")
+    public ResponseEntity<?> updateStudentProfile(
+            @PathVariable Long studentId,
+            @RequestBody StudentProfileRequest studentProfileRequest) {
+        try {
+            StudentProfileResponse response = studentProfileService.updateStudentProfile(studentId, studentProfileRequest);
+            return ResponseEntity.ok(response);
+        } catch (AppException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi cập nhật profile");
         }
     }
 }
