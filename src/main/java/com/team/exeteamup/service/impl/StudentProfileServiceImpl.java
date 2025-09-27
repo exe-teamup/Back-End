@@ -8,10 +8,8 @@ import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.repository.StudentRepository;
 import com.team.exeteamup.service.StudentProfileService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 @Service
