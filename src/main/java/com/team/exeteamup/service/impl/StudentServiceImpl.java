@@ -33,8 +33,8 @@ public class StudentServiceImpl implements StudentService {
                 .collect(Collectors.toList());
     }
 
-//    public Page<StudentResponse> getAllStudents(Pageable pageable) {
-//        Page<Student> studentPage = studentRepository.findAll(pageable);
-//        return studentPage.map(studentMapper::toResponse);
-//    }
+    public Page<StudentResponse> getAllStudents(Pageable pageable) {
+        Page<Student> studentPage = studentRepository.findAll(pageable);
+        return studentPage.map(studentMapper::toResponse);
+    }
 }
