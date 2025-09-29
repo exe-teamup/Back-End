@@ -24,15 +24,11 @@ public class Group {
     private Semester semester;
 
     @ManyToOne
-    @JoinColumn(name = "leader_id", nullable = true)
-    private Student leader;
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @Column(name = "group_name", nullable = true)
     private String groupName;
-
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
 
     @Column(name = "member_count")
     private int memberCount;
