@@ -4,6 +4,7 @@ import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.StudentResponse;
+import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.service.StudentProfileService;
 import com.team.exeteamup.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -84,4 +88,15 @@ public class StudentController {
         Page<StudentResponse> studentPage = studentService.getAllStudents(pageable);
         return ResponseEntity.ok(studentPage);
     }
+
+    @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<List<Student>> importStudents(@RequestParam("file") MultipartFile file) {
+        try {
+            List<Student> response = studentService.importStudentsFromExcel(file);
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }
