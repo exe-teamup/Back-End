@@ -37,7 +37,6 @@ public class GroupServiceImpl implements GroupService {
 
         Group group = Group.builder()
                 .groupName(groupRequest.getGroupName())
-                .leader(leader)
                 .groupStatus(true)
                 .build();
 

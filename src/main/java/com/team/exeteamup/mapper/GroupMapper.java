@@ -25,7 +25,6 @@ public class GroupMapper {
         return GroupResponse.builder()
                 .groupId(group.getGroupId())
                 .groupName(group.getGroupName())
-                .leaderId(group.getLeader() != null ? group.getLeader().getStudentId() : null)
                 .memberIds(memberIds)
                 .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
                 .groupStatus(group.getGroupStatus())

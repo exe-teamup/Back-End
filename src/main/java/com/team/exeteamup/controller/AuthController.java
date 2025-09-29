@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("authentication")
-@CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/authentication")
+@CrossOrigin("*")
 @RequiredArgsConstructor
-public class LoginGoogleController {
+public class AuthController {
 
     private final LoginService loginService;
 
@@ -20,5 +20,13 @@ public class LoginGoogleController {
     public ResponseEntity<?> loginGoogle(@RequestBody LoginRequest loginRequest) {
         LoginResponse response = loginService.loginGoogle(loginRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Không có token hợp lệ để logout");
+        }
+        return ResponseEntity.ok("Đăng xuất thành công");
     }
 }
