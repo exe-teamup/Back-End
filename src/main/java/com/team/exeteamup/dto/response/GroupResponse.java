@@ -15,7 +15,6 @@ import java.util.UUID;
 public class GroupResponse {
     private long groupId;
     private String groupName;
-    private Long leaderId;
     private List<Long> memberIds;
     private int memberCount;
     private Boolean groupStatus;

@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("group")
+@RequestMapping("/api/group")
 public class GroupController {
     @Autowired
     private GroupService groupService;

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("students")
+@RequestMapping("/api/students")
 @RequiredArgsConstructor
 public class StudentController {
 
