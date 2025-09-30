@@ -23,14 +23,13 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private TokenServiceImpl tokenServiceImpl;
-    @Autowired
-    private StudentRepository studentRepository;
 
     @Override
     public LoginResponse loginGoogle(LoginRequest loginRequest) {
         try {
             FirebaseToken decodeToken = FirebaseAuth.getInstance().verifyIdToken(loginRequest.getIdToken());
             String email = decodeToken.getEmail();
+            System.out.println("Decoded Firebase email: " + email);
 
             Optional<Account> optionalAccount = accountRepository.findByEmail(email);
             if (optionalAccount.isEmpty()) {
@@ -38,15 +37,14 @@ public class LoginServiceImpl implements LoginService {
             }
             Account account = optionalAccount.get();
 
-            String token = tokenServiceImpl.generateToken(account);
+            String accessToken = tokenServiceImpl.generateAccessToken(account);
+            String refreshToken = tokenServiceImpl.generateRefreshToken(account);
+            long expiresIn = tokenServiceImpl.getAccessTokenExpiration();
 
             return LoginResponse.builder()
-                    .studentId(account.getAccountId())
-                    .fullName(account.getFullName())
-                    .email(account.getEmail())
-                    .createdAt(account.getCreatedAt())
-                    .status(account.isStatus())
-                    .token(token)
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .expiresIn(expiresIn)
                     .build();
 
         } catch (FirebaseAuthException e) {
