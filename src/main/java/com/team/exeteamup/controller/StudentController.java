@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/students")
@@ -62,6 +59,23 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi cập nhật profile");
         }
     }
+
+    @DeleteMapping("/{studentId}")
+    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long studentId) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            studentService.deleteStudentById(studentId);
+            response.put("message", "Xóa sinh viên thành công");
+            return ResponseEntity.ok(response);
+        } catch (AppException e) {
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } catch (Exception e) {
+            response.put("error", "Đã xảy ra lỗi không mong muốn");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
 
     @GetMapping("")
     public ResponseEntity<List<StudentResponse>> getAllStudents() {

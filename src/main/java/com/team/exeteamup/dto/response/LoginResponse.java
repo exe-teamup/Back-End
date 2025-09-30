@@ -18,4 +18,7 @@ public class LoginResponse {
     private LocalDateTime createdAt;
     private boolean status;
     private String token;
+
+    private String accessToken;
+    private String refreshToken;
 }
