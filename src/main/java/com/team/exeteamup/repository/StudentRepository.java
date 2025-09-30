@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByAccount_Email(String email);
     Optional<Student> findByAccount_AccountId(Long accountId);
+    Optional<Student> findByStudentId(Long studentId);
     Boolean existsByStudentCode(String studentCode);
 }

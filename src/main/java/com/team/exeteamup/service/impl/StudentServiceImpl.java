@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.response.StudentResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Student;
@@ -114,5 +115,18 @@ public class StudentServiceImpl implements StudentService {
             }
         }
         return studentRepository.saveAll(students);
+    }
+
+    @Override
+    public void deleteStudentById(long studentId) {
+        Student student = studentRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
+
+        if (!student.isStudentStatus()) {
+            throw new AppException("Sinh viên không tồn tại");
+        }
+
+        student.setStudentStatus(false);
+        studentRepository.save(student);
     }
 }
