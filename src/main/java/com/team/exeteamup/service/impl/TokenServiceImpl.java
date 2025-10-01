@@ -21,7 +21,7 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     AccountRepository accountRepository;
 
-    private final String SECRET_KEY = "aHVuZ3RydW9uZ3NkZmdmdmRmY3ZkZnZkc3ZlcnMasESFwwWJbn12e2n3one23ior3bqy3";
+    private final String SECRET_KEY = "${TOKEN_SECRET_KEY}";
     private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
     private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 24 * 7;
 
@@ -29,30 +29,6 @@ public class TokenServiceImpl implements TokenService {
     private SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    //access token
-    public String generateAccessToken(Account account) {
-        return Jwts.builder()
-                .subject(String.valueOf(account.getAccountId()))
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-    }
-
-    //refresh token
-    public String generateRefreshToken(Account account) {
-        return Jwts.builder()
-                .subject(String.valueOf(account.getAccountId()))
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-    }
-
-    public long getAccessTokenExpiration() {
-        return ACCESS_TOKEN_EXPIRATION;
     }
 
     //verify token
