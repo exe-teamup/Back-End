@@ -5,6 +5,7 @@ import com.team.exeteamup.dto.response.StudentResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.AccountStatus;
 import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.StudentRepository;
@@ -94,10 +95,9 @@ public class StudentServiceImpl implements StudentService {
 
                 Account account = Account.builder()
                         .email(email)
-                        .fullName(fullName)
                         .role(AccountRole.STUDENT)
                         .createdAt(LocalDateTime.now())
-                        .status(true)
+                        .status(AccountStatus.ACTIVE)
                         .build();
                 accountRepository.save(account);
 

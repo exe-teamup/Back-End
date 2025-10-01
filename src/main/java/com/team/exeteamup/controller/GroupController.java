@@ -22,27 +22,16 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @Autowired
-    private GroupMapper groupMapper;
-
     @PostMapping("")
-    public ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest) {
-        try {
-            GroupResponse group = groupService.createGroup(groupRequest);
-            return ResponseEntity.ok(group);
-        } catch (AppException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi tạo group");
-        }
+    public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
+        GroupResponse group = groupService.createGroup(groupRequest);
+        return ResponseEntity.ok(group);
     }
 
     @DeleteMapping("{groupId}")
-    public ResponseEntity<Map<String, String>>deleteGroup(@PathVariable long groupId) {
+    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long groupId) {
         groupService.deleteGroup(groupId);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Đã xóa nhóm thành công");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
 
     @GetMapping("")
@@ -52,24 +41,16 @@ public class GroupController {
     }
 
     @PutMapping("{groupId}")
-    public ResponseEntity<?> updateGroup(
+    public ResponseEntity<GroupResponse> updateGroup(
             @PathVariable long groupId,
             @RequestBody GroupUpdateRequest request) {
-        try {
-            GroupResponse response = groupService.updateGroup(groupId, request);
-            return ResponseEntity.ok(response);
-        } catch (AppException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        GroupResponse response = groupService.updateGroup(groupId, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("{groupId}")
     public ResponseEntity<?> getGroupById(@PathVariable long groupId) {
-        try {
-            GroupResponse response = groupService.getGroupById(groupId);
-            return ResponseEntity.ok(response);
-        } catch (AppException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        GroupResponse response = groupService.getGroupById(groupId);
+        return ResponseEntity.ok(response);
     }
 }
