@@ -32,4 +32,7 @@ public class GroupTemplate {
     @Column(name = "template", nullable = false, length = 255)
     private String template;
 
+    @ManyToMany(mappedBy = "groupTemplates")
+    private List<Semester> semesters;
+
 }

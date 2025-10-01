@@ -6,9 +6,7 @@ import com.google.firebase.auth.FirebaseToken;
 import com.team.exeteamup.dto.request.LoginRequest;
 import com.team.exeteamup.dto.response.LoginResponse;
 import com.team.exeteamup.entity.Account;
-import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.repository.AccountRepository;
-import com.team.exeteamup.repository.StudentRepository;
 import com.team.exeteamup.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +18,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private TokenServiceImpl tokenServiceImpl;
-    @Autowired
-    private StudentRepository studentRepository;
 
     @Override
     public LoginResponse loginGoogle(LoginRequest loginRequest) {
@@ -38,15 +31,9 @@ public class LoginServiceImpl implements LoginService {
             }
             Account account = optionalAccount.get();
 
-            String token = tokenServiceImpl.generateToken(account);
-
             return LoginResponse.builder()
-                    .studentId(account.getAccountId())
-                    .fullName(account.getFullName())
-                    .email(account.getEmail())
-                    .createdAt(account.getCreatedAt())
-                    .status(account.isStatus())
-                    .token(token)
+                    .role(account.getRole())
+                    .accountId(account.getAccountId())
                     .build();
 
         } catch (FirebaseAuthException e) {

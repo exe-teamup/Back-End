@@ -1,6 +1,7 @@
 package com.team.exeteamup.dto.response;
 
 import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.AccountStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,5 @@ public class AccountResponse {
     private String fullName;
     private AccountRole role;
     private LocalDateTime createdAt;
-    private String status;
+    private AccountStatus status;
 }
