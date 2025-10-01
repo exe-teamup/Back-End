@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.team.exeteamup.enums.AccountRole;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,8 +12,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class LoginResponse {
-    private String token;
-    private String accessToken;
-    private String refreshToken;
-    private Long expiresIn;
+    private long accountId;
+    private AccountRole role;
 }

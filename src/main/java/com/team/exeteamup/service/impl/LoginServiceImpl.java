@@ -37,14 +37,9 @@ public class LoginServiceImpl implements LoginService {
             }
             Account account = optionalAccount.get();
 
-            String accessToken = tokenServiceImpl.generateAccessToken(account);
-            String refreshToken = tokenServiceImpl.generateRefreshToken(account);
-            long expiresIn = tokenServiceImpl.getAccessTokenExpiration();
-
             return LoginResponse.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .expiresIn(expiresIn)
+                    .role(account.getRole())
+                    .accountId(account.getAccountId())
                     .build();
 
         } catch (FirebaseAuthException e) {
