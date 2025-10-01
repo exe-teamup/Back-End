@@ -9,6 +9,7 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,4 +39,7 @@ public class Account {
 
     @Column(nullable = false)
     private boolean status;
+
+    @OneToMany(mappedBy = "account")
+    private List<AccountNotification> accountNotifications;
 }

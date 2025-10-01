@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "notifications")
 @AllArgsConstructor
@@ -18,13 +20,18 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long notificationId;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "notification_detail", nullable = false)
+    @Column(name = "notification_detail", nullable = false, columnDefinition = "TEXT")
+    @Lob
     private String notificationDetail;
+
 
     @Column(name = "notification_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
+
+    @OneToMany(mappedBy = "notification")
+    private List<AccountNotification> accountNotifications;
 }

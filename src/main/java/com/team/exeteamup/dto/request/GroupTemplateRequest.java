@@ -2,6 +2,10 @@ package com.team.exeteamup.dto.request;
 
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,15 +16,20 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class GroupTemplateRequest {
-    @Column(name = "min_member", nullable = false)
+
+    @NotNull
+    @Positive
     private int min_member;
 
-    @Column(name = "max_member", nullable = false)
+    @NotNull
+    @Positive
     private int max_member;
 
-    @Column(name = "min_major", nullable = false)
+    @NotNull
+    @Positive
     private int min_major;
 
-    @Column(name = "template", nullable = false, length = 255)
+    @NotBlank
+    @Size(max = 255)
     private String template;
 }
