@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
 
 @Entity
-@Table(name = "lecturer")
+@Table(name = "lecturers")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

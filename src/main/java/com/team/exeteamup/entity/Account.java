@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
