@@ -44,7 +44,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
     @Override
     public StudentProfileResponse updateStudentProfile(Long studentId, StudentProfileRequest request) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với ID: " + studentId));
+                .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(student::setPhoneNumber);
         Optional.ofNullable(request.getBio()).ifPresent(student::setBio);

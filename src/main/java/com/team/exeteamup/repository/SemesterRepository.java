@@ -8,4 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SemesterRepository extends JpaRepository<Semester, Long> {
+    boolean existsBySemesterCode(String semesterCode);
 }

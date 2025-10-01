@@ -35,47 +35,24 @@ public class StudentController {
 
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
-        try {
-            StudentProfileResponse response = studentProfileService.getStudentProfile(token);
-            return ResponseEntity.ok(response);
-
-        } catch (AppException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token không hợp lệ hoặc đã hết hạn");
-        }
+        StudentProfileResponse response = studentProfileService.getStudentProfile(token);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("{studentId}")
-    public ResponseEntity<?> updateStudentProfile(
+    public ResponseEntity<StudentProfileResponse> updateStudentProfile(
             @PathVariable Long studentId,
             @RequestBody StudentProfileRequest studentProfileRequest) {
-        try {
-            StudentProfileResponse response = studentProfileService.updateStudentProfile(studentId, studentProfileRequest);
-            return ResponseEntity.ok(response);
-        } catch (AppException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi cập nhật profile");
-        }
+
+        StudentProfileResponse response = studentProfileService.updateStudentProfile(studentId, studentProfileRequest);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{studentId}")
     public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long studentId) {
-        Map<String, String> response = new HashMap<>();
-        try {
-            studentService.deleteStudentById(studentId);
-            response.put("message", "Xóa sinh viên thành công");
-            return ResponseEntity.ok(response);
-        } catch (AppException e) {
-            response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } catch (Exception e) {
-            response.put("error", "Đã xảy ra lỗi không mong muốn");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        studentService.deleteStudentById(studentId);
+        return ResponseEntity.ok(Map.of("message", "Xóa sinh viên thành công"));
     }
-
 
     @GetMapping("")
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
