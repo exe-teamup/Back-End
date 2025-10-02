@@ -1,6 +1,7 @@
 package com.team.exeteamup.entity;
 
 import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.StudentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +45,7 @@ public class Student {
     private Date createdAt;
 
     @Column(name = "student_status")
-    private boolean studentStatus;
+    private StudentStatus studentStatus;
 
     @Column(name = "is_leader", nullable = true)
     private boolean isLeader;
