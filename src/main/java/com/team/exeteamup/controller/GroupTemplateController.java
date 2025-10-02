@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/group-template")
+@RequestMapping("/api/group-templates")
 public class GroupTemplateController {
     @Autowired
     private GroupTemplateService groupTemplateService;
