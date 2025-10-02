@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.Student;
@@ -67,5 +68,17 @@ public class LecturerServiceImpl implements LecturerService {
             }
         }
         return lecturerRepository.saveAll(lecturers);
+    }
+
+    @Override
+    public void deleteLecturer(Long lecturerId) {
+        Lecturer lecturer = lecturerRepository.findById(lecturerId)
+                .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
+
+        Account account = lecturer.getAccount();
+        account.setStatus(AccountStatus.INACTIVE);
+        lecturer.setLecturerStatus(LecturerStatus.INACTIVE);
+        lecturerRepository.save(lecturer);
+        accountRepository.save(account);
     }
 }

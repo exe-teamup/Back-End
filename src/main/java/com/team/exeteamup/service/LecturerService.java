@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface LecturerService {
     List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException;
+    void deleteLecturer(Long lecturerId);
 }
