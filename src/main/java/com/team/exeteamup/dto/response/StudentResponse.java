@@ -21,5 +21,5 @@ public class StudentResponse {
     private Long groupId;
     private String groupName;
     private Boolean isLeader;
-    private Boolean studentStatus;
+    private String studentStatus;
 }

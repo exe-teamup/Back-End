@@ -6,6 +6,7 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.enums.AccountRole;
 import com.team.exeteamup.enums.AccountStatus;
+import com.team.exeteamup.enums.StudentStatus;
 import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.StudentRepository;
@@ -108,7 +109,7 @@ public class StudentServiceImpl implements StudentService {
                         .phoneNumber(phone)
                         .bio(bio)
                         .createdAt(new Date())
-                        .studentStatus(true)
+                        .studentStatus(StudentStatus.ELIGIBLE)
                         .isLeader(false)
                         .build();
                 students.add(student);
@@ -122,11 +123,11 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
-        if (!student.isStudentStatus()) {
+        if (!student.getStudentStatus().equals(StudentStatus.ELIGIBLE)) {
             throw new AppException("Sinh viên không tồn tại");
         }
 
-        student.setStudentStatus(false);
+        student.setStudentStatus(StudentStatus.NOT_ELIGIBLE);
         studentRepository.save(student);
     }
 }

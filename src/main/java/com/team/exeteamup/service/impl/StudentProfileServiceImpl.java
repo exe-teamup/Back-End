@@ -36,7 +36,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 .bio(student.getBio())
                 .createdAt(student.getCreatedAt())
                 .isLeader(student.isLeader())
-                .studentStatus(student.isStudentStatus())
+                .studentStatus(student.getStudentStatus() != null ? student.getStudentStatus().name() : null)
                 .groupId(student.getGroup() != null ? student.getGroup().getGroupId() : null)
                 .build();
     }
@@ -59,7 +59,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 .bio(updatedStudent.getBio())
                 .createdAt(updatedStudent.getCreatedAt())
                 .isLeader(updatedStudent.isLeader())
-                .studentStatus(updatedStudent.isStudentStatus())
+                .studentStatus(updatedStudent.getStudentStatus() != null ? student.getStudentStatus().name() : null)
                 .groupId(updatedStudent.getGroup() != null ? updatedStudent.getGroup().getGroupId() : null)
                 .build();
     }

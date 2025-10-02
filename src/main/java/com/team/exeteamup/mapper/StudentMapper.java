@@ -14,7 +14,7 @@ public class StudentMapper {
         response.setEmail(student.getAccount().getEmail());
         response.setPhoneNumber(student.getPhoneNumber());
         response.setStudentCode(student.getStudentCode());
-        response.setStudentStatus(student.isStudentStatus());
+        response.setStudentStatus(student.getStudentStatus() != null ? student.getStudentStatus().name() : null);
         response.setCreatedAt(student.getCreatedAt());
         if (student.getGroup() != null) {
             response.setGroupId(student.getGroup().getGroupId());

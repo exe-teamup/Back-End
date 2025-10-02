@@ -19,6 +19,6 @@ public class StudentProfileResponse {
     private String bio;
     private Date createdAt;
     private boolean isLeader;
-    private boolean studentStatus;
+    private String studentStatus;
     private Long groupId;
 }
