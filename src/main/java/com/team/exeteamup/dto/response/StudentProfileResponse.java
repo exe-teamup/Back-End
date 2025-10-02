@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -17,7 +18,7 @@ public class StudentProfileResponse {
     private String email;
     private String phoneNumber;
     private String bio;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private boolean isLeader;
     private String studentStatus;
     private Long groupId;
