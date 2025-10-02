@@ -108,7 +108,7 @@ public class StudentServiceImpl implements StudentService {
                         .fullName(fullName)
                         .phoneNumber(phone)
                         .bio(bio)
-                        .createdAt(new Date())
+                        .createdAt(LocalDateTime.now())
                         .studentStatus(StudentStatus.ELIGIBLE)
                         .isLeader(false)
                         .build();
