@@ -1,7 +1,9 @@
 package com.team.exeteamup.controller;
 
+import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.dto.request.LecturerRequest;
+import com.team.exeteamup.dto.response.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
-import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.service.LecturerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,9 +33,17 @@ public class LecturerController {
         }
     }
 
-    @DeleteMapping("{lecturerId}")
-    public ResponseEntity<Map<String, String>> deleteLecturer(@PathVariable Long lecturerId) {
-        lecturerService.deleteLecturer(lecturerId);
-        return ResponseEntity.ok(Map.of("message", "Xóa giảng viên thành công"));
+    @PutMapping("{lecturerId}")
+    public ResponseEntity<?> updateLecturer(
+            @PathVariable Long lecturerId,
+            @RequestBody LecturerRequest request) {
+        try {
+            LecturerResponse response = lecturerService.updateLecturer(lecturerId, request);
+            return ResponseEntity.ok(response);
+        } catch (AppException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi cập nhật giảng viên");
+        }
     }
 }
