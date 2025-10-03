@@ -90,4 +90,14 @@ public class StudentController {
         }
     }
 
+    @PostMapping(value = "import-not-eligible", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> importStudentNotEligible(@RequestParam("file") MultipartFile file) {
+        try {
+            studentService.importStudentsNotEligible(file);
+            return ResponseEntity.ok("Đổi trạng thái sinh viên thành công");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi thêm  sinh viên " + e.getMessage());
+        }
+    }
 }

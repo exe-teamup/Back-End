@@ -13,5 +13,6 @@ public interface StudentService {
     List<StudentResponse> getAllStudents();
     Page<StudentResponse> getAllStudents(Pageable pageable);
     List<Student> importStudentsFromExcel(MultipartFile file) throws IOException;
+    void importStudentsNotEligible(MultipartFile file) throws IOException;
     void deleteStudentById(long studentId);
 }

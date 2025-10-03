@@ -47,6 +47,7 @@ public class Student {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "student_status")
+    @Enumerated(EnumType.STRING)
     private StudentStatus studentStatus;
 
     @Column(name = "is_leader", nullable = true)
