@@ -9,6 +9,7 @@ import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.enums.AccountRole;
 import com.team.exeteamup.enums.AccountStatus;
 import com.team.exeteamup.enums.LecturerStatus;
+import com.team.exeteamup.mapper.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.LecturerService;
@@ -32,6 +33,7 @@ import java.util.List;
 public class LecturerServiceImpl implements LecturerService {
     private final LecturerRepository lecturerRepository;
     private final AccountRepository accountRepository;
+    private final LecturerMapper lecturerMapper;
 
     @Override
     public List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException {
@@ -95,5 +97,22 @@ public class LecturerServiceImpl implements LecturerService {
                 .accountId(updated.getAccount().getAccountId())
                 .accountStatus(updated.getAccount().getStatus().name())
                 .build();
+    }
+
+    @Override
+    public List<LecturerResponse> getAllLecturers() {
+        List<Lecturer> lecturers = lecturerRepository.findAll();
+
+        return lecturers.stream()
+                .map(lecturerMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public LecturerResponse getLecturer(Long lecturerId) {
+        Lecturer lecturer = lecturerRepository.findById(lecturerId)
+                .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
+
+        return lecturerMapper.toResponse(lecturer);
     }
 }

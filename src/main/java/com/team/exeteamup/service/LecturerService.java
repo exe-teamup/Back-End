@@ -12,4 +12,6 @@ import java.util.List;
 public interface LecturerService {
     List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException;
     LecturerResponse updateLecturer(Long lecturerId, LecturerRequest request);
+    List<LecturerResponse> getAllLecturers();
+    LecturerResponse getLecturer(Long lecturerId);
 }
