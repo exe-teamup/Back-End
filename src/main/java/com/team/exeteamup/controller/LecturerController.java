@@ -46,4 +46,15 @@ public class LecturerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi cập nhật giảng viên");
         }
     }
+
+    @GetMapping()
+    public ResponseEntity <List<LecturerResponse>> getAllLecturers() {
+        List<LecturerResponse> lecturerResponses = lecturerService.getAllLecturers();
+        return ResponseEntity.ok(lecturerResponses);
+    }
+
+    @GetMapping("{lecturerId}")
+    public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long lecturerId) {
+        return ResponseEntity.ok(lecturerService.getLecturer(lecturerId));
+    }
 }
