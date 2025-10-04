@@ -30,6 +30,10 @@ public class Student {
     @JoinColumn(name = "group_id", nullable = true)
     private Group group;
 
+    @ManyToOne
+    @JoinColumn(name = "major_id", nullable = false)
+    private Major major;
+
     @Column(name = "student_code")
     private String studentCode;
 
@@ -45,7 +49,6 @@ public class Student {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "student_status")
     @Enumerated(EnumType.STRING)
     private StudentStatus studentStatus;
