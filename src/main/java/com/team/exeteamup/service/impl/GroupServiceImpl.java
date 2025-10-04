@@ -61,7 +61,7 @@ public class GroupServiceImpl implements GroupService {
             }
         }
 
-        if(members.size() < 3) {
+        if (members.size() < 3) {
             throw new AppException("Nhóm phải có ít nhất 3 thành viên");
         }
 
@@ -77,7 +77,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new AppException("Không tìm thấy nhóm với id: " + groupId));
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
         List<Student> students = group.getStudents();
         for (Student student : students) {
@@ -101,8 +101,8 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public GroupResponse updateGroup(long groupId, GroupUpdateRequest request) {
-        Group group =  groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm với id: " + groupId));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
         if (request.getGroupName() != null) {
             group.setGroupName(request.getGroupName());

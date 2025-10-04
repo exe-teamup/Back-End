@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.request;
 
+import com.team.exeteamup.enums.LecturerStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class LecturerRequest {
-    private String lecturerName;
-    private String department;
-    private long accountId;
+    private LecturerStatus status;
 }

@@ -12,10 +12,9 @@ public class AccountMapper {
         AccountResponse response = AccountResponse.builder()
                 .accountId(account.getAccountId())
                 .email(account.getEmail())
-                .fullName(account.getFullName())
                 .role(account.getRole())
                 .createdAt(account.getCreatedAt())
-                .status(String.valueOf(account.isStatus()))
+                .status(account.getStatus())
                 .build();
         return response;
     }

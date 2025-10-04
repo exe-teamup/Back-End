@@ -6,5 +6,5 @@ public enum AccountRole {
     ADMIN,
     STUDENT_LEADER,
     EMPLOYEE,
-    DEPARTMENT_HEAD,
+    MODERATOR,
 }
