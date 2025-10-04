@@ -10,26 +10,25 @@
 
     import java.util.UUID;
 
-    @Entity
-    @Table(name = "lecturer")
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
-    @Builder
-    public class Lecturer {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "lecturer_id")
-        private long lecturerId;
+@Entity
+@Table(name = "lecturers")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class Lecturer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long lecturerId;
 
-        @OneToOne
-        @JoinColumn(name = "account_id", unique = true)
-        private Account account;
+    @OneToOne
+    @JoinColumn(name = "account_id", unique = true)
+    private Account account;
 
-        @Column(name = "full_name", nullable = false, length = 50)
-        private String fullName;
+    @Column(name = "full_name", nullable = false, length = 50)
+    private String fullName;
 
-        @Enumerated(EnumType.STRING)
-        @Column(name = "lecturer_status")
-        private LecturerStatus lecturerStatus;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lecturer_status")
+    private LecturerStatus lecturerStatus;
+}

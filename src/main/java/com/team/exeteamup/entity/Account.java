@@ -10,10 +10,11 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,10 +35,11 @@ public class Account {
     @Column(name = "create_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "account")
+    private List<AccountNotification> accountNotifications;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private AccountStatus status;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Lecturer lecturer;
 }
