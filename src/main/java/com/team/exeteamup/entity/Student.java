@@ -1,6 +1,5 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.AccountRole;
 import com.team.exeteamup.enums.StudentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "students")
@@ -50,9 +48,10 @@ public class Student {
     private LocalDateTime createdAt;
 
     @Column(name = "student_status")
+    @Enumerated(EnumType.STRING)
     private StudentStatus studentStatus;
 
     @Column(name = "is_leader", nullable = true)
-    private boolean isLeader;
+    private Boolean isLeader;
 
 }

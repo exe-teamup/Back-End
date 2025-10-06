@@ -18,16 +18,20 @@ public class Major {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long majorId;
 
-    @Column(name = "major_name", nullable = true, length = 50)
+    @Column(name = "major_name", unique = true,  nullable = false, length = 50)
     private String majorName;
 
-    @Column(name = "major_code", nullable = true, length = 20)
+    @Column(name = "major_code", nullable = false, length = 20)
     private String majorCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_major_id", nullable = true)
     private Major parentMajor;
 
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     private Long level;
+
+    @Column(name = "major_status", nullable = false)
+    private Boolean majorStatus = true;
+
 }

@@ -33,12 +33,12 @@ public class LecturerController {
         }
     }
 
-    @PutMapping("{lecturerId}")
+    @PutMapping("{id}")
     public ResponseEntity<?> updateLecturer(
-            @PathVariable Long lecturerId,
+            @PathVariable Long id,
             @RequestBody LecturerRequest request) {
         try {
-            LecturerResponse response = lecturerService.updateLecturer(lecturerId, request);
+            LecturerResponse response = lecturerService.updateLecturer(id, request);
             return ResponseEntity.ok(response);
         } catch (AppException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -53,8 +53,8 @@ public class LecturerController {
         return ResponseEntity.ok(lecturerResponses);
     }
 
-    @GetMapping("{lecturerId}")
-    public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long lecturerId) {
-        return ResponseEntity.ok(lecturerService.getLecturer(lecturerId));
+    @GetMapping("{id}")
+    public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long id) {
+        return ResponseEntity.ok(lecturerService.getLecturer(id));
     }
 }

@@ -42,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
 
         group = groupRepository.save(group);
         leader.setGroup(group);
-        leader.setLeader(true);
+        leader.setIsLeader(true);
         studentRepository.save(leader);
 
         List<Student> members = new ArrayList<>();
@@ -56,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
                 member.setGroup(group);
-                member.setLeader(false);
+                member.setIsLeader(false);
                 members.add(member);
             }
         }
@@ -82,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
         List<Student> students = group.getStudents();
         for (Student student : students) {
             student.setGroup(null);
-            student.setLeader(false);
+            student.setIsLeader(false);
         }
         studentRepository.saveAll(students);
 

@@ -19,6 +19,7 @@
 public class Lecturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lecturer_id")
     private long lecturerId;
 
     @OneToOne
