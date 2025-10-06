@@ -28,19 +28,19 @@ public class SemesterController {
         return ResponseEntity.ok(semesterService.getAllSemesters());
     }
 
-    @GetMapping("{semesterId}")
-    public ResponseEntity<SemesterResponse> getSemesterById(@PathVariable Long semesterId) {
-        return ResponseEntity.ok(semesterService.getSemesterById(semesterId));
+    @GetMapping("{id}")
+    public ResponseEntity<SemesterResponse> getSemesterById(@PathVariable Long id) {
+        return ResponseEntity.ok(semesterService.getSemesterById(id));
     }
 
-    @PutMapping("{semesterId}")
-    public ResponseEntity<SemesterResponse> updateSemesterById(@PathVariable Long semesterId, @RequestBody SemesterRequest semesterRequest) {
-        return ResponseEntity.ok(semesterService.updateSemester(semesterId, semesterRequest));
+    @PutMapping("{id}")
+    public ResponseEntity<SemesterResponse> updateSemesterById(@PathVariable Long id, @RequestBody SemesterRequest semesterRequest) {
+        return ResponseEntity.ok(semesterService.updateSemester(id, semesterRequest));
     }
 
-    @DeleteMapping("/{semesterId}")
-    public ResponseEntity<Map<String, String>> deleteSemesterById(@PathVariable Long semesterId) {
-        semesterService.deleteSemester(semesterId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteSemesterById(@PathVariable Long id) {
+        semesterService.deleteSemester(id);
         return ResponseEntity.ok(Map.of("message", "Đã xóa kì học thành công"));
     }
 }

@@ -17,13 +17,14 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id")
     private long courseId;
 
     @ManyToOne
     @JoinColumn(name = "semester_id", referencedColumnName = "semester_id")
     private Semester semester;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id")
     private Lecturer lecturer;
 

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/group")
+@RequestMapping("/api/groups")
 public class GroupController {
     @Autowired
     private GroupService groupService;
@@ -28,9 +28,9 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
-    @DeleteMapping("{groupId}")
-    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long groupId) {
-        groupService.deleteGroup(groupId);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
+        groupService.deleteGroup(id);
         return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
 
@@ -40,17 +40,17 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
-    @PutMapping("{groupId}")
+    @PutMapping("{id}")
     public ResponseEntity<GroupResponse> updateGroup(
-            @PathVariable long groupId,
+            @PathVariable long id,
             @RequestBody GroupUpdateRequest request) {
-        GroupResponse response = groupService.updateGroup(groupId, request);
+        GroupResponse response = groupService.updateGroup(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{groupId}")
-    public ResponseEntity<?> getGroupById(@PathVariable long groupId) {
-        GroupResponse response = groupService.getGroupById(groupId);
+    @GetMapping("{id}")
+    public ResponseEntity<?> getGroupById(@PathVariable long id) {
+        GroupResponse response = groupService.getGroupById(id);
         return ResponseEntity.ok(response);
     }
 }
