@@ -17,7 +17,7 @@ public class GroupMapper {
         List<Long> memberIds = group.getStudents() != null
                 ? group.getStudents()
                 .stream()
-                .filter(student -> !student.isLeader())
+                .filter(student -> !student.getIsLeader())
                 .map(Student::getStudentId)
                 .toList()
                 : List.of();

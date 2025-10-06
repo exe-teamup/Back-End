@@ -39,18 +39,18 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("{studentId}")
+    @PutMapping("{id}")
     public ResponseEntity<StudentProfileResponse> updateStudentProfile(
-            @PathVariable Long studentId,
+            @PathVariable Long id,
             @RequestBody StudentProfileRequest studentProfileRequest) {
 
-        StudentProfileResponse response = studentProfileService.updateStudentProfile(studentId, studentProfileRequest);
+        StudentProfileResponse response = studentProfileService.updateStudentProfile(id, studentProfileRequest);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{studentId}")
-    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long studentId) {
-        studentService.deleteStudentById(studentId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudentById(id);
         return ResponseEntity.ok(Map.of("message", "Xóa sinh viên thành công"));
     }
 
@@ -81,9 +81,9 @@ public class StudentController {
     }
 
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<List<Student>> importStudents(@RequestParam("file") MultipartFile file) {
+        public ResponseEntity<List<StudentResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
-            List<Student> response = studentService.importStudentsFromExcel(file);
+            List<StudentResponse> response = studentService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -16,4 +16,5 @@ public class MajorRequest {
     private String majorCode;
     private Long parentMajorId;
     private Long level;
+    private Boolean majorStatus;
 }

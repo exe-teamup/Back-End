@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface AccountNotificationRepository extends JpaRepository<AccountNotification, Long> {
-    List<Long> findAccountIdByNotificationId(Long notificationId);
 }

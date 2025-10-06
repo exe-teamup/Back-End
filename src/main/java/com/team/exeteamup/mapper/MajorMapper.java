@@ -4,9 +4,12 @@ import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.entity.Major;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class MajorMapper {
-    public static MajorResponse toResponse(Major major) {
+    public MajorResponse toResponse(Major major) {
         return MajorResponse.builder()
                 .majorId(major.getMajorId())
                 .majorName(major.getMajorName())
@@ -18,7 +21,13 @@ public class MajorMapper {
                         major.getParentMajor() != null ? major.getParentMajor().getMajorName() : null
                 )
                 .level(major.getLevel())
+                .majorStatus(major.getMajorStatus())
                 .build();
     }
 
+    public List<MajorResponse> toResponseList(List<Major> majors) {
+        return majors.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 }

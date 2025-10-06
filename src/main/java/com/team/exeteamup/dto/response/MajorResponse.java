@@ -16,4 +16,5 @@ public class MajorResponse {
     private Long parentMajorId;
     private String parentMajorName;
     private Long level;
+    private Boolean majorStatus;
 }
