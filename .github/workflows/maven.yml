@@ -22,13 +22,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Bước 3: Build với Maven và tạo dependency tree
+      # Bước 3: Build với Maven và tạo dependency tree (skip tests)
       - name: Build with Maven
         run: |
-          mvn clean install -Dspring.application.name=exe-teamup-backend
+          mvn clean install -DskipTests -Dspring.application.name=exe-teamup
           mvn dependency:tree -DoutputFile=dependency-tree.txt
         env:
-          SPRING_APPLICATION_NAME: exe-teamup-backend
+          SPRING_APPLICATION_NAME: exe-teamup
 
       # Bước 4: Cập nhật dependency graph
       - name: Update dependency graph
@@ -41,11 +41,13 @@ jobs:
       # Bước 6: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t exe-teamup-backend:latest -f Back-End/Dockerfile .
+          docker build -t exe-teamup:latest -f Back-End/Dockerfile .
+        # Thay exe-teamup-backend:latest bằng exe-teamup:latest
 
       # Bước 7: Lưu image thành tar
       - name: Save Docker image
-        run: docker save -o exe-teamup-backend.tar exe-teamup-backend:latest
+        run: docker save -o exe-teamup.tar exe-teamup:latest
+        # Thay exe-teamup-backend.tar bằng exe-teamup.tar
 
       # Bước 8: Upload image tar lên server
       - name: Upload Docker image to server
@@ -55,7 +57,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "exe-teamup-backend.tar"
+          source: "exe-teamup.tar"
           target: "/opt/exe-teamup/"
 
       # Bước 9: Load image và restart docker-compose
@@ -68,6 +70,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /opt/exe-teamup
-            docker load -i exe-teamup-backend.tar
+            docker load -i exe-teamup.tar
             docker-compose up -d --build backend
-            rm exe-teamup-backend.tar
+            rm exe-teamup.tar
