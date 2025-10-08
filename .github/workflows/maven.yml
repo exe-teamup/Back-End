@@ -24,7 +24,6 @@ jobs:
 
        # Bước 3: Build với Maven và tạo dependency tree (skip tests)
       - name: Build with Maven
-        working-directory: ./Back-End
         run: |
           mvn clean install -DskipTests -Dspring.application.name=exe-teamup
           mvn dependency:tree -DoutputFile=dependency-tree.txt
