@@ -22,9 +22,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Bước 3: Build JAR với Maven
+      # Bước 3: Build với Maven và tạo dependency tree
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: |
+          mvn clean install  # Thay -DskipTests bằng install để đảm bảo build đầy đủ
+          mvn dependency:tree -DoutputFile=dependency-tree.txt
 
       # Bước 4: Cập nhật dependency graph
       - name: Update dependency graph
