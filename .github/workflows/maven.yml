@@ -28,9 +28,7 @@ jobs:
         run: |
           mvn clean install -DskipTests -Dspring.application.name=exe-teamup
           mvn dependency:tree -DoutputFile=dependency-tree.txt
-        env:
-          SPRING_APPLICATION_NAME: exe-teamup
-
+      
       # Bước 4: Cập nhật dependency graph
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v5
