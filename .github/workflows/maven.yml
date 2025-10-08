@@ -22,8 +22,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Bước 3: Build với Maven và tạo dependency tree (skip tests)
+       # Bước 3: Build với Maven và tạo dependency tree (skip tests)
       - name: Build with Maven
+        working-directory: ./Back-End
         run: |
           mvn clean install -DskipTests -Dspring.application.name=exe-teamup
           mvn dependency:tree -DoutputFile=dependency-tree.txt
@@ -33,6 +34,8 @@ jobs:
       # Bước 4: Cập nhật dependency graph
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v5
+        with:
+          working-directory: ./Back-End
 
       # Bước 5: Cài đặt Docker
       - name: Set up Docker
