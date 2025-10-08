@@ -1,6 +1,6 @@
 spring:
   application:
-    name: exe-teamup
+    name: exe_teamup
 
   datasource:
     url: jdbc:mysql://localhost:3306/exe_teamup?useSSL=false&serverTimezone=UTC
@@ -29,7 +29,6 @@ server:
 
 token:
   secret-key: aHVuZ3RydW9uZ3NkZmdmdmRmY3ZkZnZkc3ZlcnMasESFwwWJbn12e2n3one23ior3bqy3
+
 fcm:
-  credentials:
-    file:
-      path: ./firebase-admin.json
+  credentials-file: ./firebase-admin.json
