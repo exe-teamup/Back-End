@@ -27,6 +27,8 @@ jobs:
         run: |
           mvn clean install  # Thay -DskipTests bằng install để đảm bảo build đầy đủ
           mvn dependency:tree -DoutputFile=dependency-tree.txt
+          env:
+    SPRING_APPLICATION_NAME: exe-teamup
 
       # Bước 4: Cập nhật dependency graph
       - name: Update dependency graph
