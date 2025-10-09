@@ -33,7 +33,7 @@ jobs:
       # 🧩 Bước 5: Build Docker image cho backend
       - name: Build Docker image
         run: |
-          docker build -t exe-teamup:latest -f Back-End/Dockerfile .
+          docker build -t exe-teamup:latest -f Dockerfile
 
       # 📦 Bước 6: Lưu Docker image thành file .tar
       - name: Save Docker image
