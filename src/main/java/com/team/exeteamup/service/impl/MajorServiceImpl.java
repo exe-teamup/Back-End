@@ -1,6 +1,6 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.MajorRequest;
 import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.entity.Major;

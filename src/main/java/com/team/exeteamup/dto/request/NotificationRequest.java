@@ -4,9 +4,15 @@ import com.team.exeteamup.enums.NotificationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotificationRequest {
     @NotBlank
     @Size(max = 100)
@@ -18,5 +24,4 @@ public class NotificationRequest {
     @NotNull
     private NotificationType notificationType;
 
-    private List<Long> accountIds;
 }

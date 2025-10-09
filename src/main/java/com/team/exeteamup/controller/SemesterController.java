@@ -1,6 +1,5 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.SemesterRequest;
 import com.team.exeteamup.dto.response.SemesterResponse;
 import com.team.exeteamup.service.SemesterService;
