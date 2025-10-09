@@ -39,33 +39,39 @@ jobs:
       - name: Save Docker image
         run: docker save -o exe-teamup.tar exe-teamup:latest
 
-      # 🚀 Bước 7: Upload file .tar lên VPS
+      # 🚀 Bước 7: Upload file .tar lên VPS qua SSH
       - name: Upload Docker image to server
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           source: "exe-teamup.tar"
           target: "/opt/exe-teamup/"
+          overwrite: true
+          debug: true
 
-      # 🔄 Bước 8: Load image & restart backend container bằng docker-compose
+      # 🔄 Bước 8: Load image & restart container bằng docker-compose
       - name: Deploy to Server
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
             cd /opt/exe-teamup
             echo "🧩 Loading new Docker image..."
             docker load -i exe-teamup.tar
+
             echo "🧹 Cleaning old images..."
             docker image prune -f
+
             echo "🚀 Restarting backend container..."
             docker-compose up -d --no-deps --build backend
+
             echo "🧼 Removing temp file..."
             rm exe-teamup.tar
+
             echo "✅ Deployment completed successfully!"
