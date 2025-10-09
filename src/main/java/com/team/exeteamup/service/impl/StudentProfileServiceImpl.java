@@ -1,6 +1,6 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.entity.Account;

@@ -1,10 +1,8 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.Exception.AppException;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.StudentResponse;
-import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.service.StudentProfileService;
 import com.team.exeteamup.service.StudentService;
 import lombok.RequiredArgsConstructor;

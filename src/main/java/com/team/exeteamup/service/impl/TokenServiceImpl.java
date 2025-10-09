@@ -1,7 +1,6 @@
 package com.team.exeteamup.service.impl;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.TokenService;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class TokenServiceImpl implements TokenService {

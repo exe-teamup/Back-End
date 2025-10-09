@@ -1,6 +1,6 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.StudentResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Major;
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;

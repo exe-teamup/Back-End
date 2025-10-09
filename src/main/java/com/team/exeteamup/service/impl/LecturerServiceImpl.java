@@ -1,11 +1,10 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.LecturerResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Lecturer;
-import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.enums.AccountRole;
 import com.team.exeteamup.enums.AccountStatus;
 import com.team.exeteamup.enums.LecturerStatus;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
