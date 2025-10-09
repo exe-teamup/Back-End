@@ -1,21 +1,20 @@
 package com.team.exeteamup.dto.request;
 
+import com.team.exeteamup.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class SemesterRequest {
-    private long groupConstraintId;
     private String semesterCode;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private String semesterStatus;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private SemesterStatus semesterStatus;
 }

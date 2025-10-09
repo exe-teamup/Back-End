@@ -1,3 +1,4 @@
+
 package com.team.exeteamup;
 
 import com.team.exeteamup.config.DotEnvConfig;
@@ -11,6 +12,4 @@ public class ExeTeamupApplication {
         DotEnvConfig.loadEnv();
         SpringApplication.run(ExeTeamupApplication.class, args);
     }
-
-
 }

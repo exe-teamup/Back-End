@@ -42,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
 
         group = groupRepository.save(group);
         leader.setGroup(group);
-        leader.setLeader(true);
+        leader.setIsLeader(true);
         studentRepository.save(leader);
 
         List<Student> members = new ArrayList<>();
@@ -56,12 +56,12 @@ public class GroupServiceImpl implements GroupService {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
                 member.setGroup(group);
-                member.setLeader(false);
+                member.setIsLeader(false);
                 members.add(member);
             }
         }
 
-        if(members.size() < 3) {
+        if (members.size() < 3) {
             throw new AppException("Nhóm phải có ít nhất 3 thành viên");
         }
 
@@ -77,12 +77,12 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new AppException("Không tìm thấy nhóm với id: " + groupId));
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
         List<Student> students = group.getStudents();
         for (Student student : students) {
             student.setGroup(null);
-            student.setLeader(false);
+            student.setIsLeader(false);
         }
         studentRepository.saveAll(students);
 
@@ -101,8 +101,8 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public GroupResponse updateGroup(long groupId, GroupUpdateRequest request) {
-        Group group =  groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm với id: " + groupId));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
         if (request.getGroupName() != null) {
             group.setGroupName(request.getGroupName());

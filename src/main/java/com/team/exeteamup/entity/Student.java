@@ -1,16 +1,16 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.StudentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +28,10 @@ public class Student {
     @JoinColumn(name = "group_id", nullable = true)
     private Group group;
 
+    @ManyToOne
+    @JoinColumn(name = "major_id", nullable = false)
+    private Major major;
+
     @Column(name = "student_code")
     private String studentCode;
 
@@ -41,12 +45,13 @@ public class Student {
     private String bio;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "student_status")
-    private boolean studentStatus;
+    @Enumerated(EnumType.STRING)
+    private StudentStatus studentStatus;
 
     @Column(name = "is_leader", nullable = true)
-    private boolean isLeader;
+    private Boolean isLeader;
 
 }

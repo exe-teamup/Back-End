@@ -1,7 +1,6 @@
 package com.team.exeteamup.dto.request;
 
 import com.team.exeteamup.enums.AccountRole;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.time.LocalDateTime;

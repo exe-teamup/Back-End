@@ -35,8 +35,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 .phoneNumber(student.getPhoneNumber())
                 .bio(student.getBio())
                 .createdAt(student.getCreatedAt())
-                .isLeader(student.isLeader())
-                .studentStatus(student.isStudentStatus())
+                .isLeader(student.getIsLeader())
+                .studentStatus(student.getStudentStatus() != null ? student.getStudentStatus().name() : null)
                 .groupId(student.getGroup() != null ? student.getGroup().getGroupId() : null)
                 .build();
     }
@@ -44,7 +44,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
     @Override
     public StudentProfileResponse updateStudentProfile(Long studentId, StudentProfileRequest request) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với ID: " + studentId));
+                .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(student::setPhoneNumber);
         Optional.ofNullable(request.getBio()).ifPresent(student::setBio);
@@ -58,8 +58,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 .phoneNumber(updatedStudent.getPhoneNumber())
                 .bio(updatedStudent.getBio())
                 .createdAt(updatedStudent.getCreatedAt())
-                .isLeader(updatedStudent.isLeader())
-                .studentStatus(updatedStudent.isStudentStatus())
+                .isLeader(updatedStudent.getIsLeader())
+                .studentStatus(updatedStudent.getStudentStatus() != null ? student.getStudentStatus().name() : null)
                 .groupId(updatedStudent.getGroup() != null ? updatedStudent.getGroup().getGroupId() : null)
                 .build();
     }

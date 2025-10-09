@@ -1,6 +1,7 @@
 package com.team.exeteamup.entity;
 
 import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,10 +10,11 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,20 +24,22 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String fullName;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "account_role", nullable = false)
     private AccountRole role;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
+    @Column(name = "create_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private boolean status;
+    @OneToMany(mappedBy = "account")
+    private List<AccountNotification> accountNotifications;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private AccountStatus status;
+
 }
