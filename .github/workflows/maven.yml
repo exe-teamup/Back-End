@@ -24,7 +24,6 @@ jobs:
 
 # 🏗️ Bước 3: Build với Maven (skip tests để nhanh hơn)
       - name: Build with Maven
-        working-directory: Back-End
         run: mvn clean install -DskipTests
 
       # 🐳 Bước 4: Thiết lập Docker Buildx
