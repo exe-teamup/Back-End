@@ -1,41 +1,113 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.exception.DuplicateObjectException;
+import com.team.exeteamup.dto.request.NotificationRequest;
+import com.team.exeteamup.dto.response.NotificationResponse;
 import com.team.exeteamup.entity.Notification;
 import com.team.exeteamup.repository.NotificationRepository;
 import com.team.exeteamup.service.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
+
+    public NotificationServiceImpl(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
+
 
     @Override
-    public Notification saveNotification(Notification notification) {
-        return null;
+    @Transactional
+    public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
+        // check exists in DB
+        notificationRepository.findByNotificationDetail(notificationRequest.getNotificationDetail())
+                .ifPresent(notification1 -> {
+                    throw new DuplicateObjectException("Notification already exists");
+                }
+        );
+        // create new notification
+        Notification notification = notificationRepository.save(new Notification(
+                notificationRequest.getTitle(),
+                notificationRequest.getNotificationDetail(),
+                notificationRequest.getNotificationType())
+        );
+        // building response
+        return NotificationResponse.builder()
+                .notificationId(notification.getNotificationId())
+                .notificationDetail(notification.getNotificationDetail())
+                .notificationType(notification.getNotificationType())
+                .title(notification.getTitle())
+                .build();
     }
 
     @Override
-    public List<Notification> getNotifications() {
-        return List.of();
+    public List<NotificationResponse> getNotifications() {
+        return notificationRepository.findAll().stream()// find all records in DB
+                .map(notification -> NotificationResponse.builder() // map each record and build into response
+                        .notificationId(notification.getNotificationId())
+                        .title(notification.getTitle())
+                        .notificationType(notification.getNotificationType())
+                        .notificationDetail(notification.getNotificationDetail())
+                        .build())
+                .toList(); // return a list
     }
 
     @Override
-    public Notification getNotification(long id) {
-        return null;
+    public NotificationResponse getNotification(long id) {
+        // find in DB
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        // building response
+        return NotificationResponse.builder()
+                .notificationId(notification.getNotificationId())
+                .notificationDetail(notification.getNotificationDetail())
+                .notificationType(notification.getNotificationType())
+                .title(notification.getTitle())
+                .build();
     }
 
     @Override
-    public Notification updateNotification(Notification notification) {
-        return null;
+    @Transactional
+    public NotificationResponse updateNotification(long id, NotificationRequest notificationRequest) {
+        // find in DB
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        // update notification
+        notification.setNotificationDetail(notificationRequest.getNotificationDetail());
+        notification.setNotificationType(notificationRequest.getNotificationType());
+        notification.setTitle(notificationRequest.getTitle());
+        Notification updatedNotification = notificationRepository.save(notification);
+        // building response
+        return NotificationResponse.builder()
+                .notificationId(updatedNotification.getNotificationId())
+                .notificationDetail(updatedNotification.getNotificationDetail())
+                .notificationType(updatedNotification.getNotificationType())
+                .title(updatedNotification.getTitle())
+                .build();
     }
 
     @Override
-    public Notification deleteNotification(long id) {
-        return null;
+    @Transactional
+    public NotificationResponse deleteNotification(long id) {
+        // find in DB
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        // delete notification
+        notificationRepository.delete(notification);
+        //building response
+        return NotificationResponse.builder()
+                .notificationId(notification.getNotificationId())
+                .notificationDetail(notification.getNotificationDetail())
+                .notificationType(notification.getNotificationType())
+                .title(notification.getTitle())
+                .build();
     }
 }

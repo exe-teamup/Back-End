@@ -1,6 +1,6 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lecturers")

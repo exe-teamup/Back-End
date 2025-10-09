@@ -16,5 +16,4 @@ public class NotificationResponse {
     private String title;
     private String notificationDetail;
     private NotificationType notificationType;
-    private List<Long> accountIds;
 }

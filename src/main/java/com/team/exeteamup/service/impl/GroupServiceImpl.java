@@ -1,11 +1,10 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.Exception.AppException;
+import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.*;
-import com.team.exeteamup.enums.AccountRole;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.GroupService;
@@ -13,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.Security;
 import java.util.*;
 
 @Service
