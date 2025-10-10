@@ -45,6 +45,7 @@ public class AccountNotification {
                 .notificationId(this.getNotification().getNotificationId())
                 .accountId(this.getAccount().getAccountId())
                 .accountNotificationId(this.getId())
+                .isChecked(this.isChecked)
                 .build();
     }
 }
