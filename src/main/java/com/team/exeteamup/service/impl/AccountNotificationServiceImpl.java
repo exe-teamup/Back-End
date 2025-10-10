@@ -6,8 +6,6 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.AccountNotification;
 import com.team.exeteamup.entity.Notification;
 import com.team.exeteamup.repository.AccountNotificationRepository;
-import com.team.exeteamup.repository.AccountRepository;
-import com.team.exeteamup.repository.NotificationRepository;
 import com.team.exeteamup.service.AccountNotificationService;
 import com.team.exeteamup.service.AccountService;
 import com.team.exeteamup.service.NotificationService;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +37,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
         return accountNotificationRepository
                 .findAll()
                 .stream()
-                .map(AccountNotification::buildResponse)
+                .map(AccountNotification::toResponse)
                 .toList();
     }
 
@@ -53,7 +50,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return accountNotifications
                 .stream()
-                .map(AccountNotification::buildResponse)
+                .map(AccountNotification::toResponse)
                 .toList();
     }
 
@@ -72,7 +69,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return saved
                 .stream()
-                .map(AccountNotification::buildResponse)
+                .map(AccountNotification::toResponse)
                 .toList();
 
     }
@@ -88,13 +85,13 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return updated
                 .stream()
-                .map(AccountNotification::buildResponse)
+                .map(AccountNotification::toResponse)
                 .toList();
     }
 
     @Override
     public AccountNotificationResponse getAccountNotificationResponseById(long accountNotificationId) {
-        return getAccountNotificationById(accountNotificationId).buildResponse();
+        return getAccountNotificationById(accountNotificationId).toResponse();
     }
 
     @Override
@@ -106,7 +103,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
         accountNotification.setChecked(true);
 
         return accountNotificationRepository.save(accountNotification)
-                .buildResponse();
+                .toResponse();
     }
 
     @Override
@@ -117,7 +114,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         accountNotificationRepository.delete(accountNotification);
 
-        return accountNotification.buildResponse();
+        return accountNotification.toResponse();
     }
 
     @Override
