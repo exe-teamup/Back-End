@@ -40,11 +40,11 @@ public class AccountNotification {
         this.isChecked = isChecked;
     }
 
-    public AccountNotificationResponse buildResponse() {
+    public AccountNotificationResponse toResponse() {
         return AccountNotificationResponse.builder()
-                .notificationId(this.getNotification().getNotificationId())
-                .accountId(this.getAccount().getAccountId())
-                .accountNotificationId(this.getId())
+                .notificationId(this.notification.getNotificationId())
+                .accountId(this.account.getAccountId())
+                .accountNotificationId(this.id)
                 .isChecked(this.isChecked)
                 .build();
     }
