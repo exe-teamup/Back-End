@@ -110,4 +110,10 @@ public class NotificationServiceImpl implements NotificationService {
                 .title(notification.getTitle())
                 .build();
     }
+
+    @Override
+    public Notification findNotificationById(long id) {
+        return notificationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Notification not found with id: " + id));
+    }
 }
