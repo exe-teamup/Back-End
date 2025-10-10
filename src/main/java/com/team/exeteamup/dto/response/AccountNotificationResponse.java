@@ -13,4 +13,5 @@ public class AccountNotificationResponse {
     private long accountNotificationId;
     private long notificationId;
     private long accountId;
+    private boolean isChecked;
 }
