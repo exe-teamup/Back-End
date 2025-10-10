@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.team.exeteamup.enums.PostStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,15 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String postDetail;
 
-    @Column(name = "created_at")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "post_status")
+    private PostStatus postStatus;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
