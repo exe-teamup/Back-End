@@ -59,7 +59,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
     @Override
     @Transactional
-    public List<AccountNotificationResponse> notifyToAccounts(AccountNotificationRequest accountNotificationRequest) {
+    public List<AccountNotificationResponse> sendNotificationToAccounts(AccountNotificationRequest accountNotificationRequest) {
 
         List<Account> presentAccounts = accountService.presentAccounts(accountNotificationRequest.getAccountIds());
         Notification notification = notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
@@ -80,21 +80,50 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     @Override
     @Transactional
     public List<AccountNotificationResponse> checkNotifications(List<Long> accountNotificationIds) {
-        return List.of();
+        List<AccountNotification> accountNotifications = accountNotificationRepository.findAllById(accountNotificationIds);
+
+        accountNotifications.forEach(an -> an.setChecked(true));
+
+        List<AccountNotification> updated = accountNotificationRepository.saveAll(accountNotifications);
+
+        return updated
+                .stream()
+                .map(AccountNotification::buildResponse)
+                .toList();
+    }
+
+    @Override
+    public AccountNotificationResponse getAccountNotificationResponseById(long accountNotificationId) {
+        return getAccountNotificationById(accountNotificationId).buildResponse();
     }
 
     @Override
     @Transactional
     public AccountNotificationResponse checkNotification(long accountNotificationId) {
-        return null;
+
+        AccountNotification accountNotification = getAccountNotificationById(accountNotificationId);
+
+        accountNotification.setChecked(true);
+
+        return accountNotificationRepository.save(accountNotification)
+                .buildResponse();
     }
 
     @Override
     @Transactional
     public AccountNotificationResponse deleteAccountNotification(long accountNotificationId) {
-        return null;
+
+        AccountNotification accountNotification = getAccountNotificationById(accountNotificationId);
+
+        accountNotificationRepository.delete(accountNotification);
+
+        return accountNotification.buildResponse();
     }
 
-
+    @Override
+    public AccountNotification getAccountNotificationById(long accountNotificationId) {
+        return accountNotificationRepository.findById(accountNotificationId)
+                .orElseThrow(() -> new EntityNotFoundException("Account Notification Not Found with id: " + accountNotificationId));
+    }
 
 }
