@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class AccountRequest {
     private String mail;
     private AccountRole role;
