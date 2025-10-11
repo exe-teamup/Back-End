@@ -25,10 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JoinRequestServiceImpl implements JoinRequestService {
 
+
     private final JoinRequestRepository joinRequestRepository;
     private final JoinRequestMapper joinRequestMapper;
     private final GroupService groupService;
     private final StudentService studentService;
+
 
     @Override
     public JoinRequest findById(long id) {
@@ -39,10 +41,12 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 );
     }
 
+
     @Override
     public JoinRequestResponse findResponseById(long joinRequestId) {
         return joinRequestMapper.toResponse(findById(joinRequestId));
     }
+
 
     @Override
     public List<JoinRequestResponse> findAll() {
@@ -52,6 +56,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 .map(joinRequestMapper::toResponse)
                 .toList();
     }
+
 
     @Override
     public List<JoinRequestResponse> findByStudentId(long studentId) {
@@ -81,17 +86,19 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 .toResponse(joinRequestRepository.save(joinRequest));
     }
 
+
     @Override
     @Transactional
-    public JoinRequestResponse handleJoinRequest(HandleJoinRequestRequest handleJoinRequestRequest) {
+    public JoinRequestResponse handleJoinRequest(long joinRequestId, HandleJoinRequestRequest handleJoinRequestRequest) {
 
-        JoinRequest joinRequest = findById(handleJoinRequestRequest.getJoinRequestId());
+        JoinRequest joinRequest = findById(joinRequestId);
 
         joinRequest.setRequestStatus(handleJoinRequestRequest.getRequestStatus());
         joinRequest.setDenyReason(handleJoinRequestRequest.getDenyReason());
 
         return joinRequestMapper.toResponse(joinRequestRepository.save(joinRequest));
     }
+
 
     @Override
     @Transactional
@@ -103,5 +110,4 @@ public class JoinRequestServiceImpl implements JoinRequestService {
         return joinRequestMapper
                 .toResponse(joinRequest);
     }
-
 }

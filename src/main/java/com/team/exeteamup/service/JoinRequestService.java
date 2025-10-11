@@ -13,6 +13,6 @@ public interface JoinRequestService {
     List<JoinRequestResponse> findAll();
     List<JoinRequestResponse> findByStudentId(long studentId);
     JoinRequestResponse save(JoinRequestRequest request);
-    JoinRequestResponse handleJoinRequest(HandleJoinRequestRequest handleJoinRequestRequest);
+    JoinRequestResponse handleJoinRequest(long joinRequestId, HandleJoinRequestRequest handleJoinRequestRequest);
     JoinRequestResponse delete(long joinRequestId);
 }
