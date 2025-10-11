@@ -3,7 +3,6 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import com.team.exeteamup.service.AccountNotificationService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +60,7 @@ public class AccountNotificationController {
     public ResponseEntity<AccountNotificationResponse> getAccountNotificationById(
             @PathVariable("id") long accountNotificationId) {
         AccountNotificationResponse response =
-                accountNotificationService.getAccountNotificationResponseById(accountNotificationId);
+                accountNotificationService.findResponseById(accountNotificationId);
         return ResponseEntity.ok(response);
     }
 

@@ -110,10 +110,10 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
 
     @Override
-    public AccountNotificationResponse getAccountNotificationResponseById(
+    public AccountNotificationResponse findResponseById(
             long accountNotificationId) {
         return accountNotificationMapper
-                .toResponse(getAccountNotificationById(accountNotificationId));
+                .toResponse(findById(accountNotificationId));
     }
 
 
@@ -122,7 +122,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     public AccountNotificationResponse checkNotification(long accountNotificationId) {
 
         AccountNotification accountNotification =
-                getAccountNotificationById(accountNotificationId);
+                findById(accountNotificationId);
 
         accountNotification.setChecked(true);
 
@@ -136,7 +136,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     public AccountNotificationResponse deleteAccountNotification(long accountNotificationId) {
 
         AccountNotification accountNotification =
-                getAccountNotificationById(accountNotificationId);
+                findById(accountNotificationId);
 
         accountNotificationRepository.delete(accountNotification);
 
@@ -145,7 +145,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
 
     @Override
-    public AccountNotification getAccountNotificationById(long accountNotificationId) {
+    public AccountNotification findById(long accountNotificationId) {
         return accountNotificationRepository.findById(accountNotificationId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Account Notification Not Found with id: " +
