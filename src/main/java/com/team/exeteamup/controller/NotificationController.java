@@ -32,7 +32,7 @@ public class NotificationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<NotificationResponse> getNotification(@PathVariable long id) {
-        return ResponseEntity.ok(notificationService.getNotification(id));
+        return ResponseEntity.ok(notificationService.findNotificationResponseById(id));
     }
 
     @PutMapping("/{id}")

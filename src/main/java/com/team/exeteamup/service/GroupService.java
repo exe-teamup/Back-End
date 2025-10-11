@@ -14,4 +14,5 @@ public interface GroupService {
     List<Group> getAllGroups();
     GroupResponse updateGroup(long groupId, GroupUpdateRequest request);
     GroupResponse getGroupById(long groupId);
+    Group findGroupById(long groupId);
 }

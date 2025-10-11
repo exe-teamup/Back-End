@@ -121,4 +121,10 @@ public class GroupServiceImpl implements GroupService {
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
         return groupMapper.toResponse(group);
     }
+
+    @Override
+    public Group findGroupById(long groupId) {
+        return groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+    }
 }

@@ -15,4 +15,5 @@ public interface StudentService {
     List<StudentResponse> importStudentsFromExcel(MultipartFile file) throws IOException;
     void importStudentsNotEligible(MultipartFile file) throws IOException;
     void deleteStudentById(long studentId);
+    Student findById(long studentId);
 }

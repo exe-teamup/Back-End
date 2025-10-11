@@ -13,6 +13,7 @@ import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.MajorRepository;
 import com.team.exeteamup.repository.StudentRepository;
 import com.team.exeteamup.service.StudentService;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -180,5 +181,14 @@ public class StudentServiceImpl implements StudentService {
 
         student.setStudentStatus(StudentStatus.NOT_ELIGIBLE);
         studentRepository.save(student);
+    }
+
+    @Override
+    public Student findById(long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found: " +
+                                studentId)
+                );
     }
 }
