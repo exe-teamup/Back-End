@@ -4,6 +4,7 @@ import com.team.exeteamup.exception.DuplicateObjectException;
 import com.team.exeteamup.dto.request.NotificationRequest;
 import com.team.exeteamup.dto.response.NotificationResponse;
 import com.team.exeteamup.entity.Notification;
+import com.team.exeteamup.mapper.NotificationMapper;
 import com.team.exeteamup.repository.NotificationRepository;
 import com.team.exeteamup.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,17 +22,14 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     private final NotificationRepository notificationRepository;
+    private final NotificationMapper notificationMapper;
 
 
     @Override
     @Transactional
     public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
 
-        notificationRepository.findByNotificationDetail(notificationRequest.getNotificationDetail())
-                .ifPresent(notification1 -> {
-                    throw new DuplicateObjectException("Notification already exists");
-                }
-        );
+        checkExist(notificationRequest);
 
         Notification notification = notificationRepository.save(new Notification(
                 notificationRequest.getTitle(),
@@ -39,24 +37,14 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationRequest.getNotificationType())
         );
 
-        return NotificationResponse.builder()
-                .notificationId(notification.getNotificationId())
-                .notificationDetail(notification.getNotificationDetail())
-                .notificationType(notification.getNotificationType())
-                .title(notification.getTitle())
-                .build();
+        return notificationMapper.toResponse(notification);
     }
 
 
     @Override
     public List<NotificationResponse> getNotifications() {
         return notificationRepository.findAll().stream()// find all records in DB
-                .map(notification -> NotificationResponse.builder() // map each record and build into response
-                        .notificationId(notification.getNotificationId())
-                        .title(notification.getTitle())
-                        .notificationType(notification.getNotificationType())
-                        .notificationDetail(notification.getNotificationDetail())
-                        .build())
+                .map(notificationMapper::toResponse)
                 .toList(); // return a list
     }
 
@@ -66,32 +54,22 @@ public class NotificationServiceImpl implements NotificationService {
 
         Notification notification = findNotificationById(notificationId);
 
-        return NotificationResponse.builder()
-                .notificationId(notification.getNotificationId())
-                .notificationDetail(notification.getNotificationDetail())
-                .notificationType(notification.getNotificationType())
-                .title(notification.getTitle())
-                .build();
+        return notificationMapper.toResponse(notification);
     }
 
 
     @Override
     @Transactional
-    public NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest) {
+    public NotificationResponse updateNotification(long notificationId,
+                                                   NotificationRequest notificationRequest) {
 
         Notification notification = findNotificationById(notificationId);
 
         notification.setNotificationDetail(notificationRequest.getNotificationDetail());
         notification.setNotificationType(notificationRequest.getNotificationType());
         notification.setTitle(notificationRequest.getTitle());
-        Notification updatedNotification = notificationRepository.save(notification);
 
-        return NotificationResponse.builder()
-                .notificationId(updatedNotification.getNotificationId())
-                .notificationDetail(updatedNotification.getNotificationDetail())
-                .notificationType(updatedNotification.getNotificationType())
-                .title(updatedNotification.getTitle())
-                .build();
+        return notificationMapper.toResponse(notificationRepository.save(notification));
     }
 
 
@@ -103,12 +81,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationRepository.delete(notification);
 
-        return NotificationResponse.builder()
-                .notificationId(notification.getNotificationId())
-                .notificationDetail(notification.getNotificationDetail())
-                .notificationType(notification.getNotificationType())
-                .title(notification.getTitle())
-                .build();
+        return notificationMapper.toResponse(notification);
     }
 
 
@@ -119,5 +92,14 @@ public class NotificationServiceImpl implements NotificationService {
                         "Notification not found with id: " +
                                 notificationId)
                 );
+    }
+
+    public void checkExist(NotificationRequest notificationRequest) {
+         notificationRepository
+                 .findByNotificationDetail(notificationRequest.getNotificationDetail())
+                 .ifPresent(notification1 -> {
+                             throw new DuplicateObjectException("Notification already exists");
+                         }
+                 );
     }
 }
