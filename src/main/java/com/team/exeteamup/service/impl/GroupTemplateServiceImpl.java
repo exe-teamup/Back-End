@@ -4,16 +4,19 @@ import com.team.exeteamup.dto.request.GroupTemplateRequest;
 import com.team.exeteamup.entity.GroupTemplate;
 import com.team.exeteamup.repository.GroupTemplateRepository;
 import com.team.exeteamup.service.GroupTemplateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GroupTemplateServiceImpl implements GroupTemplateService {
 
-    @Autowired
-    private GroupTemplateRepository groupTemplateRepository;
+    private final GroupTemplateRepository groupTemplateRepository;
 
     @Override
     public List<GroupTemplate> findAll() {
@@ -26,6 +29,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
     }
 
     @Override
+    @Transactional
     public GroupTemplate save(GroupTemplateRequest groupTemplateRequest) {
         return groupTemplateRepository.save(GroupTemplate.builder()
                                             .template(groupTemplateRequest.getTemplate())
@@ -36,6 +40,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         if(groupTemplateRepository.existsById(id)) {
             groupTemplateRepository.deleteById(id);
@@ -45,6 +50,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
     }
 
     @Override
+    @Transactional
     public GroupTemplate update(GroupTemplate groupTemplate) {
         if(groupTemplateRepository.existsById(groupTemplate.getTemplateId())) {
             return groupTemplateRepository.save(groupTemplate);

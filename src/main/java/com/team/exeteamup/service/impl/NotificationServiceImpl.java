@@ -7,6 +7,7 @@ import com.team.exeteamup.entity.Notification;
 import com.team.exeteamup.repository.NotificationRepository;
 import com.team.exeteamup.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,31 +16,29 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-    private final NotificationRepository notificationRepository;
 
-    public NotificationServiceImpl(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
-    }
+    private final NotificationRepository notificationRepository;
 
 
     @Override
     @Transactional
     public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
-        // check exists in DB
+
         notificationRepository.findByNotificationDetail(notificationRequest.getNotificationDetail())
                 .ifPresent(notification1 -> {
                     throw new DuplicateObjectException("Notification already exists");
                 }
         );
-        // create new notification
+
         Notification notification = notificationRepository.save(new Notification(
                 notificationRequest.getTitle(),
                 notificationRequest.getNotificationDetail(),
                 notificationRequest.getNotificationType())
         );
-        // building response
+
         return NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())
                 .notificationDetail(notification.getNotificationDetail())
@@ -47,6 +46,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .title(notification.getTitle())
                 .build();
     }
+
 
     @Override
     public List<NotificationResponse> getNotifications() {
@@ -60,11 +60,12 @@ public class NotificationServiceImpl implements NotificationService {
                 .toList(); // return a list
     }
 
+
     @Override
-    public NotificationResponse getNotification(long id) {
-        // find in DB
-        Notification notification = findNotificationById(id);
-        // building response
+    public NotificationResponse findNotificationResponseById(long notificationId) {
+
+        Notification notification = findNotificationById(notificationId);
+
         return NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())
                 .notificationDetail(notification.getNotificationDetail())
@@ -73,17 +74,18 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
     }
 
+
     @Override
     @Transactional
-    public NotificationResponse updateNotification(long id, NotificationRequest notificationRequest) {
-        // find in DB
-        Notification notification = findNotificationById(id);
-        // update notification
+    public NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest) {
+
+        Notification notification = findNotificationById(notificationId);
+
         notification.setNotificationDetail(notificationRequest.getNotificationDetail());
         notification.setNotificationType(notificationRequest.getNotificationType());
         notification.setTitle(notificationRequest.getTitle());
         Notification updatedNotification = notificationRepository.save(notification);
-        // building response
+
         return NotificationResponse.builder()
                 .notificationId(updatedNotification.getNotificationId())
                 .notificationDetail(updatedNotification.getNotificationDetail())
@@ -92,14 +94,15 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
     }
 
+
     @Override
     @Transactional
-    public NotificationResponse deleteNotification(long id) {
-        // find in DB
-        Notification notification = findNotificationById(id);
-        // delete notification
+    public NotificationResponse deleteNotification(long notificationId) {
+
+        Notification notification = findNotificationById(notificationId);
+
         notificationRepository.delete(notification);
-        //building response
+
         return NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())
                 .notificationDetail(notification.getNotificationDetail())
@@ -108,12 +111,13 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
     }
 
+
     @Override
-    public Notification findNotificationById(long id) {
-        return notificationRepository.findById(id)
+    public Notification findNotificationById(long notificationId) {
+        return notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Notification not found with id: " +
-                                id)
+                                notificationId)
                 );
     }
 }

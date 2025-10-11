@@ -9,8 +9,8 @@ import java.util.List;
 public interface NotificationService {
     NotificationResponse saveNotification(NotificationRequest notificationRequest);
     List<NotificationResponse> getNotifications();
-    NotificationResponse getNotification(long id);
-    NotificationResponse updateNotification(long id, NotificationRequest notificationRequest);
-    NotificationResponse deleteNotification(long id);
-    Notification findNotificationById(long id);
+    NotificationResponse findNotificationResponseById(long notificationId);
+    NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest);
+    NotificationResponse deleteNotification(long notificationId);
+    Notification findNotificationById(long notificationId);
 }

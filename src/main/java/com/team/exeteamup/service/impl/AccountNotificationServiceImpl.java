@@ -11,6 +11,7 @@ import com.team.exeteamup.service.AccountNotificationService;
 import com.team.exeteamup.service.AccountService;
 import com.team.exeteamup.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,24 +20,13 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class AccountNotificationServiceImpl implements AccountNotificationService {
 
     private final AccountNotificationRepository accountNotificationRepository;
     private final NotificationService notificationService;
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
-
-
-    public AccountNotificationServiceImpl(AccountNotificationRepository accountNotificationRepository,
-                                          NotificationService notificationService,
-                                          AccountService accountService,
-                                          AccountNotificationMapper accountNotificationMapper) {
-        this.accountNotificationRepository = accountNotificationRepository;
-        this.notificationService = notificationService;
-        this.accountService = accountService;
-        this.accountNotificationMapper = accountNotificationMapper;
-    }
-
 
     @Override
     public List<AccountNotificationResponse> getAccountNotifications() {
