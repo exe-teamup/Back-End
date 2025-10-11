@@ -23,10 +23,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountNotificationServiceImpl implements AccountNotificationService {
 
+
     private final AccountNotificationRepository accountNotificationRepository;
     private final NotificationService notificationService;
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
+
 
     @Override
     public List<AccountNotificationResponse> getAccountNotifications() {

@@ -33,7 +33,10 @@ public class AccountNotification {
     @Column(name = "is_checked")
     private boolean isChecked;
 
-    public AccountNotification(Account account, Notification notification, LocalDateTime createdAt, boolean isChecked) {
+    public AccountNotification(Account account,
+                               Notification notification,
+                               LocalDateTime createdAt,
+                               boolean isChecked) {
         this.account = account;
         this.notification = notification;
         this.createdAt = createdAt;

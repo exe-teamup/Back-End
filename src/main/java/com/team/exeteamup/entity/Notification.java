@@ -35,7 +35,9 @@ public class Notification {
     @OneToMany(mappedBy = "notification")
     private List<AccountNotification> accountNotifications;
 
-    public Notification(String title, String notificationDetail, NotificationType notificationType) {
+    public Notification(String title,
+                        String notificationDetail,
+                        NotificationType notificationType) {
         this.title = title;
         this.notificationDetail = notificationDetail;
         this.notificationType = notificationType;
