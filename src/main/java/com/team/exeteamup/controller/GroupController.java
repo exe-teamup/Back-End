@@ -4,7 +4,6 @@ import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
-import com.team.exeteamup.entity.Student;
 import com.team.exeteamup.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,18 +48,5 @@ public class GroupController {
     public ResponseEntity<?> getGroupById(@PathVariable long id) {
         GroupResponse response = groupService.getGroupById(id);
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/add-student-to-group")
-    public ResponseEntity<?> addStudentToGroup(@RequestParam long studentId,
-                                               @RequestParam long groupId) {
-        GroupResponse response = groupService.addStudentToGroup(studentId, groupId);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/group-members/{id}")
-    public ResponseEntity<?> getGroupMembers(@PathVariable("id") long groupId) {
-        List<Student> students = groupService.findStudentsByGroupId(groupId);
-        return ResponseEntity.ok(students);
     }
 }
