@@ -11,7 +11,7 @@ public interface JoinRequestService {
     JoinRequest findById(long joinRequestId);
     JoinRequestResponse findResponseById(long joinRequestId);
     List<JoinRequestResponse> findAll();
-    List<JoinRequestResponse> findByUserId(long userId);
+    List<JoinRequestResponse> findByStudentId(long studentId);
     JoinRequestResponse save(JoinRequestRequest request);
     JoinRequestResponse handleJoinRequest(HandleJoinRequestRequest handleJoinRequestRequest);
     JoinRequestResponse delete(long joinRequestId);

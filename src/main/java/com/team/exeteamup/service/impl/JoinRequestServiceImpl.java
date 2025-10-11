@@ -54,13 +54,14 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     }
 
     @Override
-    public List<JoinRequestResponse> findByUserId(long userId) {
+    public List<JoinRequestResponse> findByStudentId(long studentId) {
         return joinRequestRepository
-                .findByUserId(userId)
+                .findByStudent(studentService.findById(studentId))
                 .stream()
                 .map(joinRequestMapper::toResponse)
                 .toList();
     }
+
 
     @Override
     @Transactional
