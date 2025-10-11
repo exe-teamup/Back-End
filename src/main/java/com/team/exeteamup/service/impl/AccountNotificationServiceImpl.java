@@ -26,6 +26,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
 
+
     public AccountNotificationServiceImpl(AccountNotificationRepository accountNotificationRepository,
                                           NotificationService notificationService,
                                           AccountService accountService,
@@ -36,6 +37,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
         this.accountNotificationMapper = accountNotificationMapper;
     }
 
+
     @Override
     public List<AccountNotificationResponse> getAccountNotifications() {
         return accountNotificationRepository
@@ -45,12 +47,14 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
                 .toList();
     }
 
+
     @Override
     public List<AccountNotificationResponse> getAccountNotificationsByAccountId(long accountId) {
 
         Account account = accountService.getAccountById(accountId);
 
-        List<AccountNotification> accountNotifications = accountNotificationRepository.findByAccount(account);
+        List<AccountNotification> accountNotifications =
+                accountNotificationRepository.findByAccount(account);
 
         return accountNotifications
                 .stream()
@@ -58,16 +62,24 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
                 .toList();
     }
 
+
     @Override
     @Transactional
-    public List<AccountNotificationResponse> sendNotificationToAccounts(AccountNotificationRequest accountNotificationRequest) {
+    public List<AccountNotificationResponse> sendNotificationToAccounts(
+            AccountNotificationRequest accountNotificationRequest) {
 
-        List<Account> presentAccounts = accountService.presentAccounts(accountNotificationRequest.getAccountIds());
-        Notification notification = notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
+        List<Account> presentAccounts =
+                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
+        Notification notification =
+                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
 
         List<AccountNotification> saved = accountNotificationRepository.saveAll(
                 presentAccounts.stream()
-                        .map(account -> new AccountNotification(account, notification, LocalDateTime.now(), false))
+                        .map(account -> new AccountNotification(
+                                account,
+                                notification,
+                                LocalDateTime.now(),
+                                false))
                         .toList()
         );
 
@@ -78,14 +90,17 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
     }
 
+
     @Override
     @Transactional
     public List<AccountNotificationResponse> checkNotifications(List<Long> accountNotificationIds) {
-        List<AccountNotification> accountNotifications = accountNotificationRepository.findAllById(accountNotificationIds);
+        List<AccountNotification> accountNotifications =
+                accountNotificationRepository.findAllById(accountNotificationIds);
 
         accountNotifications.forEach(an -> an.setChecked(true));
 
-        List<AccountNotification> updated = accountNotificationRepository.saveAll(accountNotifications);
+        List<AccountNotification> updated =
+                accountNotificationRepository.saveAll(accountNotifications);
 
         return updated
                 .stream()
@@ -93,37 +108,49 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
                 .toList();
     }
 
+
     @Override
-    public AccountNotificationResponse getAccountNotificationResponseById(long accountNotificationId) {
-        return accountNotificationMapper.toResponse(getAccountNotificationById(accountNotificationId));
+    public AccountNotificationResponse getAccountNotificationResponseById(
+            long accountNotificationId) {
+        return accountNotificationMapper
+                .toResponse(getAccountNotificationById(accountNotificationId));
     }
+
 
     @Override
     @Transactional
     public AccountNotificationResponse checkNotification(long accountNotificationId) {
 
-        AccountNotification accountNotification = getAccountNotificationById(accountNotificationId);
+        AccountNotification accountNotification =
+                getAccountNotificationById(accountNotificationId);
 
         accountNotification.setChecked(true);
 
-        return accountNotificationMapper.toResponse(accountNotificationRepository.save(accountNotification));
+        return accountNotificationMapper
+                .toResponse(accountNotificationRepository.save(accountNotification));
     }
+
 
     @Override
     @Transactional
     public AccountNotificationResponse deleteAccountNotification(long accountNotificationId) {
 
-        AccountNotification accountNotification = getAccountNotificationById(accountNotificationId);
+        AccountNotification accountNotification =
+                getAccountNotificationById(accountNotificationId);
 
         accountNotificationRepository.delete(accountNotification);
 
         return accountNotificationMapper.toResponse(accountNotification);
     }
 
+
     @Override
     public AccountNotification getAccountNotificationById(long accountNotificationId) {
         return accountNotificationRepository.findById(accountNotificationId)
-                .orElseThrow(() -> new EntityNotFoundException("Account Notification Not Found with id: " + accountNotificationId));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Account Notification Not Found with id: " +
+                                accountNotificationId)
+                );
     }
 
 }

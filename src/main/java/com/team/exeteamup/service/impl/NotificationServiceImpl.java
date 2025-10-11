@@ -63,8 +63,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationResponse getNotification(long id) {
         // find in DB
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        Notification notification = findNotificationById(id);
         // building response
         return NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())
@@ -78,8 +77,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public NotificationResponse updateNotification(long id, NotificationRequest notificationRequest) {
         // find in DB
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        Notification notification = findNotificationById(id);
         // update notification
         notification.setNotificationDetail(notificationRequest.getNotificationDetail());
         notification.setNotificationType(notificationRequest.getNotificationType());
@@ -98,8 +96,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public NotificationResponse deleteNotification(long id) {
         // find in DB
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find notification with id: " + id));
+        Notification notification = findNotificationById(id);
         // delete notification
         notificationRepository.delete(notification);
         //building response
@@ -114,6 +111,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Notification findNotificationById(long id) {
         return notificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Notification not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Notification not found with id: " +
+                                id)
+                );
     }
 }
