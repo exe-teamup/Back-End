@@ -37,10 +37,17 @@ public class JoinRequestController {
         return ResponseEntity.ok(joinRequestService.findAll());
     }
 
-    @PatchMapping
+    @GetMapping("/find-by-student/{id}")
+    public ResponseEntity<List<JoinRequestResponse>> getAllByUserId(
+            @PathVariable("id") long studentId) {
+        return ResponseEntity.ok(joinRequestService.findByStudentId(studentId));
+    }
+
+    @PatchMapping("/handle-request/{id}")
     public ResponseEntity<JoinRequestResponse> handleJoinRequest(
+            @PathVariable("id") long joinRequestId,
             @Valid @RequestBody HandleJoinRequestRequest request) {
-        return ResponseEntity.ok(joinRequestService.handleJoinRequest(request));
+        return ResponseEntity.ok(joinRequestService.handleJoinRequest(joinRequestId, request));
     }
 
     @DeleteMapping("/{id}")
