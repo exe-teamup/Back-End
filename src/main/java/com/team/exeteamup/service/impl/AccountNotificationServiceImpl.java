@@ -5,6 +5,7 @@ import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.AccountNotification;
 import com.team.exeteamup.entity.Notification;
+import com.team.exeteamup.mapper.AccountNotificationMapper;
 import com.team.exeteamup.repository.AccountNotificationRepository;
 import com.team.exeteamup.service.AccountNotificationService;
 import com.team.exeteamup.service.AccountService;
@@ -23,13 +24,16 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     private final AccountNotificationRepository accountNotificationRepository;
     private final NotificationService notificationService;
     private final AccountService accountService;
+    private final AccountNotificationMapper accountNotificationMapper;
 
     public AccountNotificationServiceImpl(AccountNotificationRepository accountNotificationRepository,
                                           NotificationService notificationService,
-                                          AccountService accountService) {
+                                          AccountService accountService,
+                                          AccountNotificationMapper accountNotificationMapper) {
         this.accountNotificationRepository = accountNotificationRepository;
         this.notificationService = notificationService;
         this.accountService = accountService;
+        this.accountNotificationMapper = accountNotificationMapper;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
         return accountNotificationRepository
                 .findAll()
                 .stream()
-                .map(AccountNotification::toResponse)
+                .map(accountNotificationMapper::toResponse)
                 .toList();
     }
 
@@ -50,7 +54,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return accountNotifications
                 .stream()
-                .map(AccountNotification::toResponse)
+                .map(accountNotificationMapper::toResponse)
                 .toList();
     }
 
@@ -69,7 +73,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return saved
                 .stream()
-                .map(AccountNotification::toResponse)
+                .map(accountNotificationMapper::toResponse)
                 .toList();
 
     }
@@ -85,13 +89,13 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         return updated
                 .stream()
-                .map(AccountNotification::toResponse)
+                .map(accountNotificationMapper::toResponse)
                 .toList();
     }
 
     @Override
     public AccountNotificationResponse getAccountNotificationResponseById(long accountNotificationId) {
-        return getAccountNotificationById(accountNotificationId).toResponse();
+        return accountNotificationMapper.toResponse(getAccountNotificationById(accountNotificationId));
     }
 
     @Override
@@ -102,8 +106,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         accountNotification.setChecked(true);
 
-        return accountNotificationRepository.save(accountNotification)
-                .toResponse();
+        return accountNotificationMapper.toResponse(accountNotificationRepository.save(accountNotification));
     }
 
     @Override
@@ -114,7 +117,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
         accountNotificationRepository.delete(accountNotification);
 
-        return accountNotification.toResponse();
+        return accountNotificationMapper.toResponse(accountNotification);
     }
 
     @Override

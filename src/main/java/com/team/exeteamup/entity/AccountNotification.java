@@ -39,13 +39,4 @@ public class AccountNotification {
         this.createdAt = createdAt;
         this.isChecked = isChecked;
     }
-
-    public AccountNotificationResponse toResponse() {
-        return AccountNotificationResponse.builder()
-                .notificationId(this.notification.getNotificationId())
-                .accountId(this.account.getAccountId())
-                .accountNotificationId(this.id)
-                .isChecked(this.isChecked)
-                .build();
-    }
 }
