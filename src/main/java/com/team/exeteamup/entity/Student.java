@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "students")
@@ -53,5 +54,8 @@ public class Student {
 
     @Column(name = "is_leader", nullable = true)
     private Boolean isLeader;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<JoinRequest> joinRequests;
 
 }

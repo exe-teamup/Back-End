@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class GroupMapper {
@@ -29,5 +30,11 @@ public class GroupMapper {
                 .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
                 .groupStatus(group.getGroupStatus())
                 .build();
+    }
+
+    public List<GroupResponse> toResponseList(List<Group> groups) {
+        return groups.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }

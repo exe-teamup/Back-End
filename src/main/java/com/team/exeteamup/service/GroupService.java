@@ -11,7 +11,8 @@ import java.util.UUID;
 public interface GroupService {
     GroupResponse createGroup(GroupRequest groupRequest);
     void deleteGroup(long groupId);
-    List<Group> getAllGroups();
+    List<GroupResponse> getAllGroups();
     GroupResponse updateGroup(long groupId, GroupUpdateRequest request);
     GroupResponse getGroupById(long groupId);
+    Group findGroupById(long groupId);
 }

@@ -8,9 +8,9 @@ import com.team.exeteamup.entity.*;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.GroupService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -92,8 +92,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<GroupResponse> getAllGroups() {
+        List<Group> groups = groupRepository.findAll();
+        return groupMapper.toResponseList(groups);
     }
 
     @Override
@@ -120,5 +122,11 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
         return groupMapper.toResponse(group);
+    }
+
+    @Override
+    public Group findGroupById(long groupId) {
+        return groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
     }
 }
