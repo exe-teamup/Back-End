@@ -5,13 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CourseRequest {
+public class CourseUpdateRequest {
+    private Long courseId;
     private Long semesterId;
     private Long lecturerId;
     private String courseCode;

@@ -12,10 +12,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class CourseResponse {
-    private long courseId;
-    private long semesterId;
-    private long lecturerId;
-    private String classCode;
+    private Long courseId;
+    private Long semesterId;
+    private Long lecturerId;
+    private String courseCode;
     private int maxGroup;
     private int groupCount;
 }
