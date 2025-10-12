@@ -31,8 +31,8 @@ public class GroupController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Group>> getAllGroups() {
-        List<Group> groups = groupService.getAllGroups();
+    public ResponseEntity<List<GroupResponse>> getAllGroups() {
+        List<GroupResponse> groups = groupService.getAllGroups();
         return ResponseEntity.ok(groups);
     }
 

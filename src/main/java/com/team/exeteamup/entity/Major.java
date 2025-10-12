@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "majors")
 @Data
@@ -33,5 +35,8 @@ public class Major {
 
     @Column(name = "major_status", nullable = false)
     private Boolean majorStatus = true;
+
+    @OneToMany(mappedBy = "major", cascade = CascadeType.ALL)
+    private List<PostMajor> postMajors;
 
 }
