@@ -15,6 +15,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+          # Cache Maven dependencies
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       # 2️⃣ Set up JDK
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -51,9 +60,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "Pulling latest image..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/spring-backend:latest
-            echo "Stopping old container..."
-            docker stop spring-backend || true && docker rm spring-backend || true
-            echo "Starting new container..."
-            docker run -d --name spring-backend -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/spring-backend:latest
+            cd /opt/exe-teamup
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/exe-backend:latest
+            docker stop exe-backend || true
+            docker rm exe-backend || true
+            docker-compose up -d backend
