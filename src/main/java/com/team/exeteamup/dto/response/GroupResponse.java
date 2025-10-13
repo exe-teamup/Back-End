@@ -18,4 +18,5 @@ public class GroupResponse {
     private List<Long> memberIds;
     private int memberCount;
     private Boolean groupStatus;
+    private Long courseId;
 }

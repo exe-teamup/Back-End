@@ -25,7 +25,7 @@ public class Course {
     private Semester semester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id")
+    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id", nullable = true)
     private Lecturer lecturer;
 
     @Column(name = "course_code")

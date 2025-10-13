@@ -3,6 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
+import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,12 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> getCoursesByLecturerId(@PathVariable("id") Long id) {
         List<CourseResponse> courseResponses = courseService.getCoursesByLecturerId(id);
         return ResponseEntity.ok(courseResponses);
+    }
+
+    @GetMapping("{id}/groups")
+    public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
+        List<GroupResponse> responses = courseService.getGroupsByCourseId(id);
+        return ResponseEntity.ok(responses);
     }
 
     @PutMapping("{id}")
