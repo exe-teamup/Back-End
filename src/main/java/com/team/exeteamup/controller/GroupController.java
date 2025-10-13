@@ -2,9 +2,13 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
+import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
+import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.entity.Group;
+import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +18,24 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/groups")
+@RequiredArgsConstructor
 public class GroupController {
-    @Autowired
-    private GroupService groupService;
+
+    private final GroupService groupService;
+    private final GroupRegisterLecturerService groupRegisterLecturerService;
 
     @PostMapping("")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
         GroupResponse group = groupService.createGroup(groupRequest);
         return ResponseEntity.ok(group);
+    }
+
+    @PostMapping("/{id}/lecturers/select")
+    public ResponseEntity<LecturerSelectionResponse> selectLecturers(
+            @PathVariable Long id,
+            @RequestBody LecturerSelectionRequest request) {
+        LecturerSelectionResponse response = groupRegisterLecturerService.selectLecturers(id, request.getLecturerIds());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("{id}")

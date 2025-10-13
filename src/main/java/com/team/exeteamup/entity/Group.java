@@ -45,6 +45,12 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<JoinRequest> joinRequests;
 
+    @OneToMany(mappedBy = "group")
+    private List<GroupRegisterLecturer> lecturerSelections;
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupLecturer> assignedLecturers;
+
 //    @OneToMany(mappedBy = "group")
 //    private List<GroupLecturer> groupLecturers;
 }

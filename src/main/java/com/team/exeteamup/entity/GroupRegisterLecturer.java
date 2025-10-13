@@ -2,6 +2,7 @@ package com.team.exeteamup.entity;
 
 import com.team.exeteamup.entity.embedded.GroupLecturerId;
 import com.team.exeteamup.enums.LecturerStatus;
+import com.team.exeteamup.enums.RegisterStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,15 +12,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "group_lecturer")
+@Table(name = "group_register_lecturer")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class GroupLecturer {
-
+public class GroupRegisterLecturer {
     @EmbeddedId
-    private GroupLecturerId id;
+    private GroupLecturerId groupLecturerId;
 
     @ManyToOne
     @MapsId("groupId")
@@ -31,12 +31,12 @@ public class GroupLecturer {
     @JoinColumn(name = "lecturer_id")
     private Lecturer lecturer;
 
-    @Column(name = "is_main")
-    private boolean isMain;
+    @Column(name = "register_order")
+    private int registerOrder;
 
     @Enumerated(EnumType.STRING)
-    private LecturerStatus status;
+    private RegisterStatus registerStatus;
 
-    @Column(name = "assignedAt")
-    private LocalDateTime assignedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }
