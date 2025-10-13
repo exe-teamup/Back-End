@@ -15,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class StudentResponse {
+    private Long courseId;
     private long studentId;
     private Account accountId;
     private String fullName;

@@ -21,11 +21,11 @@ public class GroupServiceImpl implements GroupService {
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    private final CourseRepository courseRepository;
 
     @Override
     @Transactional
     public GroupResponse createGroup(GroupRequest groupRequest) {
-        long studentId = groupRequest.getStudentId();
         Student leader = studentRepository.findById(groupRequest.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
 
@@ -33,9 +33,13 @@ public class GroupServiceImpl implements GroupService {
             throw new RuntimeException("Sinh viên này đã thuộc nhóm khác");
         }
 
+        Course course = courseRepository.findById(groupRequest.getCourseId())
+                .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
         Group group = Group.builder()
                 .groupName(groupRequest.getGroupName())
                 .groupStatus(true)
+                .course(course)
                 .build();
 
         group = groupRepository.save(group);
@@ -77,18 +81,13 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
-        List<Student> students = group.getStudents();
+        List<Student> students = studentRepository.findAllByGroup(group);
         for (Student student : students) {
             student.setGroup(null);
             student.setIsLeader(false);
         }
         studentRepository.saveAll(students);
-
-        group.setGroupStatus(false);
-        group.setStudents(new ArrayList<>());
-        group.setMemberCount(0);
-
-        groupRepository.save(group);
+        groupRepository.delete(group);
     }
 
     @Override

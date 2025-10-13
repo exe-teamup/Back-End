@@ -15,6 +15,7 @@ public class StudentMapper {
 
         StudentResponse response = new StudentResponse();
 
+        response.setCourseId(student.getCourse().getCourseId());
         response.setStudentId(student.getStudentId());
         response.setFullName(student.getFullName());
         response.setStudentCode(student.getStudentCode());

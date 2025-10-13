@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.StudentResponse;
 import com.team.exeteamup.entity.Account;
@@ -10,6 +11,7 @@ import com.team.exeteamup.enums.AccountStatus;
 import com.team.exeteamup.enums.StudentStatus;
 import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
+import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.MajorRepository;
 import com.team.exeteamup.repository.StudentRepository;
 import com.team.exeteamup.service.StudentService;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
@@ -45,6 +48,10 @@ public class StudentServiceImpl implements StudentService {
     private AccountRepository accountRepository;
     @Autowired
     private MajorRepository majorRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
 
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -87,6 +94,7 @@ public class StudentServiceImpl implements StudentService {
                 String phone = currentRow.getCell(3).getStringCellValue().trim();
                 String bio = currentRow.getCell(4) != null ? currentRow.getCell(4).getStringCellValue().trim() : null;
                 String majorName = currentRow.getCell(5).getStringCellValue().trim();
+                String courseCode = currentRow.getCell(6).getStringCellValue().trim();
 
                 if (accountRepository.existsByEmail(email)) {
                     throw new RuntimeException("Email already exists: " + email);
@@ -105,6 +113,9 @@ public class StudentServiceImpl implements StudentService {
                 Major major = majorRepository.findByMajorName(majorName)
                         .orElseThrow(() -> new RuntimeException("Major not found: " + majorName));
 
+                Course course = courseRepository.findByCourseCode(courseCode)
+                        .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
                 Account account = Account.builder()
                         .email(email)
                         .role(AccountRole.STUDENT)
@@ -121,6 +132,7 @@ public class StudentServiceImpl implements StudentService {
                         .fullName(fullName)
                         .phoneNumber(phone)
                         .bio(bio)
+                        .course(course)
                         .createdAt(LocalDateTime.now())
                         .studentStatus(StudentStatus.ELIGIBLE)
                         .isLeader(false)

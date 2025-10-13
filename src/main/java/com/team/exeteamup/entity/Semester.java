@@ -49,7 +49,4 @@ public class Semester {
 
     @OneToMany(mappedBy = "semester")
     private List<Course> courses;
-
-    @OneToMany(mappedBy = "semester")
-    private List<Group> groups;
 }
