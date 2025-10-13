@@ -6,16 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class GroupRequest {
-    private Long courseId;
-    private String groupName;
-    private long studentId;
-    private String email;
-    private List<String> memberEmails;
+public class LecturerSelectionRequest {
+    private List<Long> lecturerIds;
 }

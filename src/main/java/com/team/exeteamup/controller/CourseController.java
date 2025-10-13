@@ -2,6 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
+import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Course;
