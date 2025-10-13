@@ -37,6 +37,9 @@ public class Course {
     @Column(name = "group_count")
     private int groupCount;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Group> groups;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Student> students;
 }

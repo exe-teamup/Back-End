@@ -28,6 +28,7 @@ public class GroupMapper {
                 .groupName(group.getGroupName())
                 .memberIds(memberIds)
                 .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
+                .courseId(group.getCourse().getCourseId())
                 .groupStatus(group.getGroupStatus())
                 .build();
     }

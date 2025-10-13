@@ -33,6 +33,10 @@ public class Student {
     @JoinColumn(name = "major_id", nullable = false)
     private Major major;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+
     @Column(name = "student_code")
     private String studentCode;
 

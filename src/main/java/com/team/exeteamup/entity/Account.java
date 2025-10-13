@@ -38,6 +38,9 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<AccountNotification> accountNotifications;
 
+    @OneToOne(mappedBy = "account")
+    private Student student;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private AccountStatus status;
