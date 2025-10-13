@@ -37,4 +37,13 @@ public class GroupMapper {
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public GroupResponse toCourseResponse(Group group) {
+        return GroupResponse.builder()
+                .groupId(group.getGroupId())
+                .groupName(group.getGroupName())
+                .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
+                .courseId(group.getCourse() != null ? group.getCourse().getCourseId() : null)
+                .build();
+    }
 }
