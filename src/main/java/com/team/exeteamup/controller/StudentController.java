@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
-import com.team.exeteamup.dto.response.StudentResponse;
+import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.service.StudentProfileService;
 import com.team.exeteamup.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -53,13 +53,13 @@ public class StudentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<StudentResponse>> getAllStudents() {
-        List<StudentResponse> students = studentService.getAllStudents();
+    public ResponseEntity<List<UserResponse>> getAllStudents() {
+        List<UserResponse> students = studentService.getAllStudents();
         return ResponseEntity.ok(students);
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<StudentResponse>> getAllStudents(
+    public ResponseEntity<Page<UserResponse>> getAllStudents(
             @PageableDefault(size = 10, sort = "studentId", direction = Sort.Direction.ASC)
             Pageable pageable,
             @RequestParam(required = false) String sort) {
@@ -74,14 +74,14 @@ public class StudentController {
                         .body(null);
             }
         }
-        Page<StudentResponse> studentPage = studentService.getAllStudents(pageable);
+        Page<UserResponse> studentPage = studentService.getAllStudents(pageable);
         return ResponseEntity.ok(studentPage);
     }
 
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<List<StudentResponse>> importStudents(@RequestParam("file") MultipartFile file) {
+        public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
-            List<StudentResponse> response = studentService.importStudentsFromExcel(file);
+            List<UserResponse> response = studentService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

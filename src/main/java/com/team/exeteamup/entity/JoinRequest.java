@@ -1,7 +1,7 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.JoinRequestStatus;
-import com.team.exeteamup.enums.JoinRequestType;
+import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
+import com.team.exeteamup.enums.joinRequest.JoinRequestType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,9 +22,9 @@ public class JoinRequest {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "user_id")
     @NotNull
-    private Student student;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -48,13 +48,13 @@ public class JoinRequest {
     @NotNull
     private JoinRequestType requestType;
 
-    public JoinRequest(Student student,
+    public JoinRequest(User user,
                        Group group,
                        LocalDateTime createdAt,
                        JoinRequestStatus requestStatus,
                        String denyReason,
                        JoinRequestType requestType) {
-        this.student = student;
+        this.user = user;
         this.group = group;
         this.createdAt = createdAt;
         this.requestStatus = requestStatus;

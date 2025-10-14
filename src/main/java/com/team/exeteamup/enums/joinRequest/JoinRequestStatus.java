@@ -1,4 +1,4 @@
-package com.team.exeteamup.enums;
+package com.team.exeteamup.enums.joinRequest;
 
 public enum JoinRequestStatus {
     PENDING,

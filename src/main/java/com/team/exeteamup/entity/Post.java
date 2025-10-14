@@ -1,6 +1,7 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.PostStatus;
+import com.team.exeteamup.enums.post.PostStatus;
+import com.team.exeteamup.enums.post.PostType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +23,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private Group group;
-
     @Column(nullable = false, length = 100)
     private String title;
 
@@ -36,11 +33,19 @@ public class Post {
     @Column(name = "post_status")
     private PostStatus postStatus;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "post_type")
+    private PostType postType;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostMajor> postMajors;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @PrePersist
     protected void onCreate() {

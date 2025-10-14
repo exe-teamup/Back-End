@@ -1,7 +1,7 @@
 package com.team.exeteamup.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.team.exeteamup.enums.PostStatus;
+import com.team.exeteamup.enums.post.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

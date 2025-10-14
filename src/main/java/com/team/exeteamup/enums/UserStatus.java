@@ -1,5 +1,5 @@
     package com.team.exeteamup.enums;
 
-    public enum StudentStatus {
+    public enum UserStatus {
         ELIGIBLE, NOT_ELIGIBLE
     }

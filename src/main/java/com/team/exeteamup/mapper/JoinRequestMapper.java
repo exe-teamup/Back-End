@@ -9,7 +9,7 @@ public class JoinRequestMapper {
     public JoinRequestResponse toResponse(JoinRequest joinRequest) {
         return JoinRequestResponse.builder()
                 .id(joinRequest.getId())
-                .studentId(joinRequest.getStudent().getStudentId())
+                .studentId(joinRequest.getUser().getUserId())
                 .groupId(joinRequest.getGroup().getGroupId())
                 .createdAt(joinRequest.getCreatedAt())
                 .requestStatus(joinRequest.getRequestStatus())

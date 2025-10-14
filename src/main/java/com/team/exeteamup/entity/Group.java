@@ -19,10 +19,6 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
-
     @Column(name = "group_name", nullable = true)
     private String groupName;
 
@@ -33,10 +29,7 @@ public class Group {
     private Boolean groupStatus;
 
     @OneToMany(mappedBy = "group")
-    private List<Student> students;
-
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<Post> posts;
+    private List<User> users;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<JoinRequest> joinRequests;
@@ -50,6 +43,10 @@ public class Group {
     @ManyToOne
     @JoinColumn(name = "official_lecturer_id")
     private Lecturer officialLecturer;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
 
 //    @OneToMany(mappedBy = "group")
 //    private List<GroupLecturer> groupLecturers;

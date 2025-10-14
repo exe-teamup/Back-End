@@ -1,47 +1,47 @@
 package com.team.exeteamup.mapper;
 
-import com.team.exeteamup.dto.response.StudentResponse;
-import com.team.exeteamup.entity.Student;
-import com.team.exeteamup.enums.StudentStatus;
+import com.team.exeteamup.dto.response.UserResponse;
+import com.team.exeteamup.entity.User;
+import com.team.exeteamup.enums.UserStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StudentMapper {
 
-    public StudentResponse toResponse(Student student) {
-        if (student == null) {
+    public UserResponse toResponse(User user) {
+        if (user == null) {
             return null;
         }
 
-        StudentResponse response = new StudentResponse();
+        UserResponse response = new UserResponse();
 
-        response.setCourseId(student.getCourse().getCourseId());
-        response.setStudentId(student.getStudentId());
-        response.setFullName(student.getFullName());
-        response.setStudentCode(student.getStudentCode());
-        response.setPhoneNumber(student.getPhoneNumber());
-        response.setBio(student.getBio());
-        response.setCreatedAt(student.getCreatedAt());
+        response.setCourseId(user.getCourse().getCourseId());
+        response.setUserId(user.getUserId());
+        response.setFullName(user.getFullName());
+        response.setUserCode(user.getUserCode());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setBio(user.getBio());
+        response.setCreatedAt(user.getCreatedAt());
 
-        if (student.getAccount() != null) {
-            response.setEmail(student.getAccount().getEmail());
+        if (user.getAccount() != null) {
+            response.setEmail(user.getAccount().getEmail());
         }
 
-        if (student.getGroup() != null) {
-            response.setGroupId(student.getGroup().getGroupId());
-            response.setGroupName(student.getGroup().getGroupName());
+        if (user.getGroup() != null) {
+            response.setGroupId(user.getGroup().getGroupId());
+            response.setGroupName(user.getGroup().getGroupName());
         }
 
-        if (student.getMajor() != null) {
-            response.setMajorId(student.getMajor().getMajorId());
-            response.setMajorName(student.getMajor().getMajorName());
+        if (user.getMajor() != null) {
+            response.setMajorId(user.getMajor().getMajorId());
+            response.setMajorName(user.getMajor().getMajorName());
         }
 
-        response.setStudentStatus(
-                student.getStudentStatus() != null ? StudentStatus.valueOf(student.getStudentStatus().name()) : null
+        response.setUserStatus(
+                user.getUserStatus() != null ? UserStatus.valueOf(user.getUserStatus().name()) : null
         );
 
-        response.setIsLeader(student.getIsLeader() != null ? student.getIsLeader() : false);
+        response.setIsLeader(user.getIsLeader() != null ? user.getIsLeader() : false);
 
         return response;
     }
