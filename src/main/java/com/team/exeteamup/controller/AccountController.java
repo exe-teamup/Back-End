@@ -24,4 +24,9 @@ public class AccountController {
         AccountResponse response = accountService.loginWithEmail(accountRequest.getMail());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("test")
+    public ResponseEntity<?> getmtest() {
+        return ResponseEntity.ok("test controller 1111 ");
+    }
 }
