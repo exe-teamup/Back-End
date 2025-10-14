@@ -1,6 +1,6 @@
 package com.team.exeteamup.mapper;
 
-import com.team.exeteamup.dto.request.AssignLecturerResponse;
+import com.team.exeteamup.dto.response.AssignLecturerResponse;
 import com.team.exeteamup.entity.GroupLecturer;
 import org.springframework.stereotype.Component;
 

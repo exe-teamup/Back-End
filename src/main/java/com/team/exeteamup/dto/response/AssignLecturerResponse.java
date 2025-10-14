@@ -1,4 +1,4 @@
-package com.team.exeteamup.dto.request;
+package com.team.exeteamup.dto.response;
 
 import com.team.exeteamup.enums.LecturerStatus;
 import lombok.AllArgsConstructor;
