@@ -16,12 +16,17 @@ public class AccountController {
 
     @GetMapping("")
     public ResponseEntity<?> getm() {
-        return ResponseEntity.ok("test controller");
+        return ResponseEntity.ok("test controller 1111 ");
     }
 
     @PostMapping("")
     public ResponseEntity<AccountResponse> login(@RequestBody AccountRequest accountRequest) {
         AccountResponse response = accountService.loginWithEmail(accountRequest.getMail());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("test")
+    public ResponseEntity<?> getmtest() {
+        return ResponseEntity.ok("test controller 1111 ");
     }
 }
