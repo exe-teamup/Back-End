@@ -1,7 +1,7 @@
 package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.request.AssignLecturerRequest;
-import com.team.exeteamup.dto.request.AssignLecturerResponse;
+import com.team.exeteamup.dto.response.AssignLecturerResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.GroupLecturer;
 import com.team.exeteamup.entity.GroupRegisterLecturer;
@@ -17,12 +17,12 @@ import com.team.exeteamup.repository.GroupRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.ModeratorService;
 import jakarta.transaction.Transactional;
-import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,4 +70,49 @@ public class ModeratorServiceImpl implements ModeratorService {
         groupRepository.save(group);
         return lecturerAssignmentMapper.toResponse(groupLecturer);
     }
+
+    @Override
+    public AssignLecturerResponse updateAssignedLecturer(AssignLecturerRequest assignLecturerRequest) {
+        Group group = groupRepository.findById(assignLecturerRequest.getGroupId())
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
+        Lecturer lecturer = lecturerRepository.findById(assignLecturerRequest.getLecturerId())
+                .orElseThrow(() -> new AppException("Giảng viên không tồn tại"));
+
+        Optional<GroupLecturer> currentMainLecturer = groupLecturerRepository
+                .findByGroup_GroupIdAndIsMainTrue(group.getGroupId());
+
+        boolean isRegistered = groupRegisterLecturerRepository
+                .existsByGroup_GroupIdAndLecturer_LecturerId(group.getGroupId(), lecturer.getLecturerId());
+
+        if (!isRegistered) {
+            throw new AppException("Giảng viên này chưa được nhóm chọn");
+        }
+
+        groupLecturerRepository.deleteAllByGroup_GroupId(group.getGroupId());
+
+        GroupLecturer newMainLecturer = GroupLecturer.builder()
+                .id(new GroupLecturerId(group.getGroupId(), lecturer.getLecturerId()))
+                .group(group)
+                .lecturer(lecturer)
+                .status(LecturerStatus.ACTIVE)
+                .isMain(true)
+                .assignedAt(LocalDateTime.now())
+                .build();
+        groupLecturerRepository.save(newMainLecturer);
+
+        List<GroupRegisterLecturer> register = groupRegisterLecturerRepository
+                .findByGroup_GroupId(group.getGroupId());
+        for (GroupRegisterLecturer reg : register) {
+            if (reg.getLecturer().getLecturerId() == newMainLecturer.getLecturer().getLecturerId()) {
+                reg.setRegisterStatus(RegisterStatus.APPROVED);
+            } else {
+                reg.setRegisterStatus(RegisterStatus.REJECTED);
+            }
+        }
+        groupRegisterLecturerRepository.saveAll(register);
+        group.setOfficialLecturer(lecturer);
+        groupRepository.save(group);
+        return lecturerAssignmentMapper.toResponse(newMainLecturer);
+    }
+
 }
