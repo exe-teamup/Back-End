@@ -1,6 +1,6 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.StudentStatus;
+import com.team.exeteamup.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Student {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long studentId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @OneToOne
     @JoinColumn(name = "account_id")
@@ -37,8 +38,8 @@ public class Student {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @Column(name = "student_code")
-    private String studentCode;
+    @Column(name = "user_code")
+    private String userCode;
 
     @Column(name = "full_name")
     private String fullName;
@@ -52,14 +53,17 @@ public class Student {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "student_status")
+    @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
-    private StudentStatus studentStatus;
+    private UserStatus userStatus;
 
     @Column(name = "is_leader", nullable = true)
     private Boolean isLeader;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<JoinRequest> joinRequests;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
 }

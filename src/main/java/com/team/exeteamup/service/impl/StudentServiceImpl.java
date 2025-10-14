@@ -2,13 +2,13 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.exception.AppException;
-import com.team.exeteamup.dto.response.StudentResponse;
+import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Major;
-import com.team.exeteamup.entity.Student;
-import com.team.exeteamup.enums.AccountRole;
-import com.team.exeteamup.enums.AccountStatus;
-import com.team.exeteamup.enums.StudentStatus;
+import com.team.exeteamup.entity.User;
+import com.team.exeteamup.enums.account.AccountRole;
+import com.team.exeteamup.enums.account.AccountStatus;
+import com.team.exeteamup.enums.UserStatus;
 import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.CourseRepository;
@@ -58,22 +58,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentResponse> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
-        return students.stream()
+    public List<UserResponse> getAllStudents() {
+        List<User> users = studentRepository.findAll();
+        return users.stream()
                 .map(studentMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public Page<StudentResponse> getAllStudents(Pageable pageable) {
-        Page<Student> studentPage = studentRepository.findAll(pageable);
+    public Page<UserResponse> getAllStudents(Pageable pageable) {
+        Page<User> studentPage = studentRepository.findAll(pageable);
         return studentPage.map(studentMapper::toResponse);
     }
 
     @Override
     @Transactional
-    public List<StudentResponse> importStudentsFromExcel(MultipartFile file) throws IOException {
-        List<Student> studentsToSave = new ArrayList<>();
+    public List<UserResponse> importStudentsFromExcel(MultipartFile file) throws IOException {
+        List<User> studentsToSave = new ArrayList<>();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -90,7 +90,7 @@ public class StudentServiceImpl implements StudentService {
 
                 String email = currentRow.getCell(0).getStringCellValue().trim();
                 String fullName = currentRow.getCell(1).getStringCellValue().trim();
-                String studentCode = currentRow.getCell(2).getStringCellValue().trim();
+                String userCode = currentRow.getCell(2).getStringCellValue().trim();
                 String phone = currentRow.getCell(3).getStringCellValue().trim();
                 String bio = currentRow.getCell(4) != null ? currentRow.getCell(4).getStringCellValue().trim() : null;
                 String majorName = currentRow.getCell(5).getStringCellValue().trim();
@@ -99,12 +99,12 @@ public class StudentServiceImpl implements StudentService {
                 if (accountRepository.existsByEmail(email)) {
                     throw new RuntimeException("Email already exists: " + email);
                 }
-                if (studentRepository.existsByStudentCode(studentCode)) {
-                    throw new RuntimeException("Student code already exists: " + studentCode);
+                if (studentRepository.existsByUserCode(userCode)) {
+                    throw new RuntimeException("Student code already exists: " + userCode);
                 }
 
-                if (studentsToSave.stream().anyMatch(s -> s.getStudentCode().equals(studentCode))) {
-                    throw new RuntimeException("Duplicate student code in file: " + studentCode);
+                if (studentsToSave.stream().anyMatch(s -> s.getUserCode().equals(userCode))) {
+                    throw new RuntimeException("Duplicate student code in file: " + userCode);
                 }
                 if (studentsToSave.stream().anyMatch(s -> s.getAccount().getEmail().equals(email))) {
                     throw new RuntimeException("Duplicate email in file: " + email);
@@ -125,26 +125,26 @@ public class StudentServiceImpl implements StudentService {
 
                 accountRepository.save(account);
 
-                Student student = Student.builder()
+                User user = User.builder()
                         .account(account)
                         .major(major)
-                        .studentCode(studentCode)
+                        .userCode(userCode)
                         .fullName(fullName)
                         .phoneNumber(phone)
                         .bio(bio)
                         .course(course)
                         .createdAt(LocalDateTime.now())
-                        .studentStatus(StudentStatus.ELIGIBLE)
+                        .userStatus(UserStatus.ELIGIBLE)
                         .isLeader(false)
                         .build();
 
-                studentsToSave.add(student);
+                studentsToSave.add(user);
             }
         }
 
-        List<Student> savedStudents = studentRepository.saveAll(studentsToSave);
+        List<User> savedUsers = studentRepository.saveAll(studentsToSave);
 
-        List<StudentResponse> responses = savedStudents.stream()
+        List<UserResponse> responses = savedUsers.stream()
                 .map(studentMapper::toResponse)
                 .collect(Collectors.toList());
 
@@ -169,7 +169,7 @@ public class StudentServiceImpl implements StudentService {
                 String email = emailCell.getStringCellValue().trim();
 
                 studentRepository.findByAccount_Email(email).ifPresentOrElse(student -> {
-                    student.setStudentStatus(StudentStatus.NOT_ELIGIBLE);
+                    student.setUserStatus(UserStatus.NOT_ELIGIBLE);
                     studentRepository.save(student);
                     System.out.println("✅ Đổi trạng thái: " + email);
                 }, () -> {
@@ -184,23 +184,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteStudentById(long studentId) {
-        Student student = studentRepository.findByStudentId(studentId)
+        User user = studentRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
-        if (!student.getStudentStatus().equals(StudentStatus.ELIGIBLE)) {
+        if (!user.getUserStatus().equals(UserStatus.ELIGIBLE)) {
             throw new AppException("Sinh viên không tồn tại");
         }
 
-        student.setStudentStatus(StudentStatus.NOT_ELIGIBLE);
-        studentRepository.save(student);
+        user.setUserStatus(UserStatus.NOT_ELIGIBLE);
+        studentRepository.save(user);
     }
 
     @Override
-    public Student findById(long studentId) {
+    public User findById(long studentId) {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Student not found: " +
-                                studentId)
+                        "Student not found: " + studentId)
                 );
     }
 }

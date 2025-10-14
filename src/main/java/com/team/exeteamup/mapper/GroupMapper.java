@@ -2,10 +2,9 @@ package com.team.exeteamup.mapper;
 
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Group;
-import com.team.exeteamup.entity.Student;
+import com.team.exeteamup.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +14,11 @@ public class GroupMapper {
     public GroupResponse toResponse(Group group) {
         if (group == null) return null;
 
-        List<Long> memberIds = group.getStudents() != null
-                ? group.getStudents()
+        List<Long> memberIds = group.getUsers() != null
+                ? group.getUsers()
                 .stream()
-                .filter(student -> !student.getIsLeader())
-                .map(Student::getStudentId)
+                .filter(user -> !user.getIsLeader())
+                .map(User::getUserId)
                 .toList()
                 : List.of();
 
@@ -27,7 +26,7 @@ public class GroupMapper {
                 .groupId(group.getGroupId())
                 .groupName(group.getGroupName())
                 .memberIds(memberIds)
-                .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
+                .memberCount(group.getUsers() != null ? group.getUsers().size() : 0)
                 .courseId(group.getCourse().getCourseId())
                 .groupStatus(group.getGroupStatus())
                 .build();
@@ -43,7 +42,7 @@ public class GroupMapper {
         return GroupResponse.builder()
                 .groupId(group.getGroupId())
                 .groupName(group.getGroupName())
-                .memberCount(group.getStudents() != null ? group.getStudents().size() : 0)
+                .memberCount(group.getUsers() != null ? group.getUsers().size() : 0)
                 .courseId(group.getCourse() != null ? group.getCourse().getCourseId() : null)
                 .build();
     }

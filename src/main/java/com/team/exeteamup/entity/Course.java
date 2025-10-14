@@ -41,5 +41,5 @@ public class Course {
     private List<Group> groups;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Student> students;
+    private List<User> users;
 }

@@ -1,13 +1,8 @@
 package com.team.exeteamup.dto.response;
 
-import com.team.exeteamup.enums.AccountRole;
+import com.team.exeteamup.enums.account.AccountRole;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.UUID;
 
 @Data
 @Builder

@@ -16,29 +16,29 @@ public class FirebaseConfig {
     @Value("${FCM_CREDENTIALS_FILE_PATH}")
     private String credentialsFilePath;
 
-    // USE FOR LOCAL
-//    @Bean
-//    public FirebaseApp firebaseApp() throws IOException {
-//        FirebaseOptions options = FirebaseOptions.builder()
-//                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(credentialsFilePath).getInputStream()))
-//                .build();
-//        return FirebaseApp.initializeApp(options);
-//    }
-
-    // USE FOR PRODUCTION
+//     USE FOR LOCAL
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream(credentialsFilePath);
-
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(credentialsFilePath).getInputStream()))
                 .build();
-
-        if (FirebaseApp.getApps().isEmpty()) {
-            return FirebaseApp.initializeApp(options);
-        } else {
-            return FirebaseApp.getInstance();
-        }
+        return FirebaseApp.initializeApp(options);
     }
+
+    // USE FOR PRODUCTION
+//    @Bean
+//    public FirebaseApp firebaseApp() throws IOException {
+//        FileInputStream serviceAccount = new FileInputStream(credentialsFilePath);
+//
+//        FirebaseOptions options = FirebaseOptions.builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .build();
+//
+//        if (FirebaseApp.getApps().isEmpty()) {
+//            return FirebaseApp.initializeApp(options);
+//        } else {
+//            return FirebaseApp.getInstance();
+//        }
+//    }
 
 }
