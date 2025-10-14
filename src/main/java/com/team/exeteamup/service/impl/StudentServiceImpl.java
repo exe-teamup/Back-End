@@ -199,8 +199,7 @@ public class StudentServiceImpl implements StudentService {
     public Student findById(long studentId) {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Student not found: " +
-                                studentId)
+                        "Student not found: " + studentId)
                 );
     }
 }
