@@ -55,8 +55,11 @@ jobs:
           script: |
             cd /opt/exe-teamup
 
-            echo "IMAGE_TAG=$(git rev-parse --short HEAD)" > .env
+            NEW_TAG=$(git rev-parse --short HEAD)
+
+            sed -i '/^IMAGE_TAG=/d' .env
+
+            echo "IMAGE_TAG=$NEW_TAG" >> .env
             
             docker-compose pull backend
-            
             docker-compose up -d --force-recreate backend
