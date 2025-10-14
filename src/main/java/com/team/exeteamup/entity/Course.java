@@ -25,7 +25,7 @@ public class Course {
     private Semester semester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id")
+    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id", nullable = true)
     private Lecturer lecturer;
 
     @Column(name = "course_code")
@@ -37,6 +37,9 @@ public class Course {
     @Column(name = "group_count")
     private int groupCount;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Group> groups;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Student> students;
 }

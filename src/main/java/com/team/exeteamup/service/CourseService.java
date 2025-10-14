@@ -2,7 +2,9 @@ package com.team.exeteamup.service;
 
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
+import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
+import com.team.exeteamup.dto.response.GroupResponse;
 import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
@@ -14,4 +16,5 @@ public interface CourseService {
     List<CourseResponse> getCoursesBySemesterId(Long semesterId);
     List<CourseResponse> getCoursesByLecturerId(Long lecturerId);
     CourseResponse updateCourse(CourseUpdateRequest request);
+    List<GroupResponse> getGroupsByCourseId(Long courseId);
 }

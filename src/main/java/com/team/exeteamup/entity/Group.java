@@ -20,10 +20,6 @@ public class Group {
     private long groupId;
 
     @ManyToOne
-    @JoinColumn(name = "semester_id")
-    private Semester semester;
-
-    @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
@@ -36,7 +32,7 @@ public class Group {
     @Column(name = "group_status")
     private Boolean groupStatus;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group")
     private List<Student> students;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
@@ -44,6 +40,12 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<JoinRequest> joinRequests;
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupRegisterLecturer> lecturerSelections;
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupLecturer> assignedLecturers;
 
 //    @OneToMany(mappedBy = "group")
 //    private List<GroupLecturer> groupLecturers;

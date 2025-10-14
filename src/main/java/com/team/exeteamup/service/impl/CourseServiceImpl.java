@@ -2,13 +2,17 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
+import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
+import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.Semester;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.CourseMapper;
+import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.CourseRepository;
+import com.team.exeteamup.repository.GroupRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.CourseService;
@@ -27,6 +31,8 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final SemesterRepository semesterRepository;
     private final LecturerRepository lecturerRepository;
+    private final GroupRepository groupRepository;
+    private final GroupMapper groupMapper;
 
     @Override
     public CourseResponse createCourse(CourseRequest courseRequest) {
@@ -81,4 +87,17 @@ public class CourseServiceImpl implements CourseService {
         Course updatedCourse = courseRepository.save(course);
         return courseMapper.toResponse(updatedCourse);
     }
+
+    @Override
+    public List<GroupResponse> getGroupsByCourseId(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new AppException("Lớp không tồn tại"));
+
+        return groupRepository.findByCourse_CourseId(courseId)
+                .stream()
+                .map(groupMapper::toCourseResponse)
+                .toList();
+    }
+
+
 }
