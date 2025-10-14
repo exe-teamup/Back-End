@@ -45,7 +45,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/exe-backend:latest
 
 
-      - name: SSH to VPS and deploy
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -57,4 +57,3 @@ jobs:
             docker stop exe-backend || true
             docker rm exe-backend || true
             docker-compose up -d backend
-
