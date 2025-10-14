@@ -1,7 +1,7 @@
 package com.team.exeteamup.dto.response;
 
-import com.team.exeteamup.enums.JoinRequestStatus;
-import com.team.exeteamup.enums.JoinRequestType;
+import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
+import com.team.exeteamup.enums.joinRequest.JoinRequestType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

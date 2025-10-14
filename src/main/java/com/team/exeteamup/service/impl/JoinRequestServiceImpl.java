@@ -5,8 +5,8 @@ import com.team.exeteamup.dto.request.joinRequest.JoinRequestRequest;
 import com.team.exeteamup.dto.response.JoinRequestResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.JoinRequest;
-import com.team.exeteamup.entity.Student;
-import com.team.exeteamup.enums.JoinRequestStatus;
+import com.team.exeteamup.entity.User;
+import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
 import com.team.exeteamup.mapper.JoinRequestMapper;
 import com.team.exeteamup.repository.JoinRequestRepository;
 import com.team.exeteamup.service.GroupService;
@@ -61,7 +61,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     @Override
     public List<JoinRequestResponse> findByStudentId(long studentId) {
         return joinRequestRepository
-                .findByStudent(studentService.findById(studentId))
+                .findByUser(studentService.findById(studentId))
                 .stream()
                 .map(joinRequestMapper::toResponse)
                 .toList();
@@ -73,9 +73,9 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     public JoinRequestResponse save(JoinRequestRequest request) {
 
         Group group = groupService.findGroupById(request.getGroupId());
-        Student student = studentService.findById(request.getStudentId());
+        User user = studentService.findById(request.getStudentId());
 
-        JoinRequest joinRequest = new JoinRequest(student,
+        JoinRequest joinRequest = new JoinRequest(user,
                 group,
                 LocalDateTime.now(),
                 JoinRequestStatus.PENDING,

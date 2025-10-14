@@ -1,31 +1,30 @@
 package com.team.exeteamup.dto.response;
 
 import com.team.exeteamup.entity.Account;
-import com.team.exeteamup.enums.StudentStatus;
+import com.team.exeteamup.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentResponse {
+public class UserResponse {
     private Long courseId;
-    private long studentId;
+    private long userId;
     private Account accountId;
     private String fullName;
     private String email;
-    private String studentCode;
+    private String userCode;
     private String phoneNumber;
     private String bio;
     private LocalDateTime createdAt;
     private Boolean isLeader;
-    private StudentStatus studentStatus;
+    private UserStatus userStatus;
 
     private Long groupId;
     private String groupName;

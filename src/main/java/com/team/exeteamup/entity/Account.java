@@ -1,17 +1,12 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.enums.AccountRole;
-import com.team.exeteamup.enums.AccountStatus;
+import com.team.exeteamup.enums.account.AccountRole;
+import com.team.exeteamup.enums.account.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "accounts")
@@ -39,7 +34,7 @@ public class Account {
     private List<AccountNotification> accountNotifications;
 
     @OneToOne(mappedBy = "account")
-    private Student student;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
