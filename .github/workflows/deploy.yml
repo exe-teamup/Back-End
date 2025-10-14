@@ -57,3 +57,4 @@ jobs:
             docker stop exe-backend || true
             docker rm exe-backend || true
             docker-compose up -d backend
+
