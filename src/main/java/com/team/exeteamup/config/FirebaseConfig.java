@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Configuration
 public class FirebaseConfig {
-    @Value("${fcm.credentials.file.path}")
+    @Value("${FCM_CREDENTIALS_FILE_PATH}")
     private String credentialsFilePath;
 
     @Bean
