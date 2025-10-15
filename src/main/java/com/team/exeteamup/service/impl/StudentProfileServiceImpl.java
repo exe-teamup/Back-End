@@ -1,11 +1,15 @@
 package com.team.exeteamup.service.impl;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
+import com.team.exeteamup.mapper.StudentProfileMapper;
+import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.service.AccountService;
 import com.team.exeteamup.service.StudentProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +21,8 @@ import java.util.Optional;
 public class StudentProfileServiceImpl implements StudentProfileService {
 
     private final TokenServiceImpl tokenService;
-
-
     private final StudentRepository studentRepository;
+    private final StudentProfileMapper studentProfileMapper;
 
     @Override
     public StudentProfileResponse getStudentProfile(String token) {
@@ -28,17 +31,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         User user = studentRepository.findByAccount_AccountId(account.getAccountId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
-        return StudentProfileResponse.builder()
-                .userId(user.getUserId())
-                .fullName(user.getFullName())
-                .email(user.getAccount().getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .bio(user.getBio())
-                .createdAt(user.getCreatedAt())
-                .isLeader(user.getIsLeader())
-                .studentStatus(user.getUserStatus() != null ? user.getUserStatus().name() : null)
-                .groupId(user.getGroup() != null ? user.getGroup().getGroupId() : null)
-                .build();
+        return studentProfileMapper.toResponse(user);
     }
 
     @Override
@@ -51,16 +44,6 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
         User updatedUser = studentRepository.save(user);
 
-        return StudentProfileResponse.builder()
-                .userId(updatedUser.getUserId())
-                .fullName(updatedUser.getFullName())
-                .email(updatedUser.getAccount().getEmail())
-                .phoneNumber(updatedUser.getPhoneNumber())
-                .bio(updatedUser.getBio())
-                .createdAt(updatedUser.getCreatedAt())
-                .isLeader(updatedUser.getIsLeader())
-                .studentStatus(updatedUser.getUserStatus() != null ? user.getUserStatus().name() : null)
-                .groupId(updatedUser.getGroup() != null ? updatedUser.getGroup().getGroupId() : null)
-                .build();
+        return studentProfileMapper.toResponse(updatedUser);
     }
 }

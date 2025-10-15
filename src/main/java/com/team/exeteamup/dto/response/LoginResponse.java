@@ -9,4 +9,5 @@ import lombok.Data;
 public class LoginResponse {
     private long accountId;
     private AccountRole role;
+    private String accessToken;
 }
