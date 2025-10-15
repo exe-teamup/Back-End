@@ -9,6 +9,7 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.exception.BadRequestException;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.LoginService;
+import com.team.exeteamup.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public LoginResponse loginGoogle(LoginRequest loginRequest) {
         try {
@@ -32,10 +36,12 @@ public class LoginServiceImpl implements LoginService {
                 throw new BadRequestException("Email not registered");
             }
             Account account = optionalAccount.get();
+            String accessToken = tokenService.generateToken(account);
 
             return LoginResponse.builder()
                     .role(account.getRole())
                     .accountId(account.getAccountId())
+                    .accessToken(accessToken)
                     .build();
 
         } catch (FirebaseAuthException e) {

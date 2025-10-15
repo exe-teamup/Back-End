@@ -8,9 +8,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -18,14 +20,22 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     AccountRepository accountRepository;
 
-    private final String SECRET_KEY = "${TOKEN_SECRET_KEY}";
-    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
-    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 24 * 7;
-
+    @Value("${TOKEN_SECRET_KEY}")
+    private String SECRET_KEY;
 
     private SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(Account account) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(account.getAccountId()))
+                .claim("role", account.getRole())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 ngày
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     //verify token
