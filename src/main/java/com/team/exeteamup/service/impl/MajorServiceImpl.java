@@ -77,6 +77,8 @@ public class MajorServiceImpl implements MajorService {
                 if (level == 2 && row.getCell(3) != null) {
                     parentMajorId = (long) row.getCell(3).getNumericCellValue();
                 }
+                if (majorRepository.existsByMajorCode(majorCode)) continue;
+                if (majorRepository.existsByMajorName(majorName)) continue;
 
                 Major major = new Major();
                 major.setMajorName(majorName);
@@ -151,5 +153,12 @@ public class MajorServiceImpl implements MajorService {
 
         Major saved = majorRepository.save(major);
         return majorMapper.toResponse(saved);
+    }
+
+    @Override
+    public void deleteMajor(Long majorId) {
+        Major major = majorRepository.findById(majorId)
+                .orElseThrow(() -> new AppException("Chuyên ngành không tồn tại"));
+        majorRepository.delete(major);
     }
 }
