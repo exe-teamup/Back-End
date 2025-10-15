@@ -8,8 +8,10 @@ import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.service.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +26,12 @@ public class CourseController {
     public ResponseEntity<CourseResponse> createCourses(@RequestBody CourseRequest courseRequest) {
         CourseResponse course = courseService.createCourse(courseRequest);
         return ResponseEntity.ok(course);
+    }
+
+    @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<CourseResponse>> importCourses(@RequestParam("file") MultipartFile file) {
+        List<CourseResponse> responses = courseService.importCoursesFromExcel(file);
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("")

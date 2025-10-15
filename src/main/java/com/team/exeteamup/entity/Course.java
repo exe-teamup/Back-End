@@ -31,10 +31,13 @@ public class Course {
     @Column(name = "course_code")
     private String courseCode;
 
-    @Column(name = "max_group")
+    @Column(name = "course_name")
+    private String courseName;
+
+    @Column(name = "max_group", nullable = true)
     private int maxGroup;
 
-    @Column(name = "group_count")
+    @Column(name = "group_count", nullable = true)
     private int groupCount;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

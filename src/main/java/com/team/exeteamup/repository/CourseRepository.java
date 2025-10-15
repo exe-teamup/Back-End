@@ -12,4 +12,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findBySemester_SemesterId(Long semesterId);
     List<Course> findByLecturer_LecturerId(Long lecturerId);
     Optional<Course> findByCourseCode(String courseCode);
+    boolean existsByCourseCode(String courseCode);
 }

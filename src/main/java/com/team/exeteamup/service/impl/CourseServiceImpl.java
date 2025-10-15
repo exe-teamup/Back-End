@@ -18,8 +18,15 @@ import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.CourseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,5 +106,48 @@ public class CourseServiceImpl implements CourseService {
                 .toList();
     }
 
+    @Override
+    public List<CourseResponse> importCoursesFromExcel(MultipartFile file) {
+        List<CourseResponse> importedCourses = new ArrayList<>();
 
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Course> courseList = new ArrayList<>();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                long semesterId = (long) row.getCell(0).getNumericCellValue();
+                String courseName = row.getCell(1).getStringCellValue();
+                String courseCode = row.getCell(2).getStringCellValue();
+                int maxGroup = (int) row.getCell(3).getNumericCellValue();
+                int groupCount = (int) row.getCell(4).getNumericCellValue();
+
+                if (courseRepository.existsByCourseCode(courseCode)) continue;
+
+                Semester semester = semesterRepository.findById(semesterId)
+                        .orElseThrow(() -> new RuntimeException("Semester not found: " + semesterId));
+
+                CourseRequest request = new CourseRequest();
+                request.setCourseCode(courseCode);
+                request.setCourseName(courseName);
+                request.setSemesterId(semesterId);
+                request.setMaxGroup(maxGroup);
+                request.setGroupCount(groupCount);
+                Course course = courseMapper.toEntity(request);
+                courseList.add(course);
+            }
+
+            List<Course> saved = courseRepository.saveAll(courseList);
+            importedCourses = saved.stream()
+                    .map(courseMapper::toResponse)
+                    .toList();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to import Excel file: " + e.getMessage());
+        }
+        return importedCourses;
+    }
 }
+

@@ -19,6 +19,7 @@ public class CourseMapper {
 
         Course course = new Course();
         course.setCourseCode(request.getCourseCode());
+        course.setCourseName(request.getCourseName());
         course.setMaxGroup(request.getMaxGroup());
         course.setGroupCount(request.getGroupCount());
 
@@ -57,6 +58,7 @@ public class CourseMapper {
 
     public void updateEntity(Course course, CourseUpdateRequest request) {
         course.setCourseCode(request.getCourseCode());
+        course.setCourseName(request.getCourseName());
         course.setMaxGroup(request.getMaxGroup());
         course.setGroupCount(request.getGroupCount());
 
