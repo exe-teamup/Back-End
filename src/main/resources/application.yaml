@@ -11,6 +11,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
+        dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
   jackson:
@@ -18,7 +19,7 @@ spring:
     date-format: dd-MM-yyyy
 
   profiles:
-    active: dev
+    active: prod
 
 springdoc:
   api-docs:

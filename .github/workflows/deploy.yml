@@ -55,21 +55,22 @@ jobs:
 
       - name: SSH to VPS and deploy
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          NEW_TAG: ${{ steps.git_sha.outputs.SHORT_SHA }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-
-          env:
-            NEW_TAG: ${{ steps.git_sha.outputs.SHORT_SHA }}
           script: |
             cd /opt/exe-teamup
-
-            if ! grep -q "^BE_IMAGE_TAG=" .env; then
-              echo "BE_IMAGE_TAG=" >> .env
+            
+            # Ensure the IMAGE_TAG variable exists in the .env file
+            if ! grep -q "^IMAGE_TAG=" .env; then
+              echo "IMAGE_TAG=" >> .env
             fi
-
+            
+            # This script will now correctly receive the $NEW_TAG variable
             sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${NEW_TAG}/" .env
-
+            
             docker-compose pull backend
             docker-compose up -d --force-recreate backend
