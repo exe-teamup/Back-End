@@ -38,16 +38,16 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
-        groupService.deleteGroup(id);
-        return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
-    }
-
     @GetMapping("")
     public ResponseEntity<List<GroupResponse>> getAllGroups() {
         List<GroupResponse> groups = groupService.getAllGroups();
         return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getGroupById(@PathVariable long id) {
+        GroupResponse response = groupService.getGroupById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("{id}")
@@ -58,9 +58,12 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<?> getGroupById(@PathVariable long id) {
-        GroupResponse response = groupService.getGroupById(id);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
+        groupService.deleteGroup(id);
+        return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
+
+
+
 }

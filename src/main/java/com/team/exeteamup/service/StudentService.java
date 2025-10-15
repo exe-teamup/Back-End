@@ -16,4 +16,5 @@ public interface StudentService {
     void importStudentsNotEligible(MultipartFile file) throws IOException;
     void deleteStudentById(long studentId);
     User findById(long studentId);
+    List<UserResponse> getStudentWithoutGroup();
 }
