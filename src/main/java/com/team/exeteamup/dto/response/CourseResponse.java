@@ -16,6 +16,7 @@ public class CourseResponse {
     private Long semesterId;
     private Long lecturerId;
     private String courseCode;
+    private String courseName;
     private int maxGroup;
     private int groupCount;
 }
