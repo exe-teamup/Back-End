@@ -69,4 +69,10 @@ public class CourseController {
         CourseResponse response = courseService.updateCourse(request);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteCourse(@PathVariable("id") Long id) {
+        courseService.deleteCourse(id);
+        return ResponseEntity.ok("Xóa lớp thành công");
+    }
 }

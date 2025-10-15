@@ -18,22 +18,9 @@ public class CourseMapper {
         if (request == null) return null;
 
         Course course = new Course();
-        course.setCourseCode(request.getCourseCode());
-        course.setCourseName(request.getCourseName());
-        course.setMaxGroup(request.getMaxGroup());
-        course.setGroupCount(request.getGroupCount());
-
-        if (request.getSemesterId() != null) {
-            Semester semester = new Semester();
-            semester.setSemesterId(request.getSemesterId());
-            course.setSemester(semester);
-        }
-
-        if (request.getLecturerId() != null) {
-            Lecturer lecturer = new Lecturer();
-            lecturer.setLecturerId(request.getLecturerId());
-            course.setLecturer(lecturer);
-        }
+        applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
+                request.getMaxGroup(), request.getGroupCount(),
+                request.getSemesterId(), request.getLecturerId());
         return course;
     }
 
@@ -43,6 +30,7 @@ public class CourseMapper {
         return CourseResponse.builder()
                 .courseId(course.getCourseId())
                 .courseCode(course.getCourseCode())
+                .courseName(course.getCourseName())
                 .maxGroup(course.getMaxGroup())
                 .groupCount(course.getGroupCount())
                 .semesterId(course.getSemester() != null ? course.getSemester().getSemesterId() : null)
@@ -57,21 +45,35 @@ public class CourseMapper {
     }
 
     public void updateEntity(Course course, CourseUpdateRequest request) {
-        course.setCourseCode(request.getCourseCode());
-        course.setCourseName(request.getCourseName());
-        course.setMaxGroup(request.getMaxGroup());
-        course.setGroupCount(request.getGroupCount());
+        if (course == null || request == null) return;
 
-        if (request.getSemesterId() != null) {
+        applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
+                request.getMaxGroup(), request.getGroupCount(),
+                request.getSemesterId(), request.getLecturerId());
+    }
+
+    private void applyRequestToCourse(Course course, String code, String name,
+                                      Integer maxGroup, Integer groupCount,
+                                      Long semesterId, Long lecturerId) {
+        course.setCourseCode(code);
+        course.setCourseName(name);
+        course.setMaxGroup(maxGroup);
+        course.setGroupCount(groupCount);
+
+        if (semesterId != null) {
             Semester semester = new Semester();
-            semester.setSemesterId(request.getSemesterId());
+            semester.setSemesterId(semesterId);
             course.setSemester(semester);
+        } else {
+            course.setSemester(null);
         }
 
-        if (request.getLecturerId() != null) {
+        if (lecturerId != null) {
             Lecturer lecturer = new Lecturer();
-            lecturer.setLecturerId(request.getLecturerId());
+            lecturer.setLecturerId(lecturerId);
             course.setLecturer(lecturer);
+        } else {
+            course.setLecturer(null);
         }
     }
 }
