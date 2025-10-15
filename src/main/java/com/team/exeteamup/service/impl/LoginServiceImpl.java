@@ -6,11 +6,13 @@ import com.google.firebase.auth.FirebaseToken;
 import com.team.exeteamup.dto.request.LoginRequest;
 import com.team.exeteamup.dto.response.LoginResponse;
 import com.team.exeteamup.entity.Account;
+import com.team.exeteamup.exception.BadRequestException;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialException;
 import java.util.Optional;
 
 @Service
@@ -27,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
 
             Optional<Account> optionalAccount = accountRepository.findByEmail(email);
             if (optionalAccount.isEmpty()) {
-                throw new RuntimeException("Email not registered");
+                throw new BadRequestException("Email not registered");
             }
             Account account = optionalAccount.get();
 
@@ -38,7 +40,7 @@ public class LoginServiceImpl implements LoginService {
 
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            throw new RuntimeException("Invalid Firebase token");
+            throw new BadRequestException("Invalid Token");
         }
     }
 }
