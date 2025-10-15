@@ -84,7 +84,7 @@ public class StudentController {
             List<UserResponse> response = studentService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
