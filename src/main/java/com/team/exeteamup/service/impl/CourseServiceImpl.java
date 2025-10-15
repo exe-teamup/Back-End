@@ -149,5 +149,13 @@ public class CourseServiceImpl implements CourseService {
         }
         return importedCourses;
     }
+
+    @Override
+    public void deleteCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
+        courseRepository.delete(course);
+    }
 }
 
