@@ -13,4 +13,5 @@ public interface StudentRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserId(Long userId);
     Boolean existsByUserCode(String userCode);
     List<User> findAllByGroup(Group group);
+    List<User> findByGroupIsNull();
 }

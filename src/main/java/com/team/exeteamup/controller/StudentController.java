@@ -58,6 +58,12 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
+    @GetMapping("without-group")
+    public ResponseEntity<List<UserResponse>> getStudentsWithoutGroup() {
+        List<UserResponse> users = studentService.getStudentWithoutGroup();
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/page")
     public ResponseEntity<Page<UserResponse>> getAllStudents(
             @PageableDefault(size = 10, sort = "studentId", direction = Sort.Direction.ASC)

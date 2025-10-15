@@ -202,4 +202,9 @@ public class StudentServiceImpl implements StudentService {
                         "Student not found: " + studentId)
                 );
     }
+
+    @Override
+    public List<UserResponse> getStudentWithoutGroup() {
+        return studentMapper.toResponseList(studentRepository.findByGroupIsNull());
+    }
 }
