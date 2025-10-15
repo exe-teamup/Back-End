@@ -14,4 +14,5 @@ public interface MajorService {
     List<MajorResponse> getMajorsByLevel(Long level);
     List<MajorResponse> getMajorsByParentMajorId(Long parentMajorId);
     MajorResponse updateMajor(Long id, MajorRequest majorRequest);
+    void deleteMajor(Long majorId);
 }
