@@ -22,6 +22,6 @@ public class BadRequestExceptionHandler {
         error.put("error", "Bad Request");
         error.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
