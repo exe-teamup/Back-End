@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.enums.GroupStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
@@ -38,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
 
         Group group = Group.builder()
                 .groupName(groupRequest.getGroupName())
-                .groupStatus(true)
+                .groupStatus(GroupStatus.ACTIVE)
                 .course(course)
                 .build();
 
@@ -127,5 +128,13 @@ public class GroupServiceImpl implements GroupService {
     public Group findGroupById(long groupId) {
         return groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GroupResponse> getGroupsByStatus(String groupStatus) {
+        GroupStatus status = GroupStatus.valueOf(groupStatus.toUpperCase());
+        List<Group> groups = groupRepository.findGroupByStatus(status);
+        return groupMapper.toResponseList(groups);
     }
 }
