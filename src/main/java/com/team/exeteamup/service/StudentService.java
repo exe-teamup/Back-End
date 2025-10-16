@@ -17,4 +17,6 @@ public interface StudentService {
     void deleteStudentById(long studentId);
     User findById(long studentId);
     List<UserResponse> getStudentWithoutGroup();
+    UserResponse getStudentById(long studentId);
+    List<UserResponse> searchStudents(String keyword);
 }
