@@ -1,4 +1,4 @@
-package com.team.exeteamup.dto.request;
+package com.team.exeteamup.dto.request.post;
 
 import com.team.exeteamup.enums.post.PostStatus;
 import lombok.AllArgsConstructor;

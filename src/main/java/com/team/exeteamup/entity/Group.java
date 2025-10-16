@@ -48,6 +48,10 @@ public class Group {
     @JoinColumn(name = "course_id")
     private Course course;
 
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
 //    @OneToMany(mappedBy = "group")
 //    private List<GroupLecturer> groupLecturers;
 }

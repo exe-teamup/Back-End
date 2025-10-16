@@ -1,16 +1,13 @@
 package com.team.exeteamup.service.impl;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.mapper.StudentProfileMapper;
-import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.StudentRepository;
-import com.team.exeteamup.service.AccountService;
-import com.team.exeteamup.service.StudentProfileService;
+import com.team.exeteamup.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class StudentProfileServiceImpl implements StudentProfileService {
+public class UserProfileServiceImpl implements UserProfileService {
 
     private final TokenServiceImpl tokenService;
     private final StudentRepository studentRepository;

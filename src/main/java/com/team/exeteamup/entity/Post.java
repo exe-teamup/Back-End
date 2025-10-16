@@ -47,6 +47,10 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
