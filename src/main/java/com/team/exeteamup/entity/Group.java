@@ -42,6 +42,9 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<GroupLecturer> assignedLecturers;
 
+    @OneToMany(mappedBy = "group")
+    private List<Post> posts;
+
     @ManyToOne
     @JoinColumn(name = "official_lecturer_id")
     private Lecturer officialLecturer;

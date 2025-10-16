@@ -3,6 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.PostRequest;
 import com.team.exeteamup.dto.request.PostUpdateRequest;
 import com.team.exeteamup.dto.response.PostResponse;
+import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +31,17 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-//    @GetMapping("group/{groupId}")
-//    public ResponseEntity<List<PostResponse>> getPostsByGroupId(@PathVariable("groupId") Long groupId) {
-//        return ResponseEntity.ok(postService.getPostsByGroupId(groupId));
-//    }
+    @GetMapping("group/{groupId}")
+    public ResponseEntity<List<PostResponse>> getPostsByGroupId(
+            @PathVariable("groupId") Long groupId,
+            @RequestParam PostStatus postStatus) {
+        return ResponseEntity.ok(postService.getPostsByGroupId(groupId, postStatus));
+    }
 
-//    @GetMapping("trash/{groupId}")
-//    public ResponseEntity<List<PostResponse>> getPostsInTrashByGroupId(@PathVariable("groupId") Long groupId) {
-//        return ResponseEntity.ok(postService.getPostsInTrashByGroup(groupId));
-//    }
-
-//    @GetMapping("{postId}")
-//    public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long postId) {
-//        return ResponseEntity.ok(postService.getPostById(postId));
-//    }
+    @GetMapping("{postId}")
+    public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(postService.getPostById(postId));
+    }
 
     @PutMapping("{id}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable("id") Long id,
