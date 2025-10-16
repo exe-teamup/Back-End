@@ -39,8 +39,15 @@ public class GroupController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<GroupResponse>> getAllGroups() {
-        List<GroupResponse> groups = groupService.getAllGroups();
+    public ResponseEntity<List<GroupResponse>> getAllGroups(
+            @RequestParam(required = false) String status
+    ) {
+        List<GroupResponse> groups;
+        if (status != null) {
+            groups = groupService.getGroupsByStatus(status);
+        } else {
+            groups = groupService.getAllGroups();
+        }
         return ResponseEntity.ok(groups);
     }
 
@@ -63,7 +70,4 @@ public class GroupController {
         groupService.deleteGroup(id);
         return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
-
-
-
 }

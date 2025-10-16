@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class UserResponse {
     private Long courseId;
     private long userId;
-    private Account accountId;
+    private Long accountId;
     private String fullName;
     private String email;
     private String userCode;
