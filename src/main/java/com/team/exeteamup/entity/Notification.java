@@ -18,7 +18,7 @@ import java.util.List;
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long notificationId;
+    private Long notificationId;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
