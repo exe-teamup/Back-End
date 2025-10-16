@@ -15,9 +15,11 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByGroupIdAndGroupStatusTrue(Long groupId);
     List<Group> findByCourse_CourseId(Long courseId);
 
+
     @Query("""
         SELECT g FROM Group g
         WHERE  g.groupStatus = :status
     """)
     List<Group> findGroupByStatus(@Param("status") GroupStatus status);
+
 }

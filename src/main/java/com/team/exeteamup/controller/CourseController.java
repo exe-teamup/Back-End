@@ -58,11 +58,7 @@ public class CourseController {
         return ResponseEntity.ok(courseResponses);
     }
 
-    @GetMapping("{id}/groups")
-    public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
-        List<GroupResponse> responses = courseService.getGroupsByCourseId(id);
-        return ResponseEntity.ok(responses);
-    }
+
 
     @PutMapping("{id}")
     public ResponseEntity<CourseResponse> updateCourse(@PathVariable("id") Long id, @RequestBody CourseUpdateRequest request) {

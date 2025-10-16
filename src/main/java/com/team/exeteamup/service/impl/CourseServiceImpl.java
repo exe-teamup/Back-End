@@ -95,16 +95,7 @@ public class CourseServiceImpl implements CourseService {
         return courseMapper.toResponse(updatedCourse);
     }
 
-    @Override
-    public List<GroupResponse> getGroupsByCourseId(Long courseId) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new AppException("Lớp không tồn tại"));
 
-        return groupRepository.findByCourse_CourseId(courseId)
-                .stream()
-                .map(groupMapper::toCourseResponse)
-                .toList();
-    }
 
     @Override
     public List<CourseResponse> importCoursesFromExcel(MultipartFile file) {

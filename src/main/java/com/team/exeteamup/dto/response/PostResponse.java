@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class PostResponse {
     private Long postId;
     private Long groupId;
+    private Long userId;
     private String title;
     private String postDetail;
     private PostStatus postStatus;
