@@ -6,11 +6,9 @@ import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
-import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
