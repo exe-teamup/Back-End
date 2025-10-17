@@ -17,4 +17,5 @@ public interface GroupService {
     Group findGroupById(long groupId);
     List<GroupResponse> getGroupsByStatus(String groupStatus);
     List<GroupResponse> getGroupsByCourseId(Long courseId);
+    GroupResponse transferLeader(Long groupId, Long newLeaderId, String token);
 }
