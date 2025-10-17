@@ -58,10 +58,23 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<UserResponse> getStudentById(@PathVariable Long id) {
+        UserResponse response = userService.getStudentById(id);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("without-group")
     public ResponseEntity<List<UserResponse>> getStudentsWithoutGroup() {
         List<UserResponse> users = userService.getStudentWithoutGroup();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponse>> searchStudents(
+            @RequestParam("keyword") String keyword) {
+        List<UserResponse> result = userService.searchStudents(keyword);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/page")

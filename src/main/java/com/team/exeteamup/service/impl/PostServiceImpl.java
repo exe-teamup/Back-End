@@ -5,17 +5,13 @@ import com.team.exeteamup.dto.request.post.PostMajorRequest;
 import com.team.exeteamup.dto.request.post.PostUpdateRequest;
 import com.team.exeteamup.dto.request.post.UserPostRequest;
 import com.team.exeteamup.dto.response.post.GroupPostResponse;
-import com.team.exeteamup.dto.response.post.PostMajorResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
-import com.team.exeteamup.entity.PostMajor;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.exception.AppException;
-import com.team.exeteamup.mapper.PostMajorMapper;
 import com.team.exeteamup.mapper.PostMapper;
-import com.team.exeteamup.repository.PostMajorRepository;
 import com.team.exeteamup.repository.PostRepository;
 import com.team.exeteamup.service.PostMajorService;
 import com.team.exeteamup.service.PostService;
@@ -84,31 +80,24 @@ public class PostServiceImpl implements PostService {
         return postMapper.toResponseList(posts);
     }
 
-//    @Override
-//    public List<PostResponse> getPostsByGroupId(Long groupId) {
-//        List<Post> post = postRepository.findByGroup_GroupIdAndPostStatus(groupId, PostStatus.ACTIVE);
-//
-//        if (post.isEmpty()) {
-//            throw new AppException("Nhóm này chưa có bài viết nào");
-//        }
-//
-//        List<Post> posts = postRepository.findByGroup_GroupIdAndPostStatus(groupId, PostStatus.ACTIVE);
-//        return postMapper.toResponseList(posts);
-//    }
+    @Override
+    public List<PostResponse> getPostsByGroupId(Long groupId, PostStatus postStatus) {
+        List<Post> post = postRepository.findPostsByGroupIdAndPostStatus(groupId, postStatus);
 
-//    @Override
-//    public List<PostResponse> getPostsInTrashByGroup(Long id) {
-//        List<Post> posts = postRepository.findByGroup_GroupIdAndPostStatus(id, PostStatus.TRASHED);
-//        return postMapper.toResponseList(posts);
-//    }
+        if (post.isEmpty()) {
+            throw new AppException("Nhóm này chưa có bài viết nào");
+        }
+        List<Post> posts = postRepository.findPostsByGroupIdAndPostStatus(groupId, postStatus);
+        return postMapper.toResponseList(posts);
+    }
 
-//    @Override
-//    public PostResponse getPostById(Long id) {
-//        Post post = postRepository.findById(id)
-//                .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
-//
-//        return postMapper.toResponse(post);
-//    }
+    @Override
+    public PostResponse getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
+
+        return postMapper.toResponse(post);
+    }
 
     @Override
     public PostResponse updatePost(Long id, PostUpdateRequest request) {

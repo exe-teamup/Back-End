@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.team.exeteamup.enums.GroupStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +26,9 @@ public class Group {
     @Column(name = "member_count")
     private int memberCount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "group_status")
-    private Boolean groupStatus;
+    private GroupStatus groupStatus;
 
     @OneToMany(mappedBy = "group")
     private List<User> users;
@@ -39,6 +41,9 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<GroupLecturer> assignedLecturers;
+
+    @OneToMany(mappedBy = "group")
+    private List<Post> posts;
 
     @ManyToOne
     @JoinColumn(name = "official_lecturer_id")

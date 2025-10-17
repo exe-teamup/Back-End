@@ -207,4 +207,22 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getStudentWithoutGroup() {
         return studentMapper.toResponseList(studentRepository.findByGroupIsNull());
     }
+
+    @Override
+    public UserResponse getStudentById(long studentId) {
+        User user = studentRepository.findByUserId(studentId)
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+        return studentMapper.toResponse(user);
+    }
+
+    @Override
+    public List<UserResponse> searchStudents(String keyword) {
+        List<User> users = studentRepository.searchStudents(keyword);
+        if (users.isEmpty()) {
+            throw new AppException("Không tìm thấy sinh viên");
+        }
+        return users.stream()
+                .map(studentMapper::toResponse)
+                .toList();
+    }
 }

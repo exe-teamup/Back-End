@@ -17,6 +17,7 @@ import java.util.UUID;
 public class SemesterResponse {
     private long semesterId;
     private String semesterCode;
+    private String semesterName;
     private LocalDate startDate;
     private LocalDate endDate;
     private SemesterStatus semesterStatus;

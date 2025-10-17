@@ -6,6 +6,7 @@ import com.team.exeteamup.dto.response.post.GroupPostResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
+import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.enums.post.PostType;
 import com.team.exeteamup.service.GroupService;

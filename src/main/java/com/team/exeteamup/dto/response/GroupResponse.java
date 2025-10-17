@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.team.exeteamup.enums.GroupStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +16,9 @@ import java.util.UUID;
 public class GroupResponse {
     private long groupId;
     private String groupName;
+    private Long leaderId;
     private List<Long> memberIds;
     private int memberCount;
-    private Boolean groupStatus;
+    private GroupStatus groupStatus;
     private Long courseId;
 }

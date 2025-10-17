@@ -14,17 +14,26 @@ public class GroupMapper {
     public GroupResponse toResponse(Group group) {
         if (group == null) return null;
 
-        List<Long> memberIds = group.getUsers() != null
-                ? group.getUsers()
-                .stream()
-                .filter(user -> !user.getIsLeader())
-                .map(User::getUserId)
-                .toList()
-                : List.of();
+        Long leaderId = null;
+        List<Long> memberIds = List.of();
+
+        if (group.getUsers() != null && !group.getUsers().isEmpty()) {
+            leaderId = group.getUsers().stream()
+                    .filter(User::getIsLeader)
+                    .map(User::getUserId)
+                    .findFirst()
+                    .orElse(null);
+
+            memberIds = group.getUsers().stream()
+                    .filter(user -> !user.getIsLeader())
+                    .map(User::getUserId)
+                    .toList();
+        }
 
         return GroupResponse.builder()
                 .groupId(group.getGroupId())
                 .groupName(group.getGroupName())
+                .leaderId(leaderId)
                 .memberIds(memberIds)
                 .memberCount(group.getUsers() != null ? group.getUsers().size() : 0)
                 .courseId(group.getCourse().getCourseId())

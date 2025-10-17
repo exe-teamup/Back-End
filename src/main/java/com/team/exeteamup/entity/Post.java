@@ -48,7 +48,7 @@ public class Post {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = true)
     private Group group;
 
     @PrePersist
