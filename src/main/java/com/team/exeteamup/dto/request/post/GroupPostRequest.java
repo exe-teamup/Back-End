@@ -1,7 +1,6 @@
 package com.team.exeteamup.dto.request.post;
 
 import com.team.exeteamup.enums.post.PostStatus;
-import com.team.exeteamup.enums.post.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

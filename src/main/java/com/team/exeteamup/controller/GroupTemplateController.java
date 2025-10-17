@@ -1,10 +1,9 @@
 package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.GroupTemplateRequest;
-import com.team.exeteamup.entity.GroupTemplate;
 import com.team.exeteamup.service.GroupTemplateService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,9 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/group-templates")
+@RequiredArgsConstructor
 public class GroupTemplateController {
-    @Autowired
-    private GroupTemplateService groupTemplateService;
+
+    private final GroupTemplateService groupTemplateService;
 
     @PostMapping("")
     public ResponseEntity<?> createGroupTemplate(@Valid @RequestBody GroupTemplateRequest request,
