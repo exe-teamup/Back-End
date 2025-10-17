@@ -5,6 +5,9 @@ import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.UserStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class StudentMapper {
 
@@ -16,6 +19,7 @@ public class StudentMapper {
         UserResponse response = new UserResponse();
 
         response.setCourseId(user.getCourse().getCourseId());
+        response.setAccountId(user.getAccount().getAccountId());
         response.setUserId(user.getUserId());
         response.setFullName(user.getFullName());
         response.setUserCode(user.getUserCode());
@@ -44,6 +48,12 @@ public class StudentMapper {
         response.setIsLeader(user.getIsLeader() != null ? user.getIsLeader() : false);
 
         return response;
+    }
+
+    public List<UserResponse> toResponseList(List<User> users) {
+        return users.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
 }

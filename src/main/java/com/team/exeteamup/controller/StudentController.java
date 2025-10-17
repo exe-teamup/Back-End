@@ -3,8 +3,8 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.UserResponse;
-import com.team.exeteamup.service.StudentProfileService;
-import com.team.exeteamup.service.StudentService;
+import com.team.exeteamup.service.UserProfileService;
+import com.team.exeteamup.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +24,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentProfileService studentProfileService;
-    private final StudentService studentService;
+    private final UserProfileService userProfileService;
+    private final UserService userService;
 
     private static final Set<String> VALID_SORT_FIELDS = new HashSet<>(Arrays.asList(
             "studentId", "fullName", "studentCode", "studentStatus", "createdAt", "leader"
@@ -33,7 +33,7 @@ public class StudentController {
 
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
-        StudentProfileResponse response = studentProfileService.getStudentProfile(token);
+        StudentProfileResponse response = userProfileService.getStudentProfile(token);
         return ResponseEntity.ok(response);
     }
 
@@ -42,20 +42,39 @@ public class StudentController {
             @PathVariable Long id,
             @RequestBody StudentProfileRequest studentProfileRequest) {
 
-        StudentProfileResponse response = studentProfileService.updateStudentProfile(id, studentProfileRequest);
+        StudentProfileResponse response = userProfileService.updateStudentProfile(id, studentProfileRequest);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudentById(id);
+        userService.deleteStudentById(id);
         return ResponseEntity.ok(Map.of("message", "Xóa sinh viên thành công"));
     }
 
     @GetMapping("")
     public ResponseEntity<List<UserResponse>> getAllStudents() {
-        List<UserResponse> students = studentService.getAllStudents();
+        List<UserResponse> students = userService.getAllStudents();
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<UserResponse> getStudentById(@PathVariable Long id) {
+        UserResponse response = userService.getStudentById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("without-group")
+    public ResponseEntity<List<UserResponse>> getStudentsWithoutGroup() {
+        List<UserResponse> users = userService.getStudentWithoutGroup();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponse>> searchStudents(
+            @RequestParam("keyword") String keyword) {
+        List<UserResponse> result = userService.searchStudents(keyword);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/page")
@@ -74,14 +93,14 @@ public class StudentController {
                         .body(null);
             }
         }
-        Page<UserResponse> studentPage = studentService.getAllStudents(pageable);
+        Page<UserResponse> studentPage = userService.getAllStudents(pageable);
         return ResponseEntity.ok(studentPage);
     }
 
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
-            List<UserResponse> response = studentService.importStudentsFromExcel(file);
+            List<UserResponse> response = userService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -91,7 +110,7 @@ public class StudentController {
     @PostMapping(value = "import-not-eligible", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> importStudentNotEligible(@RequestParam("file") MultipartFile file) {
         try {
-            studentService.importStudentsNotEligible(file);
+            userService.importStudentsNotEligible(file);
             return ResponseEntity.ok("Đổi trạng thái sinh viên thành công");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

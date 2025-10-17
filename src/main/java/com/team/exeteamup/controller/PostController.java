@@ -1,27 +1,36 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.dto.request.PostRequest;
-import com.team.exeteamup.dto.request.PostUpdateRequest;
-import com.team.exeteamup.dto.response.PostResponse;
+import com.team.exeteamup.dto.request.post.GroupPostRequest;
+import com.team.exeteamup.dto.request.post.PostUpdateRequest;
+import com.team.exeteamup.dto.request.post.UserPostRequest;
+import com.team.exeteamup.dto.response.post.GroupPostResponse;
+import com.team.exeteamup.dto.response.post.PostResponse;
+import com.team.exeteamup.dto.response.post.UserPostResponse;
+import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/post")
+@RequestMapping("api/posts")
 @RequiredArgsConstructor
 public class PostController {
-    @Autowired
-    private PostService postService;
 
-    @PostMapping("")
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest) {
-        PostResponse postResponse = postService.createPost(postRequest);
-        return ResponseEntity.ok(postResponse);
+    private final PostService postService;
+
+    @PostMapping("/group-post")
+    public ResponseEntity<GroupPostResponse> createGroupPost(@RequestBody GroupPostRequest groupPostRequest) {
+        GroupPostResponse groupPostResponse = postService.createGroupPost(groupPostRequest);
+        return ResponseEntity.ok(groupPostResponse);
+    }
+
+    @PostMapping("/user-post")
+    public ResponseEntity<UserPostResponse> createUserPost(@RequestBody UserPostRequest userPostRequest) {
+        UserPostResponse userPostResponse = postService.createUserPost(userPostRequest);
+        return ResponseEntity.ok(userPostResponse);
     }
 
     @GetMapping("")
@@ -30,20 +39,17 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-//    @GetMapping("group/{groupId}")
-//    public ResponseEntity<List<PostResponse>> getPostsByGroupId(@PathVariable("groupId") Long groupId) {
-//        return ResponseEntity.ok(postService.getPostsByGroupId(groupId));
-//    }
+    @GetMapping("group/{groupId}")
+    public ResponseEntity<List<PostResponse>> getPostsByGroupId(
+            @PathVariable("groupId") Long groupId,
+            @RequestParam PostStatus postStatus) {
+        return ResponseEntity.ok(postService.getPostsByGroupId(groupId, postStatus));
+    }
 
-//    @GetMapping("trash/{groupId}")
-//    public ResponseEntity<List<PostResponse>> getPostsInTrashByGroupId(@PathVariable("groupId") Long groupId) {
-//        return ResponseEntity.ok(postService.getPostsInTrashByGroup(groupId));
-//    }
-
-//    @GetMapping("{postId}")
-//    public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long postId) {
-//        return ResponseEntity.ok(postService.getPostById(postId));
-//    }
+    @GetMapping("{postId}")
+    public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(postService.getPostById(postId));
+    }
 
     @PutMapping("{id}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable("id") Long id,

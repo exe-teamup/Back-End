@@ -27,6 +27,7 @@ public class SemesterServiceImpl implements SemesterService {
 
         Semester semester = Semester.builder()
                 .semesterCode(semesterRequest.getSemesterCode())
+                .semesterName(semesterRequest.getSemesterName())
                 .startDate(semesterRequest.getStartDate())
                 .endDate(semesterRequest.getEndDate())
                 .semesterStatus(semesterRequest.getSemesterStatus())
@@ -56,6 +57,7 @@ public class SemesterServiceImpl implements SemesterService {
                 .orElseThrow(() -> new AppException("Kì học không tồn tại"));
 
         Optional.ofNullable(semesterRequest.getSemesterCode()).ifPresent(semester::setSemesterCode);
+        Optional.ofNullable(semesterRequest.getSemesterName()).ifPresent(semester::setSemesterName);
         Optional.ofNullable(semesterRequest.getStartDate()).ifPresent(semester::setStartDate);
         Optional.ofNullable(semesterRequest.getEndDate()).ifPresent(semester::setEndDate);
         Optional.ofNullable(semesterRequest.getSemesterStatus()).ifPresent(semester::setSemesterStatus);

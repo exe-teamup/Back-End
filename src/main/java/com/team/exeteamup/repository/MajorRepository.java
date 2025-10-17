@@ -11,5 +11,6 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
     List<Major> findByLevelAndMajorStatusIsTrue(Long level);
     List<Major> findByParentMajor_MajorIdAndMajorStatusIsTrue(Long majorId);
     Optional<Major> findByMajorName(String majorName);
-
+    boolean existsByMajorCode(String majorCode);
+    boolean existsByMajorName(String majorName);
 }

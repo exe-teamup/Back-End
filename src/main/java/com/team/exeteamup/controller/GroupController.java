@@ -3,13 +3,12 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.request.LecturerSelectionRequest;
+import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
-import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,16 +37,29 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
-        groupService.deleteGroup(id);
-        return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
+    @GetMapping("")
+    public ResponseEntity<List<GroupResponse>> getAllGroups(
+            @RequestParam(required = false) String status
+    ) {
+        List<GroupResponse> groups;
+        if (status != null) {
+            groups = groupService.getGroupsByStatus(status);
+        } else {
+            groups = groupService.getAllGroups();
+        }
+        return ResponseEntity.ok(groups);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<GroupResponse>> getAllGroups() {
-        List<GroupResponse> groups = groupService.getAllGroups();
-        return ResponseEntity.ok(groups);
+    @GetMapping("{id}")
+    public ResponseEntity<?> getGroupById(@PathVariable long id) {
+        GroupResponse response = groupService.getGroupById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("{id}/course")
+    public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
+        List<GroupResponse> responses = groupService.getGroupsByCourseId(id);
+        return ResponseEntity.ok(responses);
     }
 
     @PutMapping("{id}")
@@ -58,9 +70,27 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<?> getGroupById(@PathVariable long id) {
-        GroupResponse response = groupService.getGroupById(id);
+    @PutMapping("{id}/transfer-leader")
+    public ResponseEntity<GroupResponse> transferLeader(
+            @PathVariable Long id,
+            @RequestBody TransferLeaderRequest request,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.transferLeader(id, request.getNewLeaderId(), token);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("{id}/kick/{memberId}")
+    public ResponseEntity<GroupResponse> kickMember(
+            @PathVariable Long id,
+            @PathVariable Long memberId,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.kickMember(id, memberId, token);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
+        groupService.deleteGroup(id);
+        return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
 }

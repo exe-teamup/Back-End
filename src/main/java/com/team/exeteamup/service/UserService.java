@@ -9,11 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-public interface StudentService {
+public interface UserService {
     List<UserResponse> getAllStudents();
     Page<UserResponse> getAllStudents(Pageable pageable);
     List<UserResponse> importStudentsFromExcel(MultipartFile file) throws IOException;
     void importStudentsNotEligible(MultipartFile file) throws IOException;
     void deleteStudentById(long studentId);
     User findById(long studentId);
+    List<UserResponse> getStudentWithoutGroup();
+    UserResponse getStudentById(long studentId);
+    List<UserResponse> searchStudents(String keyword);
 }

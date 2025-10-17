@@ -14,7 +14,7 @@ import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.MajorRepository;
 import com.team.exeteamup.repository.StudentRepository;
-import com.team.exeteamup.service.StudentService;
+import com.team.exeteamup.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class StudentServiceImpl implements StudentService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private StudentRepository studentRepository;
 
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
     private CourseRepository courseRepository;
 
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public UserServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -201,5 +201,28 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Student not found: " + studentId)
                 );
+    }
+
+    @Override
+    public List<UserResponse> getStudentWithoutGroup() {
+        return studentMapper.toResponseList(studentRepository.findByGroupIsNull());
+    }
+
+    @Override
+    public UserResponse getStudentById(long studentId) {
+        User user = studentRepository.findByUserId(studentId)
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+        return studentMapper.toResponse(user);
+    }
+
+    @Override
+    public List<UserResponse> searchStudents(String keyword) {
+        List<User> users = studentRepository.searchStudents(keyword);
+        if (users.isEmpty()) {
+            throw new AppException("Không tìm thấy sinh viên");
+        }
+        return users.stream()
+                .map(studentMapper::toResponse)
+                .toList();
     }
 }

@@ -52,4 +52,10 @@ public class MajorController {
         MajorResponse updated = majorService.updateMajor(id, majorRequest);
         return ResponseEntity.ok(updated);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteMajor(@PathVariable Long id) {
+        majorService.deleteMajor(id);
+        return ResponseEntity.ok("Xóa chuyên ngành thành công");
+    }
 }
