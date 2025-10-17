@@ -8,6 +8,7 @@ public class SemesterMapper {
         return SemesterResponse.builder()
                 .semesterId(semester.getSemesterId())
                 .semesterCode(semester.getSemesterCode())
+                .semesterName(semester.getSemesterName())
                 .startDate(semester.getStartDate())
                 .endDate(semester.getEndDate())
                 .semesterStatus(semester.getSemesterStatus())

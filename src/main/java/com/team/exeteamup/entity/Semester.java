@@ -32,8 +32,11 @@ public class Semester {
     )
     private List<GroupTemplate> groupTemplates;
 
-    @Column(name = "semester_code", nullable = true)
+    @Column(name = "semester_code")
     private String semesterCode;
+
+    @Column(name = "semester_name")
+    private String semesterName;
 
     @Column(name = "start_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")

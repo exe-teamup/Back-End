@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class SemesterRequest {
     private String semesterCode;
+    private String semesterName;
     private LocalDate startDate;
     private LocalDate endDate;
     private SemesterStatus semesterStatus;

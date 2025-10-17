@@ -17,6 +17,9 @@ public interface StudentRepository extends JpaRepository<User, Long> {
     List<User> findAllByGroup(Group group);
     List<User> findByGroupIsNull();
 
+    @Query("SELECT COUNT(u) FROM User u WHERE u.group.groupId = :groupId")
+    int countByGroup_GroupId(Long groupId);
+
     @Query("SELECT u FROM User u " +
             "JOIN u.account a " +
             "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
