@@ -81,6 +81,15 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("{id}/kick/{memberId}")
+    public ResponseEntity<GroupResponse> kickMember(
+            @PathVariable Long id,
+            @PathVariable Long memberId,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.kickMember(id, memberId, token);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
         groupService.deleteGroup(id);

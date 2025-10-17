@@ -9,6 +9,7 @@ import com.team.exeteamup.entity.*;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.GroupService;
+import com.team.exeteamup.service.NotificationService;
 import com.team.exeteamup.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
+    private final GroupRegisterLecturerRepository groupRegisterLecturerRepository;
+    private final GroupLecturerRepository groupLecturerRepository;
 
     @Override
     @Transactional
@@ -83,6 +86,9 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
+
+        groupRegisterLecturerRepository.deleteAllByGroup(group);
+        groupLecturerRepository.deleteAllByGroup(group);
 
         List<User> users = studentRepository.findAllByGroup(group);
         for (User user : users) {
@@ -167,6 +173,39 @@ public class GroupServiceImpl implements GroupService {
         newLeader.setIsLeader(true);
         studentRepository.save(currentLeader);
         studentRepository.save(newLeader);
+        return groupMapper.toResponse(group);
+    }
+
+    @Override
+    @Transactional
+    public GroupResponse kickMember(Long groupId, Long memberId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User currentLeader = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+
+        User member = studentRepository.findById(memberId)
+                .orElseThrow(() -> new AppException("Không tìm thấy thành viên"));
+
+        if (member.getUserId().equals(currentLeader.getUserId())) {
+            throw new AppException("Bạn không thể tự mời mình ra khỏi nhóm");
+        }
+
+        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
+
+        member.setGroup(null);
+        studentRepository.save(member);
+
+        List<User> updatedMembers = studentRepository.findAllByGroup(group);
+        int members = updatedMembers.size();
+        group.setMemberCount(members);
+
+        GroupResponse response = groupMapper.toResponse(group);
+        response.setMemberIds(updatedMembers.stream().map(User::getUserId).toList());
+        response.setMemberCount(memberCount);
         return groupMapper.toResponse(group);
     }
 }
