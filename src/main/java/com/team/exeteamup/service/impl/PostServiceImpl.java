@@ -3,9 +3,11 @@ package com.team.exeteamup.service.impl;
 import com.team.exeteamup.dto.request.post.GroupPostRequest;
 import com.team.exeteamup.dto.request.post.PostMajorRequest;
 import com.team.exeteamup.dto.request.post.PostUpdateRequest;
+import com.team.exeteamup.dto.request.post.UserPostRequest;
 import com.team.exeteamup.dto.response.post.GroupPostResponse;
 import com.team.exeteamup.dto.response.post.PostMajorResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
+import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.PostMajor;
 import com.team.exeteamup.entity.User;
@@ -54,6 +56,17 @@ public class PostServiceImpl implements PostService {
         });
 
         return postMapper.toGroupPostResponse(savedPost);
+    }
+
+
+    @Override
+    @Transactional
+    public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
+
+        Post post = postMapper.toEntity(userPostRequest);
+        Post savedPost = postRepository.save(post);
+
+        return postMapper.toUserPostResponse(savedPost);
     }
 
 

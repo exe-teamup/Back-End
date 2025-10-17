@@ -2,8 +2,10 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.post.GroupPostRequest;
 import com.team.exeteamup.dto.request.post.PostUpdateRequest;
+import com.team.exeteamup.dto.request.post.UserPostRequest;
 import com.team.exeteamup.dto.response.post.GroupPostResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
+import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,12 @@ public class PostController {
     public ResponseEntity<GroupPostResponse> createGroupPost(@RequestBody GroupPostRequest groupPostRequest) {
         GroupPostResponse groupPostResponse = postService.createGroupPost(groupPostRequest);
         return ResponseEntity.ok(groupPostResponse);
+    }
+
+    @PostMapping("/user-post")
+    public ResponseEntity<UserPostResponse> createUserPost(@RequestBody UserPostRequest userPostRequest) {
+        UserPostResponse userPostResponse = postService.createUserPost(userPostRequest);
+        return ResponseEntity.ok(userPostResponse);
     }
 
     @GetMapping("")

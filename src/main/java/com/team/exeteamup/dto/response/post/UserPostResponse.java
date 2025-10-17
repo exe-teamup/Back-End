@@ -14,10 +14,9 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponse {
+public class UserPostResponse {
     private Long postId;
     private Long userId;
-    private Long groupId;
     private String title;
     private String postDetail;
     private PostStatus postStatus;

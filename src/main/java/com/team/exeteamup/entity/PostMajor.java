@@ -1,6 +1,5 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.entity.embedded.PostMajorId;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,16 +11,16 @@ import lombok.*;
 @Builder
 public class PostMajor {
 
-    @EmbeddedId
-    private PostMajorId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_major_id")
+    private Long id;
 
     @ManyToOne
-    @MapsId("postId")
     @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @MapsId("majorId")
     @JoinColumn(name = "major_id")
     private Major major;
 
