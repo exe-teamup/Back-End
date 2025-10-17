@@ -3,6 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.request.LecturerSelectionRequest;
+import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.entity.Group;
@@ -68,6 +69,15 @@ public class GroupController {
             @PathVariable long id,
             @RequestBody GroupUpdateRequest request) {
         GroupResponse response = groupService.updateGroup(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("{id}/transfer-leader")
+    public ResponseEntity<GroupResponse> transferLeader(
+            @PathVariable Long id,
+            @RequestBody TransferLeaderRequest request,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.transferLeader(id, request.getNewLeaderId(), token);
         return ResponseEntity.ok(response);
     }
 

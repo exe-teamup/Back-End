@@ -9,6 +9,7 @@ import com.team.exeteamup.entity.*;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.GroupService;
+import com.team.exeteamup.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
+    private final TokenService tokenService;
 
     @Override
     @Transactional
@@ -147,5 +149,24 @@ public class GroupServiceImpl implements GroupService {
                 .stream()
                 .map(groupMapper::toCourseResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User currentLeader = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+
+        User newLeader = studentRepository.findById(newLeaderId)
+                .orElseThrow(() -> new AppException("Không tìm thấy leader mới"));
+
+        currentLeader.setIsLeader(false);
+        newLeader.setIsLeader(true);
+        studentRepository.save(currentLeader);
+        studentRepository.save(newLeader);
+        return groupMapper.toResponse(group);
     }
 }
