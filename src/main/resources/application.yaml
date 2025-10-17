@@ -5,10 +5,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -18,6 +18,7 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
     date-format: dd-MM-yyyy
 
+# uses for database connection
   profiles:
     active: dev
 

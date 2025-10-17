@@ -17,7 +17,7 @@ public class AccountNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_notification_id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

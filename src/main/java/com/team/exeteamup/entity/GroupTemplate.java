@@ -18,7 +18,7 @@ public class GroupTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id")
-    private long templateId;
+    private Long templateId;
 
     @Column(name = "min_member", nullable = false)
     private int min_member;

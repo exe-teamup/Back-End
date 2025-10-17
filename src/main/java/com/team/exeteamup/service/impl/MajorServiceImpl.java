@@ -157,8 +157,21 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public void deleteMajor(Long majorId) {
-        Major major = majorRepository.findById(majorId)
-                .orElseThrow(() -> new AppException("Chuyên ngành không tồn tại"));
+        Major major = findById(majorId);
         majorRepository.delete(major);
+    }
+
+    @Override
+    public Major findById(Long majorId) {
+        return majorRepository.findById(majorId)
+                .orElseThrow(() -> new AppException("Chuyên ngành không tồn tại"));
+    }
+
+    @Override
+    public List<Major> findAllByIds(List<Long> majorIds) {
+        return majorIds
+                .stream()
+                .map(id -> findById(id))
+                .collect(Collectors.toList());
     }
 }

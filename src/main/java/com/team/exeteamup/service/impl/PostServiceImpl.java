@@ -1,56 +1,78 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.dto.request.PostRequest;
-import com.team.exeteamup.dto.request.PostUpdateRequest;
-import com.team.exeteamup.dto.response.PostResponse;
-import com.team.exeteamup.entity.Group;
+import com.team.exeteamup.dto.request.post.GroupPostRequest;
+import com.team.exeteamup.dto.request.post.PostMajorRequest;
+import com.team.exeteamup.dto.request.post.PostUpdateRequest;
+import com.team.exeteamup.dto.request.post.UserPostRequest;
+import com.team.exeteamup.dto.response.post.GroupPostResponse;
+import com.team.exeteamup.dto.response.post.PostResponse;
+import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.PostMapper;
-import com.team.exeteamup.repository.GroupRepository;
 import com.team.exeteamup.repository.PostRepository;
-import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.service.PostMajorService;
 import com.team.exeteamup.service.PostService;
-import jakarta.transaction.Transactional;
+import com.team.exeteamup.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
-    private PostMapper postMapper;
-    @Autowired
-    private StudentRepository studentRepository;
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
+    private final UserService userService;
+    private final PostMajorService postMajorService;
 
     @Override
-    public PostResponse createPost(PostRequest postRequest) {
-        Group group = groupRepository.findById(postRequest.getGroupId())
-                .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
+    @Transactional
+    public GroupPostResponse createGroupPost(GroupPostRequest groupPostRequest) {
 
-        User user = studentRepository.findById(postRequest.getUserId())
-                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+        endIfUserHasNoGroup(groupPostRequest.getUserId());
 
-        Post post = postMapper.toEntity(postRequest, user, group);
-        postRepository.save(post);
+        Post post = postMapper.toEntity(groupPostRequest);
+        Post savedPost = postRepository.save(post);
 
-        return postMapper.toResponse(post);
+        List<PostMajorRequest> postMajorRequests = groupPostRequest.getPostMajorRequests();
+
+        postMajorRequests.forEach(postMajorRequest -> {
+            postMajorService.savePostMajor(savedPost, postMajorRequest);
+        });
+
+        return postMapper.toGroupPostResponse(savedPost);
     }
+
+
+    @Override
+    @Transactional
+    public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
+
+        Post post = postMapper.toEntity(userPostRequest);
+        Post savedPost = postRepository.save(post);
+
+        return postMapper.toUserPostResponse(savedPost);
+    }
+
+
+    private void endIfUserHasNoGroup(long userId) {
+        User user = userService.findById(userId);
+        if(user.getGroup() == null) {
+            throw new AppException("User has no group");
+        }
+    }
+
 
     @Override
     public List<PostResponse> getAllPosts() {
@@ -110,5 +132,11 @@ public class PostServiceImpl implements PostService {
                 throw new AppException("Bài viết đã bị xóa");
             }
         }
+    }
+
+    @Override
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
     }
 }

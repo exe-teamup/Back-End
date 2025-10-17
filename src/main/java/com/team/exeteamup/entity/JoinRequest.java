@@ -19,7 +19,7 @@ public class JoinRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "join_request_id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -11,7 +11,7 @@ import com.team.exeteamup.mapper.JoinRequestMapper;
 import com.team.exeteamup.repository.JoinRequestRepository;
 import com.team.exeteamup.service.GroupService;
 import com.team.exeteamup.service.JoinRequestService;
-import com.team.exeteamup.service.StudentService;
+import com.team.exeteamup.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     private final JoinRequestRepository joinRequestRepository;
     private final JoinRequestMapper joinRequestMapper;
     private final GroupService groupService;
-    private final StudentService studentService;
+    private final UserService userService;
 
 
     @Override
@@ -61,7 +61,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     @Override
     public List<JoinRequestResponse> findByStudentId(long studentId) {
         return joinRequestRepository
-                .findByUser(studentService.findById(studentId))
+                .findByUser(userService.findById(studentId))
                 .stream()
                 .map(joinRequestMapper::toResponse)
                 .toList();
@@ -73,7 +73,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     public JoinRequestResponse save(JoinRequestRequest request) {
 
         Group group = groupService.findGroupById(request.getGroupId());
-        User user = studentService.findById(request.getStudentId());
+        User user = userService.findById(request.getStudentId());
 
         JoinRequest joinRequest = new JoinRequest(user,
                 group,
