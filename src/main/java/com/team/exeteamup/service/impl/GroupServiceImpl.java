@@ -208,4 +208,22 @@ public class GroupServiceImpl implements GroupService {
         response.setMemberCount(memberCount);
         return groupMapper.toResponse(group);
     }
+
+    @Override
+    @Transactional
+    public void leaveGroup(Long groupId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User user = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+
+        if (Boolean.TRUE.equals(user.getIsLeader())) {
+            throw new AppException("Leader không thể rời nhóm. Vui lòng chuyển quyền cho thành viên");
+        }
+
+        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
+
+        user.setGroup(null);
+        studentRepository.save(user);
+    }
 }
