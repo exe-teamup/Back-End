@@ -226,4 +226,36 @@ public class GroupServiceImpl implements GroupService {
         user.setGroup(null);
         studentRepository.save(user);
     }
+
+    @Override
+    @Transactional
+    public GroupResponse addMember(Long groupId, Long memberId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User leader = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+
+        if (!leader.getIsLeader()) {
+            throw new AppException("Chỉ leader mới có quyền thêm thành viên");
+        }
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
+
+        User member = studentRepository.findById(memberId)
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+
+        if (member.getGroup() != null) {
+            throw new AppException("Thành viên này đã thuộc nhóm khác");
+        }
+
+        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        if (memberCount >= 6) throw new AppException("Nhóm đã đạt tối đa 6 thành viên");
+
+        member.setGroup(group);
+        studentRepository.save(member);
+
+        Group updatedGroup = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm sau khi thêm"));
+        return groupMapper.toResponse(updatedGroup);
+    }
 }
