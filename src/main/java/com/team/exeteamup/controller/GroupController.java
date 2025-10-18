@@ -45,6 +45,15 @@ public class GroupController {
         return ResponseEntity.ok("Rời nhóm thành công");
     }
 
+    @PostMapping("{id}/add-member/{memberId}")
+    public ResponseEntity<GroupResponse> addMember(
+            @PathVariable Long id,
+            @PathVariable Long memberId,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.addMember(id, memberId, token);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<GroupResponse>> getAllGroups(
             @RequestParam(required = false) String status
