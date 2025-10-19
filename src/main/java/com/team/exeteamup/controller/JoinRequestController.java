@@ -19,40 +19,41 @@ public class JoinRequestController {
 
     private final JoinRequestService joinRequestService;
 
+
     @PostMapping
-    public ResponseEntity<JoinRequestResponse> createJoinRequest(
-            @Valid @RequestBody JoinRequestRequest request) {
+    public ResponseEntity<JoinRequestResponse> createJoinRequest(@Valid @RequestBody JoinRequestRequest request) {
         JoinRequestResponse response = joinRequestService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<JoinRequestResponse> getJoinRequestById(
-            @PathVariable("id") long joinRequestId) {
+    public ResponseEntity<JoinRequestResponse> getJoinRequestById(@PathVariable("id") long joinRequestId) {
         return ResponseEntity.ok(joinRequestService.findResponseById(joinRequestId));
     }
+
 
     @GetMapping
     public ResponseEntity<List<JoinRequestResponse>> getAll() {
         return ResponseEntity.ok(joinRequestService.findAll());
     }
 
+
     @GetMapping("/find-by-student/{id}")
-    public ResponseEntity<List<JoinRequestResponse>> getAllByUserId(
-            @PathVariable("id") long studentId) {
+    public ResponseEntity<List<JoinRequestResponse>> getAllByUserId(@PathVariable("id") long studentId) {
         return ResponseEntity.ok(joinRequestService.findByStudentId(studentId));
     }
 
+
     @PatchMapping("/handle-request/{id}")
-    public ResponseEntity<JoinRequestResponse> handleJoinRequest(
-            @PathVariable("id") long joinRequestId,
-            @Valid @RequestBody HandleJoinRequestRequest request) {
+    public ResponseEntity<JoinRequestResponse> handleJoinRequest(@PathVariable("id") long joinRequestId,
+                                                                 @Valid @RequestBody HandleJoinRequestRequest request) {
         return ResponseEntity.ok(joinRequestService.handleJoinRequest(joinRequestId, request));
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<JoinRequestResponse> deleteJoinRequest(
-            @PathVariable("id") long joinRequestId) {
+    public ResponseEntity<JoinRequestResponse> deleteJoinRequest(@PathVariable("id") long joinRequestId) {
         return ResponseEntity.ok(joinRequestService.delete(joinRequestId));
     }
 }
