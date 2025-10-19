@@ -6,6 +6,7 @@ import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
+import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,13 @@ public class GroupController {
     public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
         List<GroupResponse> responses = groupService.getGroupsByCourseId(id);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<GroupResponse>> filterGroups(
+            @RequestParam GroupFilterStatus status) {
+        List<GroupResponse> response = groupService.filterGroups(status);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("{id}")

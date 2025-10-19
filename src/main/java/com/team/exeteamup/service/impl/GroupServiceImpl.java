@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.enums.GroupStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
@@ -257,5 +258,18 @@ public class GroupServiceImpl implements GroupService {
         Group updatedGroup = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm sau khi thêm"));
         return groupMapper.toResponse(updatedGroup);
+    }
+
+    @Override
+    @Transactional
+    public List<GroupResponse> filterGroups(GroupFilterStatus status) {
+        List<Group> groups = switch (status) {
+            case FULL_MEMBER -> groupRepository.findFullGroups();
+            case LACK_MEMBER -> groupRepository.findNotFullGroups();
+            case HAS_LECTURER -> groupRepository.findGroupsWithLecturerSelection();
+            case NO_LECTURER -> groupRepository.findGroupsWithoutLecturerSelection();
+        };
+
+        return groupMapper.toResponseList(groups);
     }
 }
