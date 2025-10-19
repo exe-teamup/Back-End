@@ -33,11 +33,19 @@ public class GroupTemplateController {
 
         }
 
-        return ResponseEntity.ok(groupTemplateService.save(request));
+        return ResponseEntity.ok(groupTemplateService.saveGroupTemplate(request));
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAllGroupTemplates() {
-        return ResponseEntity.ok(groupTemplateService.findAll());
+        return ResponseEntity.ok(groupTemplateService.getAll());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateGroupTemplates(
+            @PathVariable Long id,
+            @RequestBody GroupTemplateRequest request) {
+        return ResponseEntity.ok(groupTemplateService.updateGroupTemplate(id, request));
+    }
+
 }
