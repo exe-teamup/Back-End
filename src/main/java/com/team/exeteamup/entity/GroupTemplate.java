@@ -18,16 +18,16 @@ public class GroupTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id")
-    private Long templateId;
+    private Long id;
 
     @Column(name = "min_member", nullable = false)
-    private int min_member;
+    private Integer minMember;
 
     @Column(name = "max_member", nullable = false)
-    private int max_member;
+    private Integer maxMember;
 
     @Column(name = "min_major", nullable = false)
-    private int min_major;
+    private Integer minMajor;
 
     @Column(name = "template", nullable = false, length = 255)
     private String template;

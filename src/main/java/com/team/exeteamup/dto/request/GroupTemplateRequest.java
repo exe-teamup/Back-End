@@ -1,7 +1,6 @@
 package com.team.exeteamup.dto.request;
 
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -19,15 +18,15 @@ public class GroupTemplateRequest {
 
     @NotNull
     @Positive
-    private int min_member;
+    private int minMember;
 
     @NotNull
     @Positive
-    private int max_member;
+    private int maxMember;
 
     @NotNull
     @Positive
-    private int min_major;
+    private int minMajor;
 
     @NotBlank
     @Size(max = 255)
