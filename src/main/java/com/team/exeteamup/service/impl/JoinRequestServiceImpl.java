@@ -7,6 +7,7 @@ import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.JoinRequest;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
+import com.team.exeteamup.enums.joinRequest.JoinRequestType;
 import com.team.exeteamup.mapper.JoinRequestMapper;
 import com.team.exeteamup.repository.JoinRequestRepository;
 import com.team.exeteamup.service.GroupService;
@@ -89,14 +90,52 @@ public class JoinRequestServiceImpl implements JoinRequestService {
 
     @Override
     @Transactional
-    public JoinRequestResponse handleJoinRequest(long joinRequestId, HandleJoinRequestRequest handleJoinRequestRequest) {
+    public JoinRequestResponse handleJoinRequest(long joinRequestId,
+                                                 HandleJoinRequestRequest handleJoinRequestRequest) {
 
         JoinRequest joinRequest = findById(joinRequestId);
+        JoinRequest updatedJoinRequest = new JoinRequest();
 
-        joinRequest.setRequestStatus(handleJoinRequestRequest.getRequestStatus());
-        joinRequest.setDenyReason(handleJoinRequestRequest.getDenyReason());
+        if(joinRequest.getRequestType() == JoinRequestType.STUDENT_REQUEST) {
+            updatedJoinRequest = handleStudentJoinRequest(joinRequest, handleJoinRequestRequest);
+        } else  {
+            updatedJoinRequest = handleGropuInvitationJoinRequest(joinRequest, handleJoinRequestRequest);
+        }
 
-        return joinRequestMapper.toResponse(joinRequestRepository.save(joinRequest));
+        return joinRequestMapper.toResponse(updatedJoinRequest);
+    }
+
+
+    private JoinRequest handleStudentJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
+
+        JoinRequestStatus status = handleJoinRequestRequest.getRequestStatus();
+
+        switch (status) {
+            case APPROVED -> {
+            }
+            case DENIED -> {
+            }
+            case WITHDRAWN -> {
+            }
+        }
+
+        return null;
+    }
+
+    private JoinRequest handleGropuInvitationJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
+
+        JoinRequestStatus status = handleJoinRequestRequest.getRequestStatus();
+
+        switch (status) {
+            case APPROVED -> {
+            }
+            case DENIED -> {
+            }
+            case WITHDRAWN -> {
+            }
+        }
+
+        return null;
     }
 
 

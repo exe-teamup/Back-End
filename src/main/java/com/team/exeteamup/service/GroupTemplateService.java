@@ -1,14 +1,16 @@
 package com.team.exeteamup.service;
 
 import com.team.exeteamup.dto.request.GroupTemplateRequest;
+import com.team.exeteamup.dto.response.GroupTemplateResponse;
 import com.team.exeteamup.entity.GroupTemplate;
 
 import java.util.List;
 
 public interface GroupTemplateService {
-    public List<GroupTemplate> findAll();
-    public GroupTemplate findById(long id);
-    public GroupTemplate save(GroupTemplateRequest groupTemplateRequest);
-    public void deleteById(long id);
-    public GroupTemplate update(GroupTemplate groupTemplate);
+    GroupTemplate findById(long groupTemplateId);
+    GroupTemplateResponse findResponseById(long groupTemplateId);
+    List<GroupTemplateResponse> getAll();
+    GroupTemplateResponse saveGroupTemplate(GroupTemplateRequest groupTemplateRequest);
+    GroupTemplateResponse updateGroupTemplate(long groupTemplateId, GroupTemplateRequest groupTemplateRequest);
+    GroupTemplateResponse deleteGroupTemplate(long groupTemplateId);
 }
