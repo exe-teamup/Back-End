@@ -1,6 +1,6 @@
 package com.team.exeteamup.enums.joinRequest;
 
 public enum JoinRequestType {
-    GROUP_INVITE,
+    GROUP_INVITATION,
     STUDENT_REQUEST,
 }

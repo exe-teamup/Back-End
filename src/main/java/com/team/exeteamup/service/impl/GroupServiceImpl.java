@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.enums.GroupStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
@@ -207,5 +208,68 @@ public class GroupServiceImpl implements GroupService {
         response.setMemberIds(updatedMembers.stream().map(User::getUserId).toList());
         response.setMemberCount(memberCount);
         return groupMapper.toResponse(group);
+    }
+
+    @Override
+    @Transactional
+    public void leaveGroup(Long groupId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User user = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+
+        if (Boolean.TRUE.equals(user.getIsLeader())) {
+            throw new AppException("Leader không thể rời nhóm. Vui lòng chuyển quyền cho thành viên");
+        }
+
+        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
+
+        user.setGroup(null);
+        studentRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public GroupResponse addMember(Long groupId, Long memberId, String token) {
+        Account account = tokenService.getAccountByToken(token);
+        User leader = studentRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+
+        if (!leader.getIsLeader()) {
+            throw new AppException("Chỉ leader mới có quyền thêm thành viên");
+        }
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
+
+        User member = studentRepository.findById(memberId)
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+
+        if (member.getGroup() != null) {
+            throw new AppException("Thành viên này đã thuộc nhóm khác");
+        }
+
+        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        if (memberCount >= 6) throw new AppException("Nhóm đã đạt tối đa 6 thành viên");
+
+        member.setGroup(group);
+        studentRepository.save(member);
+
+        Group updatedGroup = groupRepository.findById(groupId)
+                .orElseThrow(() -> new AppException("Không tìm thấy nhóm sau khi thêm"));
+        return groupMapper.toResponse(updatedGroup);
+    }
+
+    @Override
+    @Transactional
+    public List<GroupResponse> filterGroups(GroupFilterStatus status) {
+        List<Group> groups = switch (status) {
+            case FULL_MEMBER -> groupRepository.findFullGroups();
+            case LACK_MEMBER -> groupRepository.findNotFullGroups();
+            case HAS_LECTURER -> groupRepository.findGroupsWithLecturerSelection();
+            case NO_LECTURER -> groupRepository.findGroupsWithoutLecturerSelection();
+        };
+
+        return groupMapper.toResponseList(groups);
     }
 }

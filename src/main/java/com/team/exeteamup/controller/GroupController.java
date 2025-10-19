@@ -6,6 +6,7 @@ import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
+import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,23 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("{id}/leave")
+    public ResponseEntity<String> leaveGroup(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        groupService.leaveGroup(id, token);
+        return ResponseEntity.ok("Rời nhóm thành công");
+    }
+
+    @PostMapping("{id}/add-member/{memberId}")
+    public ResponseEntity<GroupResponse> addMember(
+            @PathVariable Long id,
+            @PathVariable Long memberId,
+            @RequestHeader(value = "Authorization", required = false) String token) {
+        GroupResponse response = groupService.addMember(id, memberId, token);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<GroupResponse>> getAllGroups(
             @RequestParam(required = false) String status
@@ -60,6 +78,13 @@ public class GroupController {
     public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
         List<GroupResponse> responses = groupService.getGroupsByCourseId(id);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<GroupResponse>> filterGroups(
+            @RequestParam GroupFilterStatus status) {
+        List<GroupResponse> response = groupService.filterGroups(status);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("{id}")
