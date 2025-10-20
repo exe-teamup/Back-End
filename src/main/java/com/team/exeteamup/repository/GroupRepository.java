@@ -29,7 +29,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
         JOIN g.course c
         JOIN c.semester s
         JOIN s.groupTemplates gt
-        WHERE g.memberCount = gt.max_member
+        WHERE g.memberCount = gt.maxMember
     """)
     List<Group> findFullGroups();
 
@@ -38,7 +38,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
         JOIN g.course c
         JOIN c.semester s
         JOIN s.groupTemplates gt
-        WHERE g.memberCount < gt.max_member
+        WHERE g.memberCount < gt.maxMember
     """)
     List<Group> findNotFullGroups();
 
