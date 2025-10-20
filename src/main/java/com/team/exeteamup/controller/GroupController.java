@@ -4,7 +4,7 @@ import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
-import com.team.exeteamup.dto.response.GroupResponse;
+import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
