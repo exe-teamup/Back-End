@@ -1,9 +1,6 @@
 package com.team.exeteamup.repository;
 
-import com.team.exeteamup.dto.response.GroupResponse;
-import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.entity.Group;
-import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.GroupStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
