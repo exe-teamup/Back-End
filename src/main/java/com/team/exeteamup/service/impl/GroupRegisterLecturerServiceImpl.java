@@ -1,12 +1,14 @@
 package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
+import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.GroupRegisterLecturer;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.embedded.GroupLecturerId;
 import com.team.exeteamup.enums.RegisterStatus;
 import com.team.exeteamup.exception.AppException;
+import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.mapper.GroupRegisterLecturerMapper;
 import com.team.exeteamup.repository.GroupRegisterLecturerRepository;
 import com.team.exeteamup.repository.GroupRepository;
@@ -29,6 +31,7 @@ public class GroupRegisterLecturerServiceImpl implements GroupRegisterLecturerSe
     private final GroupRepository groupRepository;
     private final LecturerRepository lecturerRepository;
     private final GroupRegisterLecturerMapper groupRegisterLecturerMapper;
+    private final GroupMapper groupMapper;
 
     @Override
     public LecturerSelectionResponse selectLecturers(Long groupId, List<Long> lecturerIds) {
@@ -61,5 +64,14 @@ public class GroupRegisterLecturerServiceImpl implements GroupRegisterLecturerSe
         }
         groupRegisterLecturerRepository.saveAll(selections);
         return groupRegisterLecturerMapper.toResponse(groupId, selections);
+    }
+
+    @Override
+    @Transactional
+    public List<GroupRegisterLecturerResponse> findPendingGroupsByLecturer(Long lecturerId) {
+            List<Group> pendingGroups = groupRegisterLecturerRepository.findPendingGroupsByLecturer(lecturerId);
+            return pendingGroups.stream()
+                    .map(groupMapper::toGroupRegisterLecturerResponse)
+                    .toList();
     }
 }
