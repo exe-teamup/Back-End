@@ -1,9 +1,6 @@
 package com.team.exeteamup.mapper;
 
-import com.team.exeteamup.dto.response.group.GroupCourseResponse;
-import com.team.exeteamup.dto.response.group.GroupMemberResponse;
-import com.team.exeteamup.dto.response.group.GroupResponse;
-import com.team.exeteamup.dto.response.group.TemplateResponse;
+import com.team.exeteamup.dto.response.group.*;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.GroupTemplate;
@@ -95,6 +92,13 @@ public class GroupMapper {
                 .groupName(group.getGroupName())
                 .memberCount(group.getUsers() != null ? group.getUsers().size() : 0)
                 .course(courseResponse)
+                .build();
+    }
+
+    public GroupRegisterLecturerResponse toGroupRegisterLecturerResponse(Group group) {
+        return GroupRegisterLecturerResponse.builder()
+                .groupId(group.getGroupId())
+                .groupName(group.getGroupName())
                 .build();
     }
 }
