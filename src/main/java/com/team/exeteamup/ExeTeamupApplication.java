@@ -2,6 +2,7 @@
 package com.team.exeteamup;
 
 import com.team.exeteamup.config.DotEnvConfig;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

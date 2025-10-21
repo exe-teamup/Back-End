@@ -3,11 +3,12 @@ package com.team.exeteamup.service.impl;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.repository.AccountRepository;
+import com.team.exeteamup.service.AccountService;
 import com.team.exeteamup.service.TokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,10 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Value("${TOKEN_SECRET_KEY}")
     private String SECRET_KEY;
@@ -29,16 +30,18 @@ public class TokenServiceImpl implements TokenService {
     }
 
     public String generateToken(Account account) {
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(String.valueOf(account.getAccountId()))
                 .claim("role", account.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 ngày
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
+        System.out.println(account.getAccountId() + " token: " + token);
+        return token;
     }
 
-    //verify token
+
     public Account getAccountByToken(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -53,8 +56,7 @@ public class TokenServiceImpl implements TokenService {
 
             long accountId = Long.parseLong(claims.getSubject());
 
-            return accountRepository.findById(accountId)
-                    .orElseThrow(() -> new AppException("Không tìm thấy tài khoản liên kết với token"));
+            return accountService.getAccountById(accountId);
 
         } catch (ExpiredJwtException e) {
             throw new AppException("Token đã hết hạn");
