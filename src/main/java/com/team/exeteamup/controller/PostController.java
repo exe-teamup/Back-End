@@ -27,6 +27,12 @@ public class PostController {
         return ResponseEntity.ok(groupPostResponse);
     }
 
+    @GetMapping("/group-post")
+    public ResponseEntity<List<GroupPostResponse>> getGroupPost() {
+        List<GroupPostResponse> groupPostResponse = postService.getGroupPosts();
+        return ResponseEntity.ok(groupPostResponse);
+    }
+
     @PostMapping("/user-post")
     public ResponseEntity<UserPostResponse> createUserPost(@RequestBody UserPostRequest userPostRequest) {
         UserPostResponse userPostResponse = postService.createUserPost(userPostRequest);
