@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,7 +33,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
-    private final PostMajorService postMajorService;
 
     @Override
     @Transactional
@@ -41,15 +41,18 @@ public class PostServiceImpl implements PostService {
         endIfUserHasNoGroup(groupPostRequest.getUserId());
 
         Post post = postMapper.toEntity(groupPostRequest);
+
         Post savedPost = postRepository.save(post);
 
-        List<PostMajorRequest> postMajorRequests = groupPostRequest.getPostMajorRequests();
-
-        postMajorRequests.forEach(postMajorRequest -> {
-            postMajorService.savePostMajor(savedPost, postMajorRequest);
-        });
-
         return postMapper.toGroupPostResponse(savedPost);
+    }
+
+    public List<GroupPostResponse> getGroupPosts() {
+        List<Post> posts = postRepository.findByPostTypeAndPostStatus(
+                com.team.exeteamup.enums.post.PostType.GROUP_POST,
+                PostStatus.ACTIVE
+        );
+        return posts.stream().map(postMapper::toGroupPostResponse).collect(Collectors.toList());
     }
 
 

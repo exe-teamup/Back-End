@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.catalina.LifecycleState;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GroupPostResponse {
     private Long postId;
-    private Long userId;
+    private String authorName;
     private Long groupId;
     private String title;
     private String postDetail;
@@ -24,4 +26,5 @@ public class GroupPostResponse {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime createdAt;
     private PostType postType;
+    private List<PostMajorResponse> postMajors;
 }

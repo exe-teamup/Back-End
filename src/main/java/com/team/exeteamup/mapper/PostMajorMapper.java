@@ -18,15 +18,13 @@ public class PostMajorMapper {
 
     public PostMajorResponse toResponse(PostMajor postMajor) {
         return PostMajorResponse.builder()
-                .postId(postMajor.getPost().getPostId())
-                .majorId(postMajor.getMajor().getMajorId())
-                .studentNum(postMajor.getStudentNum())
+                .majorCode(postMajor.getMajor().getMajorCode())
+                .quantity(postMajor.getStudentNum())
                 .build();
     }
 
-    public PostMajor toEntityFromRequest(Post post, PostMajorRequest postMajorRequest) {
+    public PostMajor toEntity(PostMajorRequest postMajorRequest) {
         return PostMajor.builder()
-                .post(post)
                 .major(majorService.findById(postMajorRequest.getMajorId()))
                 .studentNum(postMajorRequest.getStudentNum())
                 .build();

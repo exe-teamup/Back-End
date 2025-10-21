@@ -2,6 +2,7 @@ package com.team.exeteamup.repository;
 
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.enums.post.PostStatus;
+import com.team.exeteamup.enums.post.PostType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByGroupIdAndPostStatus(
             @Param("groupId") Long groupId,
             @Param("status") PostStatus postStatus);
+
+    List<Post> findByPostTypeAndPostStatus(PostType postType, PostStatus postStatus);
 }
