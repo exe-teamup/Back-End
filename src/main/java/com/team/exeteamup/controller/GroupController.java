@@ -4,7 +4,7 @@ import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
-import com.team.exeteamup.dto.response.GroupResponse;
+import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.service.GroupRegisterLecturerService;
@@ -24,7 +24,7 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRegisterLecturerService groupRegisterLecturerService;
 
-    @PostMapping("")
+    @PostMapping("/group-template")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
         GroupResponse group = groupService.createGroup(groupRequest);
         return ResponseEntity.ok(group);
