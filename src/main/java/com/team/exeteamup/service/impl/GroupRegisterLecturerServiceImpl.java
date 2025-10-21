@@ -2,6 +2,7 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
+import com.team.exeteamup.dto.response.group.LecturerPendingGroupsResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.GroupRegisterLecturer;
 import com.team.exeteamup.entity.Lecturer;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -67,11 +69,18 @@ public class GroupRegisterLecturerServiceImpl implements GroupRegisterLecturerSe
     }
 
     @Override
-    @Transactional
-    public List<GroupRegisterLecturerResponse> findPendingGroupsByLecturer(Long lecturerId) {
-            List<Group> pendingGroups = groupRegisterLecturerRepository.findPendingGroupsByLecturer(lecturerId);
-            return pendingGroups.stream()
-                    .map(groupMapper::toGroupRegisterLecturerResponse)
-                    .toList();
+    public LecturerPendingGroupsResponse getPendingGroups(Long lecturerId) {
+        List<GroupRegisterLecturer> pendingList = groupRegisterLecturerRepository
+                .findPendingGroupsByLecturerId(lecturerId, RegisterStatus.PENDING);
+
+        List<GroupRegisterLecturerResponse> groups = pendingList.stream()
+                .map(reg -> groupMapper.toGroupRegisterLecturerResponse(reg.getGroup()))
+                .collect(Collectors.toList());
+
+        return LecturerPendingGroupsResponse.builder()
+                .lecturerId(lecturerId)
+                .totalGroups(groups.size())
+                .groups(groups)
+                .build();
     }
 }
