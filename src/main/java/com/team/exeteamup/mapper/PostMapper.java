@@ -6,6 +6,7 @@ import com.team.exeteamup.dto.response.post.GroupPostResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
+import com.team.exeteamup.entity.PostMajor;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.enums.post.PostType;
@@ -26,14 +27,24 @@ public class PostMapper {
     private final GroupService groupService;
 
     public Post toEntity(GroupPostRequest request) {
-        return Post.builder()
-                .title(request.getTitle())
-                .postDetail(request.getPostDetail())
-                .postStatus(PostStatus.ACTIVE)
-                .postType(PostType.GROUP_POST)
-                .user(userService.findById(request.getUserId()))
-                .group(groupService.findGroupById(request.getGroupId()))
-                .build();
+        Post post = new Post();
+
+        List<PostMajor> postMajors = request.getPostMajorRequests().stream()
+                .map(req -> {
+                    PostMajor postMajor = postMajorMapper.toEntity(req);
+                    postMajor.setPost(post);
+                    return postMajor;
+                }).toList();
+
+        post.setTitle(request.getTitle());
+        post.setPostDetail(request.getPostDetail());
+        post.setPostStatus(PostStatus.ACTIVE);
+        post.setPostType(PostType.GROUP_POST);
+        post.setUser(userService.findById(request.getUserId()));
+        post.setGroup(groupService.findGroupById(request.getGroupId()));
+        post.setPostMajors(postMajors);
+
+        return post;
     }
 
     public Post toEntity(UserPostRequest request) {
@@ -68,9 +79,11 @@ public class PostMapper {
                 .postDetail(post.getPostDetail())
                 .postStatus(post.getPostStatus())
                 .createdAt(post.getCreatedAt())
-                .userId(post.getUser().getUserId())
+                .authorName(post.getUser().getFullName())
                 .groupId(post.getGroup().getGroupId())
                 .postType(post.getPostType())
+                .postMajors(post.getPostMajors() != null ?
+                        postMajorMapper.toResponseList(post.getPostMajors()) : null)
                 .build();
     }
 

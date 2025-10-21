@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostMajorResponse {
-    private Long postId;
-    private Long majorId;
-    private int studentNum;
+    private String majorCode;
+    private int quantity;
 }

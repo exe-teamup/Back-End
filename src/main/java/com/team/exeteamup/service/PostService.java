@@ -20,4 +20,5 @@ public interface PostService {
     Post findById(Long postId);
     List<PostResponse> getPostsByGroupId(Long groupId, PostStatus postStatus);
     PostResponse getPostById(Long id);
+    List<GroupPostResponse> getGroupPosts();
 }

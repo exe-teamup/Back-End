@@ -7,5 +7,5 @@ import com.team.exeteamup.entity.Post;
 import java.util.List;
 
 public interface PostMajorService {
-    void savePostMajor(Post post, PostMajorRequest postMajorRequest);
+
 }
