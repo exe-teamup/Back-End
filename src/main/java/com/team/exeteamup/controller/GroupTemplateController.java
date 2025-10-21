@@ -1,16 +1,14 @@
 package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.GroupTemplateRequest;
+import com.team.exeteamup.dto.response.GroupTemplateResponse;
 import com.team.exeteamup.service.GroupTemplateService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/group-templates")
@@ -19,33 +17,39 @@ public class GroupTemplateController {
 
     private final GroupTemplateService groupTemplateService;
 
-    @PostMapping("")
-    public ResponseEntity<?> createGroupTemplate(@Valid @RequestBody GroupTemplateRequest request,
-                                                 BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            Map<String, String> errors = new LinkedHashMap<>();
-            errors.put("api", "group-template - post - createGroupTemplate");
 
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(),error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
-
-        }
-
-        return ResponseEntity.ok(groupTemplateService.saveGroupTemplate(request));
+    @GetMapping
+    public ResponseEntity<List<GroupTemplateResponse>> getAll() {
+        List<GroupTemplateResponse> templates = groupTemplateService.getAll();
+        return ResponseEntity.ok(templates);
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllGroupTemplates() {
-        return ResponseEntity.ok(groupTemplateService.getAll());
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupTemplateResponse> getById(@PathVariable("id") long id) {
+        GroupTemplateResponse response = groupTemplateService.findResponseById(id);
+        return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping
+    public ResponseEntity<GroupTemplateResponse> create(@RequestBody GroupTemplateRequest request) {
+        GroupTemplateResponse created = groupTemplateService.saveGroupTemplate(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateGroupTemplates(
-            @PathVariable Long id,
-            @RequestBody GroupTemplateRequest request) {
-        return ResponseEntity.ok(groupTemplateService.updateGroupTemplate(id, request));
+    public ResponseEntity<GroupTemplateResponse> update(@PathVariable("id") long id,
+                                                        @RequestBody GroupTemplateRequest request) {
+        GroupTemplateResponse updated = groupTemplateService.updateGroupTemplate(id, request);
+        return ResponseEntity.ok(updated);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GroupTemplateResponse> delete(@PathVariable("id") long id) {
+        GroupTemplateResponse deleted = groupTemplateService.deleteGroupTemplate(id);
+        return ResponseEntity.ok(deleted);
+    }
 }
