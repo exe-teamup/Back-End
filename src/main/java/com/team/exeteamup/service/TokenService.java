@@ -7,5 +7,4 @@ import io.jsonwebtoken.Claims;
 public interface TokenService {
     Account getAccountByToken(String token);
     String generateToken(Account account);
-    Claims extractAllClaims(String token);
 }

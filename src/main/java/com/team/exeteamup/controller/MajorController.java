@@ -32,13 +32,14 @@ public class MajorController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<List<MajorResponse>> getAllMajors() {
         List<MajorResponse> response = majorService.getAllMajors();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("level/{level}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MajorResponse>> getMajorsByLevel(@PathVariable Long level) {
         List<MajorResponse> response = majorService.getMajorsByLevel(level);
         return ResponseEntity.ok(response);
