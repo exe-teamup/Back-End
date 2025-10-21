@@ -16,5 +16,6 @@ public class GroupRequest {
     private Long courseId;
     private String groupName;
     private long studentId;
+    private Long groupTemplateId;
     private List<String> memberEmails;
 }

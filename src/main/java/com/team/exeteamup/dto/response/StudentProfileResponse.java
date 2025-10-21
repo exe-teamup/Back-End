@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class StudentProfileResponse {
     private long userId;
+    private long courseId;
     private String fullName;
     private String email;
     private String phoneNumber;

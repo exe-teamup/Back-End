@@ -3,9 +3,11 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.MajorRequest;
 import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.service.MajorService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +15,7 @@ import java.util.List;
     
 @RestController
 @RequestMapping("api/majors")
+@SecurityRequirement(name = "bearerAuth")
 public class MajorController {
     @Autowired
     private MajorService majorService;
@@ -29,12 +32,14 @@ public class MajorController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<List<MajorResponse>> getAllMajors() {
         List<MajorResponse> response = majorService.getAllMajors();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("level/{level}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MajorResponse>> getMajorsByLevel(@PathVariable Long level) {
         List<MajorResponse> response = majorService.getMajorsByLevel(level);
         return ResponseEntity.ok(response);

@@ -2,10 +2,7 @@ package com.team.exeteamup.service;
 
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
-import com.team.exeteamup.dto.request.LecturerSelectionRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
-import com.team.exeteamup.dto.response.GroupResponse;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -53,6 +53,9 @@ public class Group {
     @JoinColumn(name = "course_id")
     private Course course;
 
+    @ManyToOne
+    @JoinColumn(name = "group_template_id", referencedColumnName = "template_id")
+    private GroupTemplate groupTemplate;
 
     @Column(name = "image_url")
     private String imageUrl;

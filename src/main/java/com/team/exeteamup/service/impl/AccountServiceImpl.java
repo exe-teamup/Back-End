@@ -6,7 +6,11 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.mapper.AccountMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.AccountService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +51,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findById(accountId).isPresent();
     }
 
+
     @Override
     public List<Account> presentAccounts(List<Long> accountIds) {
 
@@ -65,9 +70,31 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
+
     @Override
     public Account getAccountById(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
+        return accountRepository.findByEmail(mail)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                "User not found with mail: " +
+                                        mail)
+                );
+    }
+
+
+    public UserDetails loadUserById(long accountId) throws UsernameNotFoundException {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                "User not found with id: " +
+                                        accountId)
+                );
     }
 }
