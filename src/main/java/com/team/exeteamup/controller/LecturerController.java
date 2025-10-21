@@ -2,6 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
 import com.team.exeteamup.dto.response.group.GroupResponse;
+import com.team.exeteamup.dto.response.group.LecturerPendingGroupsResponse;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.LecturerResponse;
@@ -51,7 +52,7 @@ public class LecturerController {
     }
 
     @GetMapping()
-    public ResponseEntity <List<LecturerResponse>> getAllLecturers() {
+    public ResponseEntity<List<LecturerResponse>> getAllLecturers() {
         List<LecturerResponse> lecturerResponses = lecturerService.getAllLecturers();
         return ResponseEntity.ok(lecturerResponses);
     }
@@ -62,8 +63,8 @@ public class LecturerController {
     }
 
     @GetMapping("{id}/pending-groups")
-    public ResponseEntity<?> getLecturerCount(@PathVariable Long id) {
-        List<GroupRegisterLecturerResponse> response = groupRegisterLecturerService.findPendingGroupsByLecturer(id);
+    public ResponseEntity<LecturerPendingGroupsResponse> getPendingGroups(@PathVariable Long id) {
+        LecturerPendingGroupsResponse response = groupRegisterLecturerService.getPendingGroups(id);
         return ResponseEntity.ok(response);
     }
 }
