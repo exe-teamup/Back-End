@@ -4,4 +4,6 @@ public enum GroupStatus {
     ACTIVE,
     INACTIVE,
     LOCKED,
+    DRAFT,
+    ASSIGNED
 }

@@ -24,7 +24,7 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRegisterLecturerService groupRegisterLecturerService;
 
-    @PostMapping("/group-template")
+    @PostMapping("")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
         GroupResponse group = groupService.createGroup(groupRequest);
         return ResponseEntity.ok(group);
