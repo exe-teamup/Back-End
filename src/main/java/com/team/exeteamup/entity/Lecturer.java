@@ -20,7 +20,7 @@ public class Lecturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecturer_id")
-    private long lecturerId;
+    private Long lecturerId;
 
     @OneToOne
     @JoinColumn(name = "account_id", unique = true)
@@ -30,6 +30,6 @@ public class Lecturer {
     private String fullName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "lecturer_status")
+    @Column(name = "lecturer_status",length = 20, nullable = false)
     private LecturerStatus lecturerStatus;
 }

@@ -96,12 +96,8 @@ public class UserServiceImpl implements UserService {
                 String majorName = currentRow.getCell(5).getStringCellValue().trim();
                 String courseCode = currentRow.getCell(6).getStringCellValue().trim();
 
-                if (accountRepository.existsByEmail(email)) {
-                    throw new RuntimeException("Email already exists: " + email);
-                }
-                if (studentRepository.existsByUserCode(userCode)) {
-                    throw new RuntimeException("Student code already exists: " + userCode);
-                }
+                if (accountRepository.existsByEmail(email)) continue;
+                if (studentRepository.existsByUserCode(userCode)) continue;
 
                 if (studentsToSave.stream().anyMatch(s -> s.getUserCode().equals(userCode))) {
                     throw new RuntimeException("Duplicate student code in file: " + userCode);
