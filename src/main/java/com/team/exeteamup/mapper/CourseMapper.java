@@ -6,6 +6,7 @@ import com.team.exeteamup.dto.response.CourseResponse;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.Semester;
+import com.team.exeteamup.enums.CourseStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CourseMapper {
         Course course = new Course();
         applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
                 request.getMaxGroup(), request.getGroupCount(),
-                request.getSemesterId(), request.getLecturerId());
+                request.getSemesterId(), request.getLecturerId(), request.getStatus());
         return course;
     }
 
@@ -35,6 +36,8 @@ public class CourseMapper {
                 .groupCount(course.getGroupCount())
                 .semesterId(course.getSemester() != null ? course.getSemester().getSemesterId() : null)
                 .lecturerId(course.getLecturer() != null ? course.getLecturer().getLecturerId() : null)
+                .lecturerName(course.getLecturer() != null ? course.getLecturer().getFullName() : null)
+                .status(course.getStatus())
                 .build();
     }
 
@@ -49,31 +52,38 @@ public class CourseMapper {
 
         applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
                 request.getMaxGroup(), request.getGroupCount(),
-                request.getSemesterId(), request.getLecturerId());
+                request.getSemesterId(), request.getLecturerId(), request.getStatus());
     }
 
     private void applyRequestToCourse(Course course, String code, String name,
                                       Integer maxGroup, Integer groupCount,
-                                      Long semesterId, Long lecturerId) {
-        course.setCourseCode(code);
-        course.setCourseName(name);
-        course.setMaxGroup(maxGroup);
-        course.setGroupCount(groupCount);
+                                      Long semesterId, Long lecturerId, CourseStatus status) {
+        if (code != null) {
+            course.setCourseCode(code);
+        }
+        if (name != null) {
+            course.setCourseName(name);
+        }
+        if (maxGroup != null) {
+            course.setMaxGroup(maxGroup);
+        }
+        if (groupCount != null) {
+            course.setGroupCount(groupCount);
+        }
+        if (status != null) {
+            course.setStatus(status);
+        }
 
         if (semesterId != null) {
             Semester semester = new Semester();
             semester.setSemesterId(semesterId);
             course.setSemester(semester);
-        } else {
-            course.setSemester(null);
         }
 
         if (lecturerId != null) {
             Lecturer lecturer = new Lecturer();
             lecturer.setLecturerId(lecturerId);
             course.setLecturer(lecturer);
-        } else {
-            course.setLecturer(null);
         }
     }
 }

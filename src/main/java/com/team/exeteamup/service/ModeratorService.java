@@ -6,5 +6,4 @@ import com.team.exeteamup.dto.response.AssignLecturerResponse;
 public interface ModeratorService {
     AssignLecturerResponse assignLecturer(AssignLecturerRequest assignLecturerRequest);
     AssignLecturerResponse updateAssignedLecturer(AssignLecturerRequest assignLecturerRequest);
-
 }

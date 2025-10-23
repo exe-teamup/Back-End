@@ -1,13 +1,10 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
-import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.dto.response.group.LecturerPendingGroupsResponse;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
-import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.LecturerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +22,6 @@ import java.util.List;
 public class LecturerController {
 
     private final LecturerService lecturerService;
-    private final GroupRegisterLecturerService groupRegisterLecturerService;
 
     @PostMapping(name = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Lecturer>> importLecturers(@RequestParam("file") MultipartFile file) {
@@ -61,13 +57,7 @@ public class LecturerController {
     public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long id) {
         return ResponseEntity.ok(lecturerService.getLecturer(id));
     }
-
-    @GetMapping("{id}/pending-groups")
-    public ResponseEntity<LecturerPendingGroupsResponse> getPendingGroups(@PathVariable Long id) {
-        LecturerPendingGroupsResponse response = groupRegisterLecturerService.getPendingGroups(id);
-        return ResponseEntity.ok(response);
-    }
-
+  
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLecturer(@PathVariable Long id) {
         LecturerResponse response = lecturerService.deleteLecturer(id);

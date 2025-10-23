@@ -6,11 +6,10 @@ import com.team.exeteamup.dto.response.CourseResponse;
 import com.team.exeteamup.entity.Course;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.Semester;
+import com.team.exeteamup.enums.CourseStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.CourseMapper;
-import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.CourseRepository;
-import com.team.exeteamup.repository.GroupRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.CourseService;
@@ -36,12 +35,25 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final SemesterRepository semesterRepository;
     private final LecturerRepository lecturerRepository;
-    private final GroupRepository groupRepository;
-    private final GroupMapper groupMapper;
 
     @Override
     public CourseResponse createCourse(CourseRequest courseRequest) {
-        Course course  = courseMapper.toEntity(courseRequest);
+        Course course = courseMapper.toEntity(courseRequest);
+
+        // Set semester nếu có
+        if (courseRequest.getSemesterId() != null) {
+            Semester semester = semesterRepository.findById(courseRequest.getSemesterId())
+                    .orElseThrow(() -> new AppException("Kì học không tồn tại"));
+            course.setSemester(semester);
+        }
+
+        // Set lecturer nếu có
+        if (courseRequest.getLecturerId() != null) {
+            Lecturer lecturer = lecturerRepository.findById(courseRequest.getLecturerId())
+                    .orElseThrow(() -> new AppException("Giảng viên không tồn tại"));
+            course.setLecturer(lecturer);
+        }
+
         courseRepository.save(course);
         return courseMapper.toResponse(course);
     }
@@ -93,8 +105,6 @@ public class CourseServiceImpl implements CourseService {
         return courseMapper.toResponse(updatedCourse);
     }
 
-
-
     @Override
     public List<CourseResponse> importCoursesFromExcel(MultipartFile file) {
         List<CourseResponse> importedCourses = new ArrayList<>();
@@ -112,19 +122,25 @@ public class CourseServiceImpl implements CourseService {
                 String courseCode = row.getCell(2).getStringCellValue();
                 int maxGroup = (int) row.getCell(3).getNumericCellValue();
                 int groupCount = (int) row.getCell(4).getNumericCellValue();
+                Long lecturerId = (long) row.getCell(5).getNumericCellValue();
 
                 if (courseRepository.existsByCourseCode(courseCode)) continue;
 
                 Semester semester = semesterRepository.findById(semesterId)
                         .orElseThrow(() -> new RuntimeException("Semester not found: " + semesterId));
 
-                CourseRequest request = new CourseRequest();
-                request.setCourseCode(courseCode);
-                request.setCourseName(courseName);
-                request.setSemesterId(semesterId);
-                request.setMaxGroup(maxGroup);
-                request.setGroupCount(groupCount);
-                Course course = courseMapper.toEntity(request);
+                Lecturer lecturer = lecturerRepository.findById(lecturerId)
+                        .orElseThrow(() -> new RuntimeException("Lecturer not found: " + lecturerId));
+
+                Course course = new Course();
+                course.setCourseCode(courseCode);
+                course.setCourseName(courseName);
+                course.setMaxGroup(maxGroup);
+                course.setGroupCount(groupCount);
+                course.setStatus(CourseStatus.ACTIVE);
+                course.setSemester(semester);
+                course.setLecturer(lecturer);
+
                 courseList.add(course);
             }
 
@@ -140,6 +156,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public void deleteCourse(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
@@ -147,4 +164,3 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.delete(course);
     }
 }
-
