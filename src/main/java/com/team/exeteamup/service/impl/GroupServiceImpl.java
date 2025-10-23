@@ -26,7 +26,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
-    private final GroupLecturerRepository groupLecturerRepository;
     private final GroupTemplateRepository groupTemplateRepository;
 
     @Override
@@ -44,6 +43,10 @@ public class GroupServiceImpl implements GroupService {
 
         if (!course.getUsers().contains(leader)) {
             throw new AppException("Sinh viên trưởng nhóm không thuộc lớp học này");
+        }
+
+        if (course.getGroupCount() >= course.getMaxGroup()) {
+            throw new AppException("Lớp học đã đạt số lượng nhóm tối đa");
         }
 
         GroupTemplate groupTemplate = groupTemplateRepository.findById(groupRequest.getGroupTemplateId())
@@ -92,6 +95,8 @@ public class GroupServiceImpl implements GroupService {
         group.setMemberCount(members.size());
         groupRepository.save(group);
 
+        course.setGroupCount(course.getGroupCount() + 1);
+        courseRepository.save(course);
         return groupMapper.toResponse(group);
     }
 
@@ -100,8 +105,6 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
-
-        groupLecturerRepository.deleteAllByGroup(group);
 
         List<User> users = studentRepository.findAllByGroup(group);
         for (User user : users) {
