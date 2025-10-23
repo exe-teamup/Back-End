@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignLecturerRequest {
-    private Long groupId;
+@Builder
+public class ModeratorUpdateCourseRequest {
     private Long lecturerId;
 }

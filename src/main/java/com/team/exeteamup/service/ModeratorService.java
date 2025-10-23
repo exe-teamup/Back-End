@@ -1,9 +1,9 @@
 package com.team.exeteamup.service;
 
-import com.team.exeteamup.dto.request.AssignLecturerRequest;
-import com.team.exeteamup.dto.response.AssignLecturerResponse;
+import com.team.exeteamup.dto.request.CourseRequest;
+import com.team.exeteamup.dto.request.ModeratorUpdateCourseRequest;
+import com.team.exeteamup.dto.response.CourseResponse;
 
 public interface ModeratorService {
-    AssignLecturerResponse assignLecturer(AssignLecturerRequest assignLecturerRequest);
-    AssignLecturerResponse updateAssignedLecturer(AssignLecturerRequest assignLecturerRequest);
+    CourseResponse updateCourseLecturer(Long courseId, ModeratorUpdateCourseRequest request);
 }
