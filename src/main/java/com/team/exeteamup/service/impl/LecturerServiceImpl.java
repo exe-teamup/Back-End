@@ -13,6 +13,7 @@ import com.team.exeteamup.mapper.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.LecturerService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -113,5 +114,31 @@ public class LecturerServiceImpl implements LecturerService {
                 .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
 
         return lecturerMapper.toResponse(lecturer);
+    }
+
+    @Override
+    @Transactional
+    public LecturerResponse deleteLecturer(Long lecturerId) {
+
+        Lecturer lecturer = findById(lecturerId);
+        Account account = lecturer.getAccount();
+
+        lecturer.setLecturerStatus(LecturerStatus.INACTIVE);
+        account.setStatus(AccountStatus.INACTIVE);
+
+        accountRepository.save(account);
+        Lecturer savedLecturer = lecturerRepository.save(lecturer);
+
+        return lecturerMapper.toResponse(savedLecturer);
+    }
+
+    @Override
+    public Lecturer findById(Long lecturerId) {
+        return lecturerRepository.findById(lecturerId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Lecturer not found with id: " +
+                                        lecturerId)
+                );
     }
 }
