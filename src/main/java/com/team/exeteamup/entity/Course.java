@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.team.exeteamup.enums.CourseStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +46,8 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<User> users;
+
+    @Column(name = "course_status")
+    @Enumerated(EnumType.STRING)
+    private CourseStatus status;
 }

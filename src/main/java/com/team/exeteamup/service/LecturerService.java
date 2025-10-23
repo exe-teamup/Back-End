@@ -15,5 +15,7 @@ public interface LecturerService {
     LecturerResponse updateLecturer(Long lecturerId, LecturerRequest request);
     List<LecturerResponse> getAllLecturers();
     LecturerResponse getLecturer(Long lecturerId);
+    LecturerResponse deleteLecturer(Long lecturerId);
+    Lecturer findById(Long lecturerId);
 
 }

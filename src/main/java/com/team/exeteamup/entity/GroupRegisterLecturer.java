@@ -39,4 +39,11 @@ public class GroupRegisterLecturer {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (groupLecturerId == null && group != null && lecturer != null) {
+            this.groupLecturerId = new GroupLecturerId(group.getGroupId(), lecturer.getLecturerId());
+        }
+    }
 }
