@@ -1,8 +1,5 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
-import com.team.exeteamup.dto.response.group.GroupResponse;
-import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.LecturerResponse;
@@ -14,7 +11,6 @@ import com.team.exeteamup.enums.LecturerStatus;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.mapper.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
-import com.team.exeteamup.repository.GroupRegisterLecturerRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.LecturerService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +19,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,8 +33,6 @@ public class LecturerServiceImpl implements LecturerService {
     private final LecturerRepository lecturerRepository;
     private final AccountRepository accountRepository;
     private final LecturerMapper lecturerMapper;
-    private final GroupRegisterLecturerRepository groupRegisterLecturerRepository;
-    private final GroupMapper groupMapper;
 
     @Override
     public List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException {

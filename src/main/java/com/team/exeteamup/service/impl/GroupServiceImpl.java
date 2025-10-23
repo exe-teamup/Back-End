@@ -26,7 +26,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
-    private final GroupRegisterLecturerRepository groupRegisterLecturerRepository;
     private final GroupLecturerRepository groupLecturerRepository;
     private final GroupTemplateRepository groupTemplateRepository;
 
@@ -42,6 +41,10 @@ public class GroupServiceImpl implements GroupService {
 
         Course course = courseRepository.findById(groupRequest.getCourseId())
                 .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
+        if (!course.getUsers().contains(leader)) {
+            throw new AppException("Sinh viên trưởng nhóm không thuộc lớp học này");
+        }
 
         GroupTemplate groupTemplate = groupTemplateRepository.findById(groupRequest.getGroupTemplateId())
                 .orElseThrow(() -> new AppException("Group template không tồn tại"));
@@ -65,9 +68,15 @@ public class GroupServiceImpl implements GroupService {
             for (String email : groupRequest.getMemberEmails()) {
                 User member = studentRepository.findByAccount_Email(email)
                         .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với email: " + email));
+
                 if (member.getGroup() != null) {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
+
+                if (!course.getUsers().contains(member)) {
+                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
+                }
+
                 member.setGroup(group);
                 member.setIsLeader(false);
                 members.add(member);
@@ -92,7 +101,6 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
-        groupRegisterLecturerRepository.deleteAllByGroup(group);
         groupLecturerRepository.deleteAllByGroup(group);
 
         List<User> users = studentRepository.findAllByGroup(group);
@@ -270,8 +278,6 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groups = switch (status) {
             case FULL_MEMBER -> groupRepository.findFullGroups();
             case LACK_MEMBER -> groupRepository.findNotFullGroups();
-            case HAS_LECTURER -> groupRepository.findGroupsWithLecturerSelection();
-            case NO_LECTURER -> groupRepository.findGroupsWithoutLecturerSelection();
         };
 
         return groupMapper.toResponseList(groups);

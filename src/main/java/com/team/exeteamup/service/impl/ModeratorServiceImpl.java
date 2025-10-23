@@ -4,7 +4,6 @@ import com.team.exeteamup.dto.request.AssignLecturerRequest;
 import com.team.exeteamup.dto.response.AssignLecturerResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.GroupLecturer;
-import com.team.exeteamup.entity.GroupRegisterLecturer;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.embedded.GroupLecturerId;
 import com.team.exeteamup.enums.LecturerStatus;
@@ -12,7 +11,6 @@ import com.team.exeteamup.enums.RegisterStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.LecturerAssignmentMapper;
 import com.team.exeteamup.repository.GroupLecturerRepository;
-import com.team.exeteamup.repository.GroupRegisterLecturerRepository;
 import com.team.exeteamup.repository.GroupRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.ModeratorService;
@@ -22,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class ModeratorServiceImpl implements ModeratorService {
     private final GroupRepository groupRepository;
     private final LecturerRepository lecturerRepository;
     private final GroupLecturerRepository groupLecturerRepository;
-    private final GroupRegisterLecturerRepository groupRegisterLecturerRepository;
     private final LecturerAssignmentMapper lecturerAssignmentMapper;
 
     @Override
@@ -40,11 +37,6 @@ public class ModeratorServiceImpl implements ModeratorService {
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
         Lecturer lecturer = lecturerRepository.findById(request.getLecturerId())
                 .orElseThrow(() -> new AppException("Giảng viên không tồn tại"));
-
-        groupLecturerRepository.findByGroup_GroupIdAndIsMainTrue(group.getGroupId())
-                .ifPresent(present -> {
-                    throw new RuntimeException("Nhóm đã có giảng viên chính thức");
-                });
 
         GroupLecturerId id = new GroupLecturerId(group.getGroupId(), lecturer.getLecturerId());
         GroupLecturer groupLecturer = GroupLecturer.builder()
@@ -57,16 +49,6 @@ public class ModeratorServiceImpl implements ModeratorService {
                 .build();
         groupLecturerRepository.save(groupLecturer);
 
-        List<GroupRegisterLecturer> register = groupRegisterLecturerRepository.findByGroup_GroupId(request.getGroupId());
-        for (GroupRegisterLecturer reg : register) {
-            if (reg.getLecturer().getLecturerId() == lecturer.getLecturerId()) {
-                reg.setRegisterStatus(RegisterStatus.APPROVED);
-            } else {
-                reg.setRegisterStatus(RegisterStatus.REJECTED);
-            }
-        }
-        groupRegisterLecturerRepository.saveAll(register);
-        group.setOfficialLecturer(lecturer);
         groupRepository.save(group);
         return lecturerAssignmentMapper.toResponse(groupLecturer);
     }
@@ -77,16 +59,6 @@ public class ModeratorServiceImpl implements ModeratorService {
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
         Lecturer lecturer = lecturerRepository.findById(assignLecturerRequest.getLecturerId())
                 .orElseThrow(() -> new AppException("Giảng viên không tồn tại"));
-
-        Optional<GroupLecturer> currentMainLecturer = groupLecturerRepository
-                .findByGroup_GroupIdAndIsMainTrue(group.getGroupId());
-
-        boolean isRegistered = groupRegisterLecturerRepository
-                .existsByGroup_GroupIdAndLecturer_LecturerId(group.getGroupId(), lecturer.getLecturerId());
-
-        if (!isRegistered) {
-            throw new AppException("Giảng viên này chưa được nhóm chọn");
-        }
 
         groupLecturerRepository.deleteAllByGroup_GroupId(group.getGroupId());
 
@@ -100,17 +72,6 @@ public class ModeratorServiceImpl implements ModeratorService {
                 .build();
         groupLecturerRepository.save(newMainLecturer);
 
-        List<GroupRegisterLecturer> register = groupRegisterLecturerRepository
-                .findByGroup_GroupId(group.getGroupId());
-        for (GroupRegisterLecturer reg : register) {
-            if (reg.getLecturer().getLecturerId() == newMainLecturer.getLecturer().getLecturerId()) {
-                reg.setRegisterStatus(RegisterStatus.APPROVED);
-            } else {
-                reg.setRegisterStatus(RegisterStatus.REJECTED);
-            }
-        }
-        groupRegisterLecturerRepository.saveAll(register);
-        group.setOfficialLecturer(lecturer);
         groupRepository.save(group);
         return lecturerAssignmentMapper.toResponse(newMainLecturer);
     }
