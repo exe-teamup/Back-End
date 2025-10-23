@@ -66,4 +66,11 @@ public class LecturerController {
         List<GroupRegisterLecturerResponse> response = groupRegisterLecturerService.findPendingGroupsByLecturer(id);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLecturer(@PathVariable Long id) {
+        LecturerResponse response = lecturerService.deleteLecturer(id);
+        return ResponseEntity.ok(response);
+    }
 }
+
