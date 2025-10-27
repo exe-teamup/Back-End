@@ -1,12 +1,13 @@
-package com.team.exeteamup.dto.response;
+package com.team.exeteamup.dto.response.lecturer;
 
-import com.team.exeteamup.enums.LecturerStatus;
+import java.util.List;
+
+import com.team.exeteamup.dto.response.CourseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +19,6 @@ public class LecturerResponse {
     private String lecturerStatus;
     private String accountStatus;
     private long accountId;
+    private String email;
+    private List<LecturerCourseResponse> courses;
 }

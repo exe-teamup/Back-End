@@ -8,6 +8,7 @@
     import lombok.NoArgsConstructor;
     import org.hibernate.annotations.GenericGenerator;
 
+    import java.util.List;
     import java.util.UUID;
 
 @Entity
@@ -32,4 +33,7 @@ public class Lecturer {
     @Enumerated(EnumType.STRING)
     @Column(name = "lecturer_status",length = 20, nullable = false)
     private LecturerStatus lecturerStatus;
+
+    @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
+    private List<Course> courses;
 }
