@@ -1,9 +1,7 @@
 package com.team.exeteamup.service;
 
 import com.team.exeteamup.dto.request.LecturerRequest;
-import com.team.exeteamup.dto.response.LecturerResponse;
-import com.team.exeteamup.dto.response.group.GroupRegisterLecturerResponse;
-import com.team.exeteamup.dto.response.group.GroupResponse;
+import com.team.exeteamup.dto.response.lecturer.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
 import org.springframework.web.multipart.MultipartFile;
 

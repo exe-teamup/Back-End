@@ -2,14 +2,13 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
-import com.team.exeteamup.dto.response.LecturerResponse;
+import com.team.exeteamup.dto.response.lecturer.LecturerResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.enums.account.AccountRole;
 import com.team.exeteamup.enums.account.AccountStatus;
 import com.team.exeteamup.enums.LecturerStatus;
-import com.team.exeteamup.mapper.GroupMapper;
-import com.team.exeteamup.mapper.LecturerMapper;
+import com.team.exeteamup.mapper.lecturer.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.service.LecturerService;
@@ -30,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LecturerServiceImpl implements LecturerService {
     private final LecturerRepository lecturerRepository;
@@ -37,6 +37,7 @@ public class LecturerServiceImpl implements LecturerService {
     private final LecturerMapper lecturerMapper;
 
     @Override
+    @Transactional
     public List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException {
         List<Lecturer> lecturers = new ArrayList<>();
 
@@ -76,6 +77,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
+    @Transactional
     public LecturerResponse updateLecturer(Long lecturerId, LecturerRequest request) {
         Lecturer lecturer = lecturerRepository.findById(lecturerId)
                 .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));

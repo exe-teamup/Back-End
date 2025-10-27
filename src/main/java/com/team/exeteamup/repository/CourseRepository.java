@@ -1,14 +1,10 @@
 package com.team.exeteamup.repository;
 
-import com.team.exeteamup.dto.response.CourseResponse;
 import com.team.exeteamup.entity.Course;
-import com.team.exeteamup.entity.Lecturer;
-import com.team.exeteamup.enums.CourseStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findBySemester_SemesterId(Long semesterId);

@@ -3,7 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.response.group.LecturerPendingGroupsResponse;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
-import com.team.exeteamup.dto.response.LecturerResponse;
+import com.team.exeteamup.dto.response.lecturer.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.service.LecturerService;
 import lombok.RequiredArgsConstructor;

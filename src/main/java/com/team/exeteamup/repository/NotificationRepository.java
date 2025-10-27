@@ -2,7 +2,6 @@ package com.team.exeteamup.repository;
 
 import com.team.exeteamup.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
