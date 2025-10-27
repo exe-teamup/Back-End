@@ -37,7 +37,7 @@ public class CourseMapper {
                 .semesterId(course.getSemester() != null ? course.getSemester().getSemesterId() : null)
                 .lecturerId(course.getLecturer() != null ? course.getLecturer().getLecturerId() : null)
                 .lecturerName(course.getLecturer() != null ? course.getLecturer().getFullName() : null)
-                .semesterName(course.getSemester() != null ? course.getSemester().getSemesterName() : null)
+                .semesterCode(course.getSemester() != null ? course.getSemester().getSemesterCode() : null)
                 .status(course.getStatus())
                 .build();
     }

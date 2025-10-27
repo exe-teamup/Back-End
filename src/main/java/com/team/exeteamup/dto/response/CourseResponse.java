@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +17,7 @@ public class CourseResponse {
     private String lecturerName;
     private String courseCode;
     private String courseName;
-    private String semesterName;
+    private String semesterCode;
     private int maxGroup;
     private int groupCount;
     private CourseStatus status;
