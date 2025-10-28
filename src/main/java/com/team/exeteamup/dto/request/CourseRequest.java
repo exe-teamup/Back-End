@@ -19,6 +19,7 @@ public class CourseRequest {
     private String courseCode;
     private String courseName;
     private int maxGroup;
+    private int maxStudents;
     private int groupCount;
     private CourseStatus status;
 }

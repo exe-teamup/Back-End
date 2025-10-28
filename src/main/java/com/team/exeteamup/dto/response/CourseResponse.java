@@ -19,6 +19,7 @@ public class CourseResponse {
     private String courseName;
     private String semesterCode;
     private int maxGroup;
+    private int maxStudents;
     private int groupCount;
     private CourseStatus status;
 }
