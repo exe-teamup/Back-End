@@ -20,7 +20,7 @@ public class CourseMapper {
 
         Course course = new Course();
         applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
-                request.getMaxGroup(), request.getGroupCount(),
+                request.getMaxGroup(), request.getMaxStudents(), request.getGroupCount(),
                 request.getSemesterId(), request.getLecturerId(), request.getStatus());
         return course;
     }
@@ -33,6 +33,7 @@ public class CourseMapper {
                 .courseCode(course.getCourseCode())
                 .courseName(course.getCourseName())
                 .maxGroup(course.getMaxGroup())
+                .maxStudents(course.getMaxStudents())
                 .groupCount(course.getGroupCount())
                 .semesterId(course.getSemester() != null ? course.getSemester().getSemesterId() : null)
                 .lecturerId(course.getLecturer() != null ? course.getLecturer().getLecturerId() : null)
@@ -52,12 +53,12 @@ public class CourseMapper {
         if (course == null || request == null) return;
 
         applyRequestToCourse(course, request.getCourseCode(), request.getCourseName(),
-                request.getMaxGroup(), request.getGroupCount(),
+                request.getMaxGroup(), request.getMaxStudents(), request.getGroupCount(),
                 request.getSemesterId(), request.getLecturerId(), request.getStatus());
     }
 
     private void applyRequestToCourse(Course course, String code, String name,
-                                      Integer maxGroup, Integer groupCount,
+                                      Integer maxGroup, Integer maxStudents, Integer groupCount,
                                       Long semesterId, Long lecturerId, CourseStatus status) {
         if (code != null) {
             course.setCourseCode(code);
@@ -67,6 +68,9 @@ public class CourseMapper {
         }
         if (maxGroup != null) {
             course.setMaxGroup(maxGroup);
+        }
+        if(maxStudents != null) {
+            course.setMaxStudents(maxStudents);
         }
         if (groupCount != null) {
             course.setGroupCount(groupCount);

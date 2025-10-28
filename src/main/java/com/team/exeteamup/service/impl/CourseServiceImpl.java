@@ -54,6 +54,8 @@ public class CourseServiceImpl implements CourseService {
             course.setLecturer(lecturer);
         }
 
+        course.setMaxStudents(courseRequest.getMaxStudents());
+
         courseRepository.save(course);
         return courseMapper.toResponse(course);
     }
@@ -100,6 +102,10 @@ public class CourseServiceImpl implements CourseService {
             course.setLecturer(lecturer);
         }
 
+        if (request.getMaxStudents() > 0) {
+            course.setMaxStudents(request.getMaxStudents());
+        }
+
         courseMapper.updateEntity(course, request);
         Course updatedCourse = courseRepository.save(course);
         return courseMapper.toResponse(updatedCourse);
@@ -123,6 +129,7 @@ public class CourseServiceImpl implements CourseService {
                 int maxGroup = (int) row.getCell(3).getNumericCellValue();
                 int groupCount = (int) row.getCell(4).getNumericCellValue();
                 Long lecturerId = (long) row.getCell(5).getNumericCellValue();
+                int maxStudents = (int) row.getCell(6).getNumericCellValue();
 
                 if (courseRepository.existsByCourseCode(courseCode)) continue;
 
@@ -136,6 +143,7 @@ public class CourseServiceImpl implements CourseService {
                 course.setCourseCode(courseCode);
                 course.setCourseName(courseName);
                 course.setMaxGroup(maxGroup);
+                course.setMaxStudents(maxStudents);
                 course.setGroupCount(groupCount);
                 course.setStatus(CourseStatus.ACTIVE);
                 course.setSemester(semester);

@@ -26,4 +26,7 @@ public interface StudentRepository extends JpaRepository<User, Long> {
             "   OR LOWER(u.userCode) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR LOWER(a.email) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<User> searchStudents(@Param("keyword") String keyword);
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.course.courseId = :courseId")
+    int countByCourse_CourseId(Long courseId);
 }

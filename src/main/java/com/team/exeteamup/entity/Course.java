@@ -38,6 +38,9 @@ public class Course {
     @Column(name = "max_group", nullable = true)
     private Integer maxGroup;
 
+    @Column(name = "max_students", nullable = true)
+    private Integer maxStudents;
+
     @Column(name = "group_count", nullable = true)
     private Integer groupCount;
 
