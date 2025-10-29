@@ -1,17 +1,25 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.entity.Account;
+import com.team.exeteamup.entity.AccountNotification;
 import com.team.exeteamup.exception.DuplicateObjectException;
 import com.team.exeteamup.dto.request.NotificationRequest;
 import com.team.exeteamup.dto.response.NotificationResponse;
 import com.team.exeteamup.entity.Notification;
+import com.team.exeteamup.mapper.AccountNotificationMapper;
 import com.team.exeteamup.mapper.NotificationMapper;
 import com.team.exeteamup.repository.NotificationRepository;
+import com.team.exeteamup.service.AccountNotificationService;
+import com.team.exeteamup.service.AccountService;
 import com.team.exeteamup.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.TargetSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,86 +28,84 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-
     private final NotificationRepository notificationRepository;
-    private final NotificationMapper notificationMapper;
+    private final AccountNotificationService accountNotificationService;
+    private final AccountNotificationMapper accountNotificationMapper;
+    private final AccountService accountService;
+
+
+    @Value("${notification.template.member-kicked}")
+    private String memberKickedTemplateCode;
+
+    @Value("${notification.template.member-invited}")
+    private String memberInvitedTemplateCode;
 
 
     @Override
-    @Transactional
-    public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
+    public void sendMemberKickedNotification(long kickedUserId, long groupId) {
 
-        checkExist(notificationRequest);
-
-        Notification notification = notificationRepository.save(new Notification(
-                notificationRequest.getTitle(),
-                notificationRequest.getNotificationDetail(),
-                notificationRequest.getNotificationType())
-        );
-
-        return notificationMapper.toResponse(notification);
     }
 
 
     @Override
-    public List<NotificationResponse> getNotifications() {
-        return notificationRepository.findAll().stream()// find all records in DB
-                .map(notificationMapper::toResponse)
-                .toList(); // return a list
+    public void sendMemberInvitedNotification(long invitedUserId, long groupId) {
+
     }
 
 
-    @Override
-    public NotificationResponse findNotificationResponseById(long notificationId) {
+    private void saveFormattedNotification(long accountId, String templateCode, Object... args) {
 
-        Notification notification = findNotificationById(notificationId);
+        Account account = accountService.getAccountById(accountId);
 
-        return notificationMapper.toResponse(notification);
+        Notification template = findByTemplateCode(templateCode);
+
+        String formattedContent = String.format(template.getTemplateCode(), args);
+
+        AccountNotification accountNotification = buildAccountNotification(account, template, formattedContent);
+
+        accountNotificationService.saveAccountNotification(accountNotification);
     }
 
 
-    @Override
-    @Transactional
-    public NotificationResponse updateNotification(long notificationId,
-                                                   NotificationRequest notificationRequest) {
-
-        Notification notification = findNotificationById(notificationId);
-
-        notification.setNotificationDetail(notificationRequest.getNotificationDetail());
-        notification.setNotificationType(notificationRequest.getNotificationType());
-        notification.setTitle(notificationRequest.getTitle());
-
-        return notificationMapper.toResponse(notificationRepository.save(notification));
-    }
-
-
-    @Override
-    @Transactional
-    public NotificationResponse deleteNotification(long notificationId) {
-
-        Notification notification = findNotificationById(notificationId);
-
-        notificationRepository.delete(notification);
-
-        return notificationMapper.toResponse(notification);
-    }
-
-
-    @Override
-    public Notification findNotificationById(long notificationId) {
-        return notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Notification not found with id: " +
-                                notificationId)
+    private Notification findByTemplateCode(String templateCode) {
+        return notificationRepository.findByTemplateCode(templateCode)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Notification template not found: " +
+                                        templateCode)
                 );
     }
 
-    public void checkExist(NotificationRequest notificationRequest) {
-         notificationRepository
-                 .findByNotificationDetail(notificationRequest.getNotificationDetail())
-                 .ifPresent(notification1 -> {
-                             throw new DuplicateObjectException("Notification already exists");
-                         }
-                 );
+
+    private AccountNotification buildAccountNotification(Account account,
+                                                         Notification notification,
+                                                         String formattedContent) {
+        return accountNotificationMapper.toEntity(account, notification, formattedContent);
+    }
+
+
+    @Override
+    public NotificationResponse findById(long notificationId) {
+        return null;
+    }
+
+    @Override
+    public List<NotificationResponse> findAllNotifications() {
+        return List.of();
+    }
+
+    @Override
+    public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
+        return null;
+    }
+
+    @Override
+    public NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest) {
+        return null;
+    }
+
+    @Override
+    public NotificationResponse deleteNotification(long notificationId) {
+        return null;
     }
 }

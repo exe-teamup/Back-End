@@ -31,3 +31,9 @@ springdoc:
 server:
   port: 8080
   forward-headers-strategy: framework
+
+# customize notification template
+notification:
+  template:
+    member-kicked: MEMBER_KICKED_V1
+    member-invited: MEMBER_INVITED_V1

@@ -3,20 +3,19 @@ package com.team.exeteamup.service.impl;
 import com.team.exeteamup.dto.request.AccountRequest;
 import com.team.exeteamup.dto.response.AccountResponse;
 import com.team.exeteamup.entity.Account;
+import com.team.exeteamup.entity.User;
 import com.team.exeteamup.mapper.AccountMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.service.AccountService;
-import jakarta.persistence.EntityNotFoundException;
+import com.team.exeteamup.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +24,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
+    private final UserService userService;
 
     @Override
     @Transactional
@@ -75,6 +75,13 @@ public class AccountServiceImpl implements AccountService {
     public Account getAccountById(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+    }
+
+    @Override
+    public Account findAccountByUserId(Long userId) {
+        User user = userService.findById(userId);
+        Account account = getAccountById(user.getAccount().getId());
+        return account;
     }
 
 

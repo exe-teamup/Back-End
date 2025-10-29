@@ -25,7 +25,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     public StudentProfileResponse getStudentProfile(String token) {
         Account account = tokenService.getAccountByToken(token);
 
-        User user = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User user = studentRepository.findByAccount_AccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         return studentProfileMapper.toResponse(user);

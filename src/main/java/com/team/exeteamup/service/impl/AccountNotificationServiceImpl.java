@@ -60,25 +60,26 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     public List<AccountNotificationResponse> sendNotificationToAccounts(
             AccountNotificationRequest accountNotificationRequest) {
 
-        List<Account> presentAccounts =
-                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
-        Notification notification =
-                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
-
-        List<AccountNotification> saved = accountNotificationRepository.saveAll(
-                presentAccounts.stream()
-                        .map(account -> new AccountNotification(
-                                account,
-                                notification,
-                                LocalDateTime.now(),
-                                false))
-                        .toList()
-        );
-
-        return saved
-                .stream()
-                .map(accountNotificationMapper::toResponse)
-                .toList();
+//        List<Account> presentAccounts =
+//                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
+//        Notification notification =
+//                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
+//
+//        List<AccountNotification> saved = accountNotificationRepository.saveAll(
+//                presentAccounts.stream()
+//                        .map(account -> new AccountNotification(
+//                                account,
+//                                notification,
+//                                LocalDateTime.now(),
+//                                false))
+//                        .toList()
+//        );
+//
+//        return saved
+//                .stream()
+//                .map(accountNotificationMapper::toResponse)
+//                .toList();
+        return null;
 
     }
 
@@ -143,6 +144,11 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
                         "Account Notification Not Found with id: " +
                                 accountNotificationId)
                 );
+    }
+
+    @Override
+    public void saveAccountNotification(AccountNotification accountNotification) {
+        accountNotificationRepository.save(accountNotification);
     }
 
 }

@@ -2,6 +2,7 @@ package com.team.exeteamup.entity;
 
 import com.team.exeteamup.enums.NotificationType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,15 +19,15 @@ import java.util.List;
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long notificationId;
+    private Long id;
 
-    @Column(name = "title", nullable = false, length = 100)
-    private String title;
+    @Column(name = "template_code", nullable = false, unique = true, length = 50)
+    @Pattern(regexp = "^[A-Z0-9_]+$", message = "Template code must contain only uppercase letters, numbers, and underscores.")
+    private String templateCode;
 
-    @Column(name = "notification_detail", nullable = false, columnDefinition = "TEXT")
     @Lob
-    private String notificationDetail;
-
+    @Column(name = "template_content", nullable = false, columnDefinition = "TEXT")
+    private String templateContent;
 
     @Column(name = "notification_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -34,12 +35,4 @@ public class Notification {
 
     @OneToMany(mappedBy = "notification")
     private List<AccountNotification> accountNotifications;
-
-    public Notification(String title,
-                        String notificationDetail,
-                        NotificationType notificationType) {
-        this.title = title;
-        this.notificationDetail = notificationDetail;
-        this.notificationType = notificationType;
-    }
 }

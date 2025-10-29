@@ -97,7 +97,7 @@ public class LecturerServiceImpl implements LecturerService {
                 .lecturerId(updated.getLecturerId())
                 .lecturerName(updated.getFullName())
                 .lecturerStatus(updated.getLecturerStatus().name())
-                .accountId(updated.getAccount().getAccountId())
+                .accountId(updated.getAccount().getId())
                 .accountStatus(updated.getAccount().getStatus().name())
                 .build();
     }

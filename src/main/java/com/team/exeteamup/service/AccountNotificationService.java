@@ -15,4 +15,5 @@ public interface AccountNotificationService {
     AccountNotificationResponse checkNotification(long accountNotificationId);
     AccountNotificationResponse deleteAccountNotification(long accountNotificationId);
     AccountNotification findById(long accountNotificationId);
+    void saveAccountNotification(AccountNotification accountNotification);
 }

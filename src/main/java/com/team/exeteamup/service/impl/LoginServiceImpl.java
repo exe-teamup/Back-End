@@ -13,7 +13,6 @@ import com.team.exeteamup.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.CredentialException;
 import java.util.Optional;
 
 @Service
@@ -40,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
 
             return LoginResponse.builder()
                     .role(account.getRole())
-                    .accountId(account.getAccountId())
+                    .accountId(account.getId())
                     .accessToken(accessToken)
                     .build();
 

@@ -1,6 +1,5 @@
 package com.team.exeteamup.entity;
 
-import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,11 +19,11 @@ public class AccountNotification {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "notification_id")
+    @JoinColumn(name = "notification_id", nullable = false)
     private Notification notification;
 
     @Column(name = "created_at")
@@ -33,13 +32,8 @@ public class AccountNotification {
     @Column(name = "is_checked")
     private boolean isChecked;
 
-    public AccountNotification(Account account,
-                               Notification notification,
-                               LocalDateTime createdAt,
-                               boolean isChecked) {
-        this.account = account;
-        this.notification = notification;
-        this.createdAt = createdAt;
-        this.isChecked = isChecked;
-    }
+    @Lob
+    @Column(name = "formatted_content", columnDefinition = "TEXT")
+    private String formattedContent;
+
 }
