@@ -9,7 +9,8 @@ import java.util.List;
 public interface NotificationService {
     void sendMemberKickedNotification(long kickedUserId, long groupId);
     void sendMemberInvitedNotification(long invitedUserId, long groupId);
-    NotificationResponse findById(long notificationId);
+    Notification findById(long notificationId);
+    NotificationResponse findResponseById(long notificationId);
     List<NotificationResponse> findAllNotifications();
     NotificationResponse saveNotification(NotificationRequest notificationRequest);
     NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest);

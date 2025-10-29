@@ -32,6 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final AccountNotificationService accountNotificationService;
     private final AccountNotificationMapper accountNotificationMapper;
     private final AccountService accountService;
+    private final NotificationMapper notificationMapper;
 
 
     @Value("${notification.template.member-kicked}")
@@ -85,27 +86,81 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public NotificationResponse findById(long notificationId) {
-        return null;
+    public Notification findById(long notificationId) {
+        return notificationRepository.findById(notificationId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Notification not found with id: " +
+                                        notificationId)
+                );
     }
+
+
+    @Override
+    public NotificationResponse findResponseById(long notificationId) {
+
+        Notification notification = findById(notificationId);
+
+        return notificationMapper.toResponse(notification);
+    }
+
 
     @Override
     public List<NotificationResponse> findAllNotifications() {
-        return List.of();
+        return notificationRepository.findAll().stream()
+                .map(notificationMapper::toResponse)
+                .toList();
     }
 
+
     @Override
+    @Transactional
     public NotificationResponse saveNotification(NotificationRequest notificationRequest) {
-        return null;
+
+        checkDuplicateTemplateCode(notificationRequest.getTemplateCode());
+
+        Notification notification = notificationMapper.toEntity(notificationRequest);
+
+        Notification savedNotification = notificationRepository.save(notification);
+
+        return notificationMapper.toResponse(savedNotification);
     }
 
+
+    private void checkDuplicateTemplateCode(String templateCode) {
+        notificationRepository.findByTemplateCode(templateCode)
+                .ifPresent(notification -> {
+                    throw new DuplicateObjectException(
+                            "Notification template code already exists: " +
+                                    templateCode);
+                });
+    }
+
+
     @Override
+    @Transactional
     public NotificationResponse updateNotification(long notificationId, NotificationRequest notificationRequest) {
-        return null;
+
+        checkDuplicateTemplateCode(notificationRequest.getTemplateCode());
+
+        Notification notification = findById(notificationId);
+
+        notificationMapper.updateEntityFromRequest(notification, notificationRequest);
+
+        Notification savedNotification = notificationRepository.save(notification);
+
+        return notificationMapper.toResponse(savedNotification);
     }
 
+
     @Override
+    @Transactional
     public NotificationResponse deleteNotification(long notificationId) {
-        return null;
+
+        Notification notification = findById(notificationId);
+
+        notificationRepository.delete(notification);
+
+        return notificationMapper.toResponse(notification);
     }
 }

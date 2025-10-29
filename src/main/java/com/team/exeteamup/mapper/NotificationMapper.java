@@ -25,4 +25,11 @@ public class NotificationMapper {
                 .notificationType(notificationRequest.getNotificationType())
                 .build();
     }
+
+
+    public void updateEntityFromRequest(Notification notification, NotificationRequest notificationRequest) {
+        notification.setTemplateCode(notificationRequest.getTemplateCode());
+        notification.setTemplateContent(notificationRequest.getTemplateContent());
+        notification.setNotificationType(notificationRequest.getNotificationType());
+    }
 }

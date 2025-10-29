@@ -25,7 +25,6 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
 
     private final AccountNotificationRepository accountNotificationRepository;
-    private final NotificationService notificationService;
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
 

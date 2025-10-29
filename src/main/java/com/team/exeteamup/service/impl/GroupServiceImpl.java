@@ -177,7 +177,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccount_AccountId(account.getId())
+        User currentLeader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -196,7 +196,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse kickMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccount_AccountId(account.getId())
+        User currentLeader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Group group = groupRepository.findById(groupId)
@@ -229,7 +229,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void leaveGroup(Long groupId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User user = studentRepository.findByAccount_AccountId(account.getId())
+        User user = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (Boolean.TRUE.equals(user.getIsLeader())) {
@@ -247,7 +247,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse addMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User leader = studentRepository.findByAccount_AccountId(account.getId())
+        User leader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (!leader.getIsLeader()) {
