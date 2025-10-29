@@ -2,13 +2,12 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.NotificationRequest;
 import com.team.exeteamup.dto.response.NotificationResponse;
-import com.team.exeteamup.service.NotificationService;
+import com.team.exeteamup.service.inter.notification.NotificationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

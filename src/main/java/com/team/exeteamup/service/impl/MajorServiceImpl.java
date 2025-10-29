@@ -6,7 +6,7 @@ import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.entity.Major;
 import com.team.exeteamup.mapper.MajorMapper;
 import com.team.exeteamup.repository.MajorRepository;
-import com.team.exeteamup.service.MajorService;
+import com.team.exeteamup.service.inter.MajorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

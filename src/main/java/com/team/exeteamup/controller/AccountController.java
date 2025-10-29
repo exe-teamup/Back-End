@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.AccountRequest;
 import com.team.exeteamup.dto.response.AccountResponse;
-import com.team.exeteamup.service.AccountService;
+import com.team.exeteamup.service.inter.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

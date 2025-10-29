@@ -1,7 +1,6 @@
 package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.request.post.GroupPostRequest;
-import com.team.exeteamup.dto.request.post.PostMajorRequest;
 import com.team.exeteamup.dto.request.post.PostUpdateRequest;
 import com.team.exeteamup.dto.request.post.UserPostRequest;
 import com.team.exeteamup.dto.response.post.GroupPostResponse;
@@ -13,9 +12,8 @@ import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.PostMapper;
 import com.team.exeteamup.repository.PostRepository;
-import com.team.exeteamup.service.PostMajorService;
-import com.team.exeteamup.service.PostService;
-import com.team.exeteamup.service.UserService;
+import com.team.exeteamup.service.inter.PostService;
+import com.team.exeteamup.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

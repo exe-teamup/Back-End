@@ -7,11 +7,10 @@ import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.PostMajor;
-import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.enums.post.PostType;
-import com.team.exeteamup.service.GroupService;
-import com.team.exeteamup.service.UserService;
+import com.team.exeteamup.service.inter.GroupService;
+import com.team.exeteamup.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

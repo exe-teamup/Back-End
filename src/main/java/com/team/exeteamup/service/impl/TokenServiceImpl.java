@@ -2,8 +2,8 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.entity.Account;
-import com.team.exeteamup.service.AccountService;
-import com.team.exeteamup.service.TokenService;
+import com.team.exeteamup.service.inter.AccountService;
+import com.team.exeteamup.service.inter.TokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

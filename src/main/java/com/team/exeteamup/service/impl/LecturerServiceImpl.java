@@ -11,7 +11,7 @@ import com.team.exeteamup.enums.LecturerStatus;
 import com.team.exeteamup.mapper.lecturer.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
-import com.team.exeteamup.service.LecturerService;
+import com.team.exeteamup.service.inter.LecturerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;

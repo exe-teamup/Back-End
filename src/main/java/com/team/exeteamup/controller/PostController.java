@@ -7,7 +7,7 @@ import com.team.exeteamup.dto.response.post.GroupPostResponse;
 import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.enums.post.PostStatus;
-import com.team.exeteamup.service.PostService;
+import com.team.exeteamup.service.inter.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -14,7 +14,7 @@ import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.MajorRepository;
 import com.team.exeteamup.repository.StudentRepository;
-import com.team.exeteamup.service.UserService;
+import com.team.exeteamup.service.inter.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

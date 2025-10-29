@@ -12,7 +12,7 @@ import com.team.exeteamup.mapper.CourseMapper;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
-import com.team.exeteamup.service.CourseService;
+import com.team.exeteamup.service.inter.CourseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;

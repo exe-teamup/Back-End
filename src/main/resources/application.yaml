@@ -35,5 +35,29 @@ server:
 # customize notification template
 notification:
   template:
-    member-kicked: MEMBER_KICKED_V1
-    member-invited: MEMBER_INVITED_V1
+    account:
+      welcome-message: ACCOUNT_WELCOME_MESSAGE
+    user:
+      create-group-success: USER_CREATE_GROUP_SUCCESS
+      add-member-success: USER_ADD_MEMBER_SUCCESS
+      remove-member-success: USER_REMOVE_MEMBER_SUCCESS
+      leave-group-success: USER_LEAVE_GROUP_SUCCESS
+      update-group-success: USER_UPDATE_GROUP_SUCCESS
+      join-group-success: USER_JOIN_GROUP_SUCCESS
+      group-invitation: USER_GROUP_INVITATION
+      join-request-approved: USER_JOIN_REQUEST_APPROVED
+      join-request-rejected: USER_JOIN_REQUEST_REJECTED
+      leave-course-success: USER_LEAVE_COURSE_SUCCESS
+      enroll-course-success: USER_ENROLL_COURSE_SUCCESS
+      enroll-course-failed: USER_ENROLL_COURSE_FAILED
+    group:
+      new-member: GROUP_NEW_MEMBER
+      member-left: GROUP_MEMBER_LEFT
+      lecturer-locked-group: GROUP_LECTURER_LOCKED_GROUP
+      lecturer-unlocked-group: GROUP_LECTURER_UNLOCKED_GROUP
+      course-moderator-added-user: GROUP_COURSE_MODERATOR_ADDED_USER
+      unqualified-member-quantity: GROUP_UNQUALIFIED_MEMBER_QUANTITY
+      unqualified-major-quantity: GROUP_UNQUALIFIED_MAJOR_QUANTITY
+    group-leader:
+      user-join-request: GROUP_LEADER_USER_JOIN_REQUEST
+

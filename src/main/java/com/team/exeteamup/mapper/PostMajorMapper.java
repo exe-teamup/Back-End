@@ -2,9 +2,8 @@ package com.team.exeteamup.mapper;
 
 import com.team.exeteamup.dto.request.post.PostMajorRequest;
 import com.team.exeteamup.dto.response.post.PostMajorResponse;
-import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.PostMajor;
-import com.team.exeteamup.service.MajorService;
+import com.team.exeteamup.service.inter.MajorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

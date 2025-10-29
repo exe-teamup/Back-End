@@ -8,8 +8,8 @@ import com.team.exeteamup.dto.response.LoginResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.exception.BadRequestException;
 import com.team.exeteamup.repository.AccountRepository;
-import com.team.exeteamup.service.LoginService;
-import com.team.exeteamup.service.TokenService;
+import com.team.exeteamup.service.inter.LoginService;
+import com.team.exeteamup.service.inter.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

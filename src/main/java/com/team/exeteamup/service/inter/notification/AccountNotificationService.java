@@ -1,4 +1,4 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter.notification;
 
 import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;

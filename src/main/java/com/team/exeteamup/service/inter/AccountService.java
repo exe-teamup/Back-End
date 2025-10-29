@@ -1,9 +1,8 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
 import com.team.exeteamup.dto.request.AccountRequest;
 import com.team.exeteamup.dto.response.AccountResponse;
 import com.team.exeteamup.entity.Account;
-import com.team.exeteamup.entity.User;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

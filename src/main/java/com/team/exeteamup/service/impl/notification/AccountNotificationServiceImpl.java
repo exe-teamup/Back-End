@@ -1,21 +1,18 @@
-package com.team.exeteamup.service.impl;
+package com.team.exeteamup.service.impl.notification;
 
 import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.AccountNotification;
-import com.team.exeteamup.entity.Notification;
 import com.team.exeteamup.mapper.AccountNotificationMapper;
 import com.team.exeteamup.repository.AccountNotificationRepository;
-import com.team.exeteamup.service.AccountNotificationService;
-import com.team.exeteamup.service.AccountService;
-import com.team.exeteamup.service.NotificationService;
+import com.team.exeteamup.service.inter.notification.AccountNotificationService;
+import com.team.exeteamup.service.inter.AccountService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
