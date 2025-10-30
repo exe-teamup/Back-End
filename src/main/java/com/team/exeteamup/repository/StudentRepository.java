@@ -29,4 +29,5 @@ public interface StudentRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.course.courseId = :courseId")
     int countByCourse_CourseId(Long courseId);
+
 }

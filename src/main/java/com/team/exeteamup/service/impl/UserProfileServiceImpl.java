@@ -7,6 +7,7 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.mapper.StudentProfileMapper;
 import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.service.inter.TokenService;
 import com.team.exeteamup.service.inter.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
 
-    private final TokenServiceImpl tokenService;
+    private final TokenService tokenService;
     private final StudentRepository studentRepository;
     private final StudentProfileMapper studentProfileMapper;
 

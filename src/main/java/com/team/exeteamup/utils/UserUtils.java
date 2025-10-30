@@ -16,14 +16,14 @@ public final class UserUtils {
     private final LecturerRepository lecturerRepository;
 
 
-    public static Account getCurrentAccount() {
+    public Account getCurrentAccount() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return (Account) authentication.getPrincipal();
     }
 
-    public static User getCurrentUser() {
+    public User getCurrentUser() {
         Account account = getCurrentAccount();
         return account.getUser();
     }
@@ -31,7 +31,7 @@ public final class UserUtils {
     public Lecturer getCurrentLecturer() {
         Account account = getCurrentAccount();
 
-        return lecturerRepository.findByAccount_AccountId(account.getId())
+        return lecturerRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new RuntimeException(
                         "Không tìm thấy giảng viên tương ứng với tài khoản ID: " + account.getId()
                 ));
