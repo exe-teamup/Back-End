@@ -37,17 +37,7 @@ public class Group {
     private List<JoinRequest> joinRequests;
 
     @OneToMany(mappedBy = "group")
-    private List<GroupRegisterLecturer> lecturerSelections;
-
-    @OneToMany(mappedBy = "group")
-    private List<GroupLecturer> assignedLecturers;
-
-    @OneToMany(mappedBy = "group")
     private List<Post> posts;
-
-    @ManyToOne
-    @JoinColumn(name = "official_lecturer_id")
-    private Lecturer officialLecturer;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

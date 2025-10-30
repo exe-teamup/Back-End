@@ -26,8 +26,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
-    private final GroupRegisterLecturerRepository groupRegisterLecturerRepository;
-    private final GroupLecturerRepository groupLecturerRepository;
     private final GroupTemplateRepository groupTemplateRepository;
 
     @Override
@@ -42,6 +40,14 @@ public class GroupServiceImpl implements GroupService {
 
         Course course = courseRepository.findById(groupRequest.getCourseId())
                 .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
+        if (!course.getUsers().contains(leader)) {
+            throw new AppException("Sinh viên trưởng nhóm không thuộc lớp học này");
+        }
+
+        if (course.getGroupCount() >= course.getMaxGroup()) {
+            throw new AppException("Lớp học đã đạt số lượng nhóm tối đa");
+        }
 
         GroupTemplate groupTemplate = groupTemplateRepository.findById(groupRequest.getGroupTemplateId())
                 .orElseThrow(() -> new AppException("Group template không tồn tại"));
@@ -65,9 +71,15 @@ public class GroupServiceImpl implements GroupService {
             for (String email : groupRequest.getMemberEmails()) {
                 User member = studentRepository.findByAccount_Email(email)
                         .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với email: " + email));
+
                 if (member.getGroup() != null) {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
+
+                if (!course.getUsers().contains(member)) {
+                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
+                }
+
                 member.setGroup(group);
                 member.setIsLeader(false);
                 members.add(member);
@@ -83,6 +95,8 @@ public class GroupServiceImpl implements GroupService {
         group.setMemberCount(members.size());
         groupRepository.save(group);
 
+        course.setGroupCount(course.getGroupCount() + 1);
+        courseRepository.save(course);
         return groupMapper.toResponse(group);
     }
 
@@ -91,9 +105,6 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
-
-        groupRegisterLecturerRepository.deleteAllByGroup(group);
-        groupLecturerRepository.deleteAllByGroup(group);
 
         List<User> users = studentRepository.findAllByGroup(group);
         for (User user : users) {
@@ -270,8 +281,6 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groups = switch (status) {
             case FULL_MEMBER -> groupRepository.findFullGroups();
             case LACK_MEMBER -> groupRepository.findNotFullGroups();
-            case HAS_LECTURER -> groupRepository.findGroupsWithLecturerSelection();
-            case NO_LECTURER -> groupRepository.findGroupsWithoutLecturerSelection();
         };
 
         return groupMapper.toResponseList(groups);

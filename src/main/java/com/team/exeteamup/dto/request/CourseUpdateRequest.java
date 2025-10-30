@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.request;
 
+import com.team.exeteamup.enums.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +17,7 @@ public class CourseUpdateRequest {
     private String courseCode;
     private String courseName;
     private int maxGroup;
+    private int maxStudents;
     private int groupCount;
+    private CourseStatus status;
 }

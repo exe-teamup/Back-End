@@ -1,34 +1,40 @@
 package com.team.exeteamup.utils;
 
 import com.team.exeteamup.entity.Account;
+import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.User;
-import com.team.exeteamup.exception.AppException;
-import com.team.exeteamup.service.UserService;
+import com.team.exeteamup.repository.LecturerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public final class UserUtils {
 
-    private final UserService userService;
+    private final LecturerRepository lecturerRepository;
 
-    private UserUtils(UserService userService) {
-        this.userService = userService;
-    }
 
     public static Account getCurrentAccount() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null ||
-                !authentication.isAuthenticated() ||
-                !(authentication.getPrincipal() instanceof Account)) {
-
-            throw new AppException("No authenticated user found in context.");
-        }
 
         return (Account) authentication.getPrincipal();
     }
 
-    public static User getCurrentUser(Account account) {
+    public static User getCurrentUser() {
+        Account account = getCurrentAccount();
         return account.getUser();
     }
+
+    public Lecturer getCurrentLecturer() {
+        Account account = getCurrentAccount();
+
+        return lecturerRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Không tìm thấy giảng viên tương ứng với tài khoản ID: " + account.getAccountId()
+                ));
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.team.exeteamup.dto.request;
+package com.team.exeteamup.dto.response.lecturer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignLecturerRequest {
-    private Long groupId;
-    private Long lecturerId;
+@Builder
+public class LecturerCourseResponse {
+    private String courseCode;
+    private Long courseId;
 }

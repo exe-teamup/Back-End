@@ -1,21 +1,18 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.entity.Course;
+import com.team.exeteamup.entity.*;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.UserResponse;
-import com.team.exeteamup.entity.Account;
-import com.team.exeteamup.entity.Major;
-import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.account.AccountRole;
 import com.team.exeteamup.enums.account.AccountStatus;
 import com.team.exeteamup.enums.UserStatus;
 import com.team.exeteamup.mapper.StudentMapper;
-import com.team.exeteamup.repository.AccountRepository;
-import com.team.exeteamup.repository.CourseRepository;
-import com.team.exeteamup.repository.MajorRepository;
-import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.repository.*;
+import com.team.exeteamup.service.CourseService;
+import com.team.exeteamup.service.TokenService;
 import com.team.exeteamup.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -26,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -39,18 +38,25 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private StudentRepository studentRepository;
-
     @Autowired
     private StudentMapper studentMapper;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private MajorRepository majorRepository;
-
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private GroupRepository groupRepository;
+    @Autowired
+    private CourseChangeRepository courseChangeRepository;
+    @Autowired
+    private CourseService courseService;
 
 
     public UserServiceImpl(StudentRepository studentRepository) {
@@ -219,6 +225,77 @@ public class UserServiceImpl implements UserService {
         }
         return users.stream()
                 .map(studentMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public UserResponse moveStudentCourses(Long newCourseId) {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new AppException("Yêu cầu thiếu token xác thực.");
+        }
+        String token = authHeader.substring(7);
+
+        Account currentAccount = tokenService.getAccountByToken(token);
+        User student = studentRepository.findByAccount_AccountId(currentAccount.getAccountId())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+
+        Course newCourse = courseRepository.findByCourseId(newCourseId)
+                .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+
+        Course oldCourse = student.getCourse();
+        if (oldCourse == null) {
+            throw new AppException("Sinh viên chưa thuộc lớp nào");
+        }
+
+        if (oldCourse.getCourseId() == newCourse.getCourseId()) {
+            throw new AppException("Bạn đã ở lớp học này");
+        }
+
+        int currentStudentCount = studentRepository.countByCourse_CourseId(newCourse.getCourseId());
+        if (newCourse.getMaxStudents() != null && newCourse.getMaxStudents() > 0) {
+            if (currentStudentCount > newCourse.getMaxStudents()) {
+                throw new AppException("Lớp này đã đạt giới hạn thành viên");
+            }
+        }
+
+        Group currentGroup = student.getGroup();
+        if (currentGroup != null && currentGroup.getCourse().getCourseId() == oldCourse.getCourseId()) {
+            if (student.getIsLeader()) {
+                throw new AppException("Vui lòng chuyển quyền nhóm trưởng cho thành viên khác");
+            }
+            int memberCount = studentRepository.countByGroup_GroupId(currentGroup.getGroupId());
+            if (memberCount <= 3) {
+                throw new AppException("Nhóm bạn dưới 3 thành viên. Vui lòng giải tán trước khi rời");
+            }
+            student.setGroup(null);
+            student.setIsLeader(false);
+            currentGroup.setMemberCount(memberCount - 1);
+            groupRepository.save(currentGroup);
+        }
+        CourseChange log = CourseChange.builder()
+                .user(student)
+                .oldCourse(oldCourse)
+                .newCourse(newCourse)
+                .build();
+        courseChangeRepository.save(log);
+
+        student.setCourse(newCourse);
+        User savedStudent = studentRepository.save(student);
+
+        return studentMapper.toResponse(savedStudent);
+    }
+
+    @Override
+    public List<UserResponse> getStudentByCourseId(long courseId) {
+        Course course = courseService.findById(courseId);
+
+        return course.getUsers()
+                .stream().map(studentMapper::toResponse)
                 .toList();
     }
 }

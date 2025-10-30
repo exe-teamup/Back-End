@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AutoAssignLecturerRequest {
-    private Integer maxGroupsPerLecturer;
+public class ModeratorUpdateCourseRequest {
+    private Long lecturerId;
 }

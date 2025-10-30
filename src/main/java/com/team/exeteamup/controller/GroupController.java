@@ -7,7 +7,6 @@ import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.dto.response.LecturerSelectionResponse;
 import com.team.exeteamup.enums.GroupFilterStatus;
-import com.team.exeteamup.service.GroupRegisterLecturerService;
 import com.team.exeteamup.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +21,11 @@ import java.util.Map;
 public class GroupController {
 
     private final GroupService groupService;
-    private final GroupRegisterLecturerService groupRegisterLecturerService;
 
     @PostMapping("")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
         GroupResponse group = groupService.createGroup(groupRequest);
         return ResponseEntity.ok(group);
-    }
-
-    @PostMapping("/{id}/lecturers/select")
-    public ResponseEntity<LecturerSelectionResponse> selectLecturers(
-            @PathVariable Long id,
-            @RequestBody LecturerSelectionRequest request) {
-        LecturerSelectionResponse response = groupRegisterLecturerService.selectLecturers(id, request.getLecturerIds());
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("{id}/leave")

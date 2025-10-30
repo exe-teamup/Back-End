@@ -26,7 +26,7 @@ public class Course {
     private Semester semester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id", nullable = true)
+    @JoinColumn(name = "lecturer_id", referencedColumnName = "lecturer_id")
     private Lecturer lecturer;
 
     @Column(name = "course_code")
@@ -36,10 +36,13 @@ public class Course {
     private String courseName;
 
     @Column(name = "max_group", nullable = true)
-    private int maxGroup;
+    private Integer maxGroup;
+
+    @Column(name = "max_students", nullable = true)
+    private Integer maxStudents;
 
     @Column(name = "group_count", nullable = true)
-    private int groupCount;
+    private Integer groupCount;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Group> groups;
