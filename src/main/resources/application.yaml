@@ -20,7 +20,7 @@ spring:
 
 # uses for database connection
   profiles:
-    active: dev
+    active: prod
 
 springdoc:
   api-docs:
