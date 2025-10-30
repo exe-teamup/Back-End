@@ -22,4 +22,5 @@ public interface GroupService {
     void leaveGroup(Long groupId, String token);
     GroupResponse addMember(Long groupId, Long memberId, String token);
     List<GroupResponse> filterGroups(GroupFilterStatus status);
+    List<GroupResponse> getGroupsByLecturer(long lecturerId);
 }

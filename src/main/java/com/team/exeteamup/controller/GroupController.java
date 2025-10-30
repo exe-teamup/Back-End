@@ -106,4 +106,10 @@ public class GroupController {
         groupService.deleteGroup(id);
         return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
+
+    @GetMapping("/lecturer/{id}")
+    public ResponseEntity<List<GroupResponse>> getGroupByLecturer(@PathVariable long id) {
+        List<GroupResponse> response = groupService.getGroupsByLecturer(id);
+        return ResponseEntity.ok(response);
+    }
 }

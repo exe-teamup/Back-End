@@ -19,6 +19,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GroupServiceImpl implements GroupService {
 
     private final StudentRepository studentRepository;
@@ -284,5 +285,18 @@ public class GroupServiceImpl implements GroupService {
         };
 
         return groupMapper.toResponseList(groups);
+    }
+
+    @Override
+    public List<GroupResponse> getGroupsByLecturer(long lecturerId) {
+
+        List<Group> groups = groupRepository.findAll();
+        List<Group> filteredGroups = new ArrayList<>();
+        for (Group group : groups) {
+            if (group.getCourse().getLecturer().getLecturerId().equals(lecturerId)) {
+                filteredGroups.add(group);
+            }
+        }
+        return groupMapper.toResponseList(filteredGroups);
     }
 }
