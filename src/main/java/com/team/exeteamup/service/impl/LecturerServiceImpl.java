@@ -149,8 +149,8 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     public LecturerResponse getCurrentLecturer() {
-        Account account = userUtils.getCurrentAccount();
-        Lecturer lecturer = lecturerRepository.findByAccount_AccountId(account.getAccountId());
-        return lecturerMapper.toResponse(lecturer);
+//        Account account = userUtils.getCurrentAccount();
+//        Lecturer lecturer = lecturerRepository.findByAccount_AccountId(account.getAccountId()).get();
+        return lecturerMapper.toResponse(userUtils.getCurrentLecturer());
     }
 }

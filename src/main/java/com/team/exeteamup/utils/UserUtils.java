@@ -1,6 +1,7 @@
 package com.team.exeteamup.utils;
 
 import com.team.exeteamup.entity.Account;
+import com.team.exeteamup.entity.Lecturer;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.repository.LecturerRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,18 @@ public final class UserUtils {
         return (Account) authentication.getPrincipal();
     }
 
-    public static User getCurrentUser(Account account) {
+    public static User getCurrentUser() {
+        Account account = getCurrentAccount();
         return account.getUser();
     }
+
+    public Lecturer getCurrentLecturer() {
+        Account account = getCurrentAccount();
+
+        return lecturerRepository.findByAccount_AccountId(account.getAccountId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Không tìm thấy giảng viên tương ứng với tài khoản ID: " + account.getAccountId()
+                ));
+    }
+
 }

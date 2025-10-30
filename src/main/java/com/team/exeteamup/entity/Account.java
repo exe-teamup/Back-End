@@ -42,6 +42,9 @@ public class Account implements UserDetails {
     @OneToOne(mappedBy = "account")
     private User user;
 
+    @OneToOne(mappedBy = "account")
+    private Lecturer lecturer;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private AccountStatus status;
