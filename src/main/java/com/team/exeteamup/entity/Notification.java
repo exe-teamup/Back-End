@@ -19,6 +19,7 @@ import java.util.List;
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notification_id")
     private Long id;
 
     @Column(name = "template_code", nullable = false, unique = true, length = 50)
