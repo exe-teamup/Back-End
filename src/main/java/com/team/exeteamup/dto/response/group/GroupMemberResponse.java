@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class GroupMemberResponse {
     private Long studentId;
     private String studentName;
+    private String studentEmail;
     private Boolean isLeader;
     private String majorName;
 }
