@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class StudentController {
+public class UserController {
 
     private final UserProfileService userProfileService;
     private final UserService userService;
@@ -127,5 +127,11 @@ public class StudentController {
             @Valid @RequestBody MoveCourseRequest request) {
         UserResponse response = userService.moveStudentCourses(request.getNewCourseId());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/course/{id}")
+    public ResponseEntity<List<UserResponse>> getByCourseId(@PathVariable Long id) {
+        List<UserResponse> result = userService.getStudentByCourseId(id);
+        return ResponseEntity.ok(result);
     }
 }

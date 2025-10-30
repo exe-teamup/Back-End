@@ -13,6 +13,9 @@ import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.CourseService;
+import com.team.exeteamup.service.LecturerService;
+import com.team.exeteamup.utils.UserUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,6 +39,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final SemesterRepository semesterRepository;
     private final LecturerRepository lecturerRepository;
+    private final UserUtils userUtils;
 
     @Override
     public CourseResponse createCourse(CourseRequest courseRequest) {
@@ -171,4 +176,16 @@ public class CourseServiceImpl implements CourseService {
 
         courseRepository.delete(course);
     }
+
+    @Override
+    public Course findById(Long courseId) {
+        return courseRepository.findByCourseId(courseId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Course not found: " +
+                                        courseId)
+                );
+    }
+
+
 }

@@ -20,4 +20,5 @@ public interface UserService {
     UserResponse getStudentById(long studentId);
     List<UserResponse> searchStudents(String keyword);
     UserResponse moveStudentCourses(Long newCourseId);
+    List<UserResponse> getStudentByCourseId(long courseId);
 }

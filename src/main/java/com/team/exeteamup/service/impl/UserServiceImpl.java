@@ -8,6 +8,7 @@ import com.team.exeteamup.enums.account.AccountStatus;
 import com.team.exeteamup.enums.UserStatus;
 import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.*;
+import com.team.exeteamup.service.CourseService;
 import com.team.exeteamup.service.TokenService;
 import com.team.exeteamup.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,9 +38,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private StudentRepository studentRepository;
-
     @Autowired
     private StudentMapper studentMapper;
     @Autowired
@@ -54,6 +55,8 @@ public class UserServiceImpl implements UserService {
     private GroupRepository groupRepository;
     @Autowired
     private CourseChangeRepository courseChangeRepository;
+    @Autowired
+    private CourseService courseService;
 
 
     public UserServiceImpl(StudentRepository studentRepository) {
@@ -285,5 +288,14 @@ public class UserServiceImpl implements UserService {
         User savedStudent = studentRepository.save(student);
 
         return studentMapper.toResponse(savedStudent);
+    }
+
+    @Override
+    public List<UserResponse> getStudentByCourseId(long courseId) {
+        Course course = courseService.findById(courseId);
+
+        return course.getUsers()
+                .stream().map(studentMapper::toResponse)
+                .toList();
     }
 }
