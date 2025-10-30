@@ -6,7 +6,9 @@ import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class UserUtils {
 
     private final UserService userService;
@@ -16,14 +18,8 @@ public final class UserUtils {
     }
 
     public static Account getCurrentAccount() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null ||
-                !authentication.isAuthenticated() ||
-                !(authentication.getPrincipal() instanceof Account)) {
-
-            throw new AppException("No authenticated user found in context.");
-        }
 
         return (Account) authentication.getPrincipal();
     }

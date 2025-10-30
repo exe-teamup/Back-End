@@ -16,4 +16,6 @@ public interface CourseService {
     CourseResponse updateCourse(CourseUpdateRequest request);
     List<CourseResponse> importCoursesFromExcel(MultipartFile file);
     void deleteCourse(Long courseId);
+    List<CourseResponse> getAllCoursesByCurrentLecturer();
+    List<CourseResponse> getCoursesBySemesterOfCurrentLecturer(Long semesterId);
 }

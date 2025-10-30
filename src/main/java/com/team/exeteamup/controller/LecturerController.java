@@ -53,6 +53,12 @@ public class LecturerController {
         return ResponseEntity.ok(lecturerResponses);
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<LecturerResponse> getCurrentLecturer() {
+        LecturerResponse lecturerResponses = lecturerService.getCurrentLecturer();
+        return ResponseEntity.ok(lecturerResponses);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long id) {
         return ResponseEntity.ok(lecturerService.getLecturer(id));

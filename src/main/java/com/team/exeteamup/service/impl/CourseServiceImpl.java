@@ -171,4 +171,15 @@ public class CourseServiceImpl implements CourseService {
 
         courseRepository.delete(course);
     }
+
+    @Override
+    public List<CourseResponse> getAllCoursesByCurrentLecturer() {
+        return List.of();
+    }
+
+    @Override
+    public List<CourseResponse> getCoursesBySemesterOfCurrentLecturer(Long semesterId) {
+        return List.of();
+    }
+
 }

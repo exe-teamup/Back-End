@@ -72,4 +72,9 @@ public class SemesterServiceImpl implements SemesterService {
                 .orElseThrow(() -> new AppException("Kì học không tồn tại"));
         semesterRepository.delete(semester);
     }
+
+    @Override
+    public List<SemesterResponse> getSemestersOfCurrentLecturer() {
+        return List.of();
+    }
 }
