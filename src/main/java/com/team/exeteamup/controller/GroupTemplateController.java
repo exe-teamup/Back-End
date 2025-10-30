@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.GroupTemplateRequest;
 import com.team.exeteamup.dto.response.GroupTemplateResponse;
-import com.team.exeteamup.service.GroupTemplateService;
+import com.team.exeteamup.service.inter.GroupTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

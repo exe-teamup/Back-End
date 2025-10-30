@@ -3,7 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
-import com.team.exeteamup.service.CourseService;
+import com.team.exeteamup.service.inter.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

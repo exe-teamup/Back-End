@@ -2,8 +2,7 @@ package com.team.exeteamup.config;
 
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.exception.AppException;
-import com.team.exeteamup.service.TokenService;
-import io.jsonwebtoken.Claims;
+import com.team.exeteamup.service.inter.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

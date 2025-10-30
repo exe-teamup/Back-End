@@ -1,10 +1,8 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
-import com.google.api.gax.rpc.ServerStream;
 import com.team.exeteamup.dto.request.MajorRequest;
 import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.entity.Major;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

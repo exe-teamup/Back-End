@@ -6,7 +6,7 @@ import com.team.exeteamup.dto.response.SemesterResponse;
 import com.team.exeteamup.entity.Semester;
 import com.team.exeteamup.mapper.SemesterMapper;
 import com.team.exeteamup.repository.SemesterRepository;
-import com.team.exeteamup.service.SemesterService;
+import com.team.exeteamup.service.inter.SemesterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

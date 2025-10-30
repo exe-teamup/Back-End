@@ -31,9 +31,9 @@ public final class UserUtils {
     public Lecturer getCurrentLecturer() {
         Account account = getCurrentAccount();
 
-        return lecturerRepository.findByAccount_AccountId(account.getAccountId())
+        return lecturerRepository.findByAccount_AccountId(account.getId())
                 .orElseThrow(() -> new RuntimeException(
-                        "Không tìm thấy giảng viên tương ứng với tài khoản ID: " + account.getAccountId()
+                        "Không tìm thấy giảng viên tương ứng với tài khoản ID: " + account.getId()
                 ));
     }
 

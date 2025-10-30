@@ -19,7 +19,7 @@ public class LecturerMapper {
                 .lecturerId(lecturer.getLecturerId())
                 .lecturerName(lecturer.getFullName())
                 .lecturerStatus(lecturer.getLecturerStatus().name())
-                .accountId(lecturer.getAccount().getAccountId())
+                .accountId(lecturer.getAccount().getId())
                 .accountStatus(lecturer.getAccount().getStatus().name())
                 .email(lecturer.getAccount().getEmail())
                 .courses(lecturerCourseMapper.toResponseList(lecturer))

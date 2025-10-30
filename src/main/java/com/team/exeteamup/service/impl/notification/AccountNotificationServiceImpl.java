@@ -1,21 +1,18 @@
-package com.team.exeteamup.service.impl;
+package com.team.exeteamup.service.impl.notification;
 
 import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.AccountNotification;
-import com.team.exeteamup.entity.Notification;
 import com.team.exeteamup.mapper.AccountNotificationMapper;
 import com.team.exeteamup.repository.AccountNotificationRepository;
-import com.team.exeteamup.service.AccountNotificationService;
-import com.team.exeteamup.service.AccountService;
-import com.team.exeteamup.service.NotificationService;
+import com.team.exeteamup.service.inter.notification.AccountNotificationService;
+import com.team.exeteamup.service.inter.AccountService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,7 +22,6 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
 
     private final AccountNotificationRepository accountNotificationRepository;
-    private final NotificationService notificationService;
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
 
@@ -60,25 +56,26 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     public List<AccountNotificationResponse> sendNotificationToAccounts(
             AccountNotificationRequest accountNotificationRequest) {
 
-        List<Account> presentAccounts =
-                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
-        Notification notification =
-                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
-
-        List<AccountNotification> saved = accountNotificationRepository.saveAll(
-                presentAccounts.stream()
-                        .map(account -> new AccountNotification(
-                                account,
-                                notification,
-                                LocalDateTime.now(),
-                                false))
-                        .toList()
-        );
-
-        return saved
-                .stream()
-                .map(accountNotificationMapper::toResponse)
-                .toList();
+//        List<Account> presentAccounts =
+//                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
+//        Notification notification =
+//                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
+//
+//        List<AccountNotification> saved = accountNotificationRepository.saveAll(
+//                presentAccounts.stream()
+//                        .map(account -> new AccountNotification(
+//                                account,
+//                                notification,
+//                                LocalDateTime.now(),
+//                                false))
+//                        .toList()
+//        );
+//
+//        return saved
+//                .stream()
+//                .map(accountNotificationMapper::toResponse)
+//                .toList();
+        return null;
 
     }
 
@@ -143,6 +140,11 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
                         "Account Notification Not Found with id: " +
                                 accountNotificationId)
                 );
+    }
+
+    @Override
+    public void saveAccountNotification(AccountNotification accountNotification) {
+        accountNotificationRepository.save(accountNotification);
     }
 
 }

@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.ModeratorUpdateCourseRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
-import com.team.exeteamup.service.ModeratorService;
+import com.team.exeteamup.service.inter.ModeratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

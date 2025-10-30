@@ -1,6 +1,5 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
-import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.ModeratorUpdateCourseRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
 

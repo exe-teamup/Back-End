@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.MajorRequest;
 import com.team.exeteamup.dto.response.MajorResponse;
-import com.team.exeteamup.service.MajorService;
+import com.team.exeteamup.service.inter.MajorService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

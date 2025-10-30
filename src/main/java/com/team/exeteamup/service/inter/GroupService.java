@@ -1,4 +1,4 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
@@ -22,4 +22,5 @@ public interface GroupService {
     void leaveGroup(Long groupId, String token);
     GroupResponse addMember(Long groupId, Long memberId, String token);
     List<GroupResponse> filterGroups(GroupFilterStatus status);
+    List<GroupResponse> getGroupsByLecturer(long lecturerId);
 }

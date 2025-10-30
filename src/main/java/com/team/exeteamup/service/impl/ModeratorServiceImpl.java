@@ -1,6 +1,5 @@
 package com.team.exeteamup.service.impl;
 
-import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.ModeratorUpdateCourseRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
 import com.team.exeteamup.entity.Course;
@@ -9,7 +8,7 @@ import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.CourseMapper;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
-import com.team.exeteamup.service.ModeratorService;
+import com.team.exeteamup.service.inter.ModeratorService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

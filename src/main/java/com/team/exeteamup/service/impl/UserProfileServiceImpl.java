@@ -7,7 +7,7 @@ import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.mapper.StudentProfileMapper;
 import com.team.exeteamup.repository.StudentRepository;
-import com.team.exeteamup.service.UserProfileService;
+import com.team.exeteamup.service.inter.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     public StudentProfileResponse getStudentProfile(String token) {
         Account account = tokenService.getAccountByToken(token);
 
-        User user = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User user = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         return studentProfileMapper.toResponse(user);

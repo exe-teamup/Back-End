@@ -19,12 +19,12 @@ public class AccountNotification {
     @Column(name = "account_notification_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "notification_id")
+    @JoinColumn(name = "notification_id", nullable = false)
     private Notification notification;
 
     @Column(name = "created_at")
@@ -33,13 +33,8 @@ public class AccountNotification {
     @Column(name = "is_checked")
     private boolean isChecked;
 
-    public AccountNotification(Account account,
-                               Notification notification,
-                               LocalDateTime createdAt,
-                               boolean isChecked) {
-        this.account = account;
-        this.notification = notification;
-        this.createdAt = createdAt;
-        this.isChecked = isChecked;
-    }
+    @Lob
+    @Column(name = "formatted_content", columnDefinition = "TEXT")
+    private String formattedContent;
+
 }
