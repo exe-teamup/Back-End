@@ -14,7 +14,7 @@ import com.team.exeteamup.repository.StudentRepository;
 import com.team.exeteamup.service.inter.UserService;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.CourseService;
-import com.team.exeteamup.service.inter.TokenService;
+import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.Cell;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private TokenService tokenService;
+    private UserUtils userUtils;
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
@@ -244,8 +244,8 @@ public class UserServiceImpl implements UserService {
         }
         String token = authHeader.substring(7);
 
-        Account currentAccount = tokenService.getAccountByToken(token);
-        User student = studentRepository.findByAccount_AccountId(currentAccount.getAccountId())
+        Account currentAccount = userUtils.getCurrentAccount();
+        User student = studentRepository.findByAccountId(currentAccount.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Course newCourse = courseRepository.findByCourseId(newCourseId)
