@@ -35,29 +35,26 @@ server:
 # customize notification template
 notification:
   template:
-    account:
-      welcome-message: ACCOUNT_WELCOME_MESSAGE
     user:
       create-group-success: USER_CREATE_GROUP_SUCCESS
-      add-member-success: USER_ADD_MEMBER_SUCCESS
-      remove-member-success: USER_REMOVE_MEMBER_SUCCESS
-      leave-group-success: USER_LEAVE_GROUP_SUCCESS
-      update-group-success: USER_UPDATE_GROUP_SUCCESS
-      join-group-success: USER_JOIN_GROUP_SUCCESS
-      group-invitation: USER_GROUP_INVITATION
-      join-request-approved: USER_JOIN_REQUEST_APPROVED
-      join-request-rejected: USER_JOIN_REQUEST_REJECTED
-      leave-course-success: USER_LEAVE_COURSE_SUCCESS
-      enroll-course-success: USER_ENROLL_COURSE_SUCCESS
-      enroll-course-failed: USER_ENROLL_COURSE_FAILED
+      join-group: USER_ADD_MEMBER_SUCCESS # user nhận được khi tham gia nhóm thành công
+      removed-from-group: USER_REMOVE_MEMBER_SUCCESS # user nhận được khi bị xóa khỏi nhóm
+      group-invitation: USER_GROUP_INVITATION # user nhận được khi được mời vào nhóm
+      join-request-approved: USER_JOIN_REQUEST_APPROVED # user nhận được khi yêu cầu tham gia nhóm được chấp thuận
+      join-request-rejected: USER_JOIN_REQUEST_REJECTED # user nhận được khi yêu cầu tham gia nhóm bị từ chối
+      leave-course: USER_LEAVE_COURSE_SUCCESS # user nhận được khi rời khỏi khóa học
+      enroll-course-success: USER_ENROLL_COURSE_SUCCESS # user nhận được khi đăng ký khóa học thành công
+      enroll-course-failed: USER_ENROLL_COURSE_FAILED # user nhận được khi đăng ký khóa học thất bại
     group:
-      new-member: GROUP_NEW_MEMBER
-      member-left: GROUP_MEMBER_LEFT
-      lecturer-locked-group: GROUP_LECTURER_LOCKED_GROUP
-      lecturer-unlocked-group: GROUP_LECTURER_UNLOCKED_GROUP
-      course-moderator-added-user: GROUP_COURSE_MODERATOR_ADDED_USER
-      unqualified-member-quantity: GROUP_UNQUALIFIED_MEMBER_QUANTITY
-      unqualified-major-quantity: GROUP_UNQUALIFIED_MAJOR_QUANTITY
+      new-member: GROUP_NEW_MEMBER # các thành viên trong nhóm nhận được khi có thành viên mới tham gia nhóm
+      member-left: GROUP_MEMBER_LEFT # các thành viên trong nhóm nhận được khi có thành viên rời khỏi nhóm
+      member-removed: GROUP_MEMBER_REMOVED # các thành viên trong nhóm nhận được khi có thành viên bị xóa khỏi nhóm
+      update-group-success: USER_UPDATE_GROUP_SUCCESS # các thành viên trong nhóm nhận được khi nhóm được cập nhật thành công
+      locked-by-lecturer: GROUP_LECTURER_LOCKED_GROUP # các thành viên trong nhóm nhận được khi nhóm bị giảng viên khóa
+      unlocked-by-lecturer: GROUP_LECTURER_UNLOCKED_GROUP # các thành viên trong nhóm nhận được khi nhóm bị giảng viên mở khóa
+      course-moderator-added-user: GROUP_COURSE_MODERATOR_ADDED_USER # các thành viên trong nhóm nhận được khi có giảng viên hoặc trợ giảng thêm thành viên vào nhóm
+      unqualified-member-quantity: GROUP_UNQUALIFIED_MEMBER_QUANTITY # cac thành viên trong nhóm nhận được khi số lượng thành viên không đủ
+      unqualified-major-quantity: GROUP_UNQUALIFIED_MAJOR_QUANTITY # các thành viên trong nhóm nhận được khi số lượng thành viên theo chuyên ngành không đủ
     group-leader:
       user-join-request: GROUP_LEADER_USER_JOIN_REQUEST
 
