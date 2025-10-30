@@ -53,10 +53,10 @@ public class LecturerController {
         return ResponseEntity.ok(lecturerResponses);
     }
 
-    @GetMapping("/current")
+    @GetMapping("/profile")
     public ResponseEntity<LecturerResponse> getCurrentLecturer() {
-        LecturerResponse lecturerResponses = lecturerService.getCurrentLecturer();
-        return ResponseEntity.ok(lecturerResponses);
+        LecturerResponse lecturer = lecturerService.getCurrentLecturer();
+        return ResponseEntity.ok(lecturer);
     }
 
     @GetMapping("{id}")

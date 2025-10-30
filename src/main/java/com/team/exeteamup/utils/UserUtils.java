@@ -2,20 +2,18 @@ package com.team.exeteamup.utils;
 
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
-import com.team.exeteamup.exception.AppException;
-import com.team.exeteamup.service.UserService;
+import com.team.exeteamup.repository.LecturerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public final class UserUtils {
 
-    private final UserService userService;
+    private final LecturerRepository lecturerRepository;
 
-    private UserUtils(UserService userService) {
-        this.userService = userService;
-    }
 
     public static Account getCurrentAccount() {
 

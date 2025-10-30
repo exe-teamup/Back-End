@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.exeteamup.enums.account.AccountRole;
 import com.team.exeteamup.enums.account.AccountStatus;
 import jakarta.persistence.*;
@@ -35,6 +36,7 @@ public class Account implements UserDetails {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnore
     private List<AccountNotification> accountNotifications;
 
     @OneToOne(mappedBy = "account")

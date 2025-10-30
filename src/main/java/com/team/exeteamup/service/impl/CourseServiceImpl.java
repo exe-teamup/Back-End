@@ -13,6 +13,7 @@ import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.CourseService;
+import com.team.exeteamup.service.LecturerService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
@@ -174,6 +175,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseResponse> getAllCoursesByCurrentLecturer() {
+
         return List.of();
     }
 
