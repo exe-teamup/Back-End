@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import jakarta.persistence.*;
 import lombok.*;
 

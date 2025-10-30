@@ -13,6 +13,8 @@ import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.inter.CourseService;
+import com.team.exeteamup.utils.UserUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,6 +37,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final SemesterRepository semesterRepository;
     private final LecturerRepository lecturerRepository;
+    private final UserUtils userUtils;
 
     @Override
     public CourseResponse createCourse(CourseRequest courseRequest) {
@@ -53,6 +56,8 @@ public class CourseServiceImpl implements CourseService {
                     .orElseThrow(() -> new AppException("Giảng viên không tồn tại"));
             course.setLecturer(lecturer);
         }
+
+        course.setMaxStudents(courseRequest.getMaxStudents());
 
         courseRepository.save(course);
         return courseMapper.toResponse(course);
@@ -100,6 +105,10 @@ public class CourseServiceImpl implements CourseService {
             course.setLecturer(lecturer);
         }
 
+        if (request.getMaxStudents() > 0) {
+            course.setMaxStudents(request.getMaxStudents());
+        }
+
         courseMapper.updateEntity(course, request);
         Course updatedCourse = courseRepository.save(course);
         return courseMapper.toResponse(updatedCourse);
@@ -123,6 +132,7 @@ public class CourseServiceImpl implements CourseService {
                 int maxGroup = (int) row.getCell(3).getNumericCellValue();
                 int groupCount = (int) row.getCell(4).getNumericCellValue();
                 Long lecturerId = (long) row.getCell(5).getNumericCellValue();
+                int maxStudents = (int) row.getCell(6).getNumericCellValue();
 
                 if (courseRepository.existsByCourseCode(courseCode)) continue;
 
@@ -136,6 +146,7 @@ public class CourseServiceImpl implements CourseService {
                 course.setCourseCode(courseCode);
                 course.setCourseName(courseName);
                 course.setMaxGroup(maxGroup);
+                course.setMaxStudents(maxStudents);
                 course.setGroupCount(groupCount);
                 course.setStatus(CourseStatus.ACTIVE);
                 course.setSemester(semester);
@@ -163,4 +174,16 @@ public class CourseServiceImpl implements CourseService {
 
         courseRepository.delete(course);
     }
+
+    @Override
+    public Course findById(Long courseId) {
+        return courseRepository.findByCourseId(courseId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Course not found: " +
+                                        courseId)
+                );
+    }
+
+
 }

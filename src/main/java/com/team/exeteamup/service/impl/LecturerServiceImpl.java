@@ -11,7 +11,8 @@ import com.team.exeteamup.enums.LecturerStatus;
 import com.team.exeteamup.mapper.lecturer.LecturerMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
-import com.team.exeteamup.service.inter.LecturerService;
+import com.team.exeteamup.service.LecturerService;
+import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,9 +33,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LecturerServiceImpl implements LecturerService {
+
     private final LecturerRepository lecturerRepository;
     private final AccountRepository accountRepository;
     private final LecturerMapper lecturerMapper;
+    private final UserUtils userUtils;
 
     @Override
     @Transactional
@@ -97,7 +100,7 @@ public class LecturerServiceImpl implements LecturerService {
                 .lecturerId(updated.getLecturerId())
                 .lecturerName(updated.getFullName())
                 .lecturerStatus(updated.getLecturerStatus().name())
-                .accountId(updated.getAccount().getId())
+                .accountId(updated.getAccount().getAccountId())
                 .accountStatus(updated.getAccount().getStatus().name())
                 .build();
     }
@@ -143,4 +146,11 @@ public class LecturerServiceImpl implements LecturerService {
                                 "Lecturer not found with id: " + lecturerId)
                 );
         }
+
+    @Override
+    public LecturerResponse getCurrentLecturer() {
+//        Account account = userUtils.getCurrentAccount();
+//        Lecturer lecturer = lecturerRepository.findByAccount_AccountId(account.getAccountId()).get();
+        return lecturerMapper.toResponse(userUtils.getCurrentLecturer());
+    }
 }

@@ -1,5 +1,6 @@
 package com.team.exeteamup.controller;
 
+import com.team.exeteamup.dto.request.MoveCourseRequest;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.UserResponse;
@@ -20,9 +21,9 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class StudentController {
+public class UserController {
 
     private final UserProfileService userProfileService;
     private final UserService userService;
@@ -116,5 +117,19 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi thêm  sinh viên " + e.getMessage());
         }
+    }
+
+    @PutMapping("/move-course")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public ResponseEntity<UserResponse> moveStudentCourse(
+            @Valid @RequestBody MoveCourseRequest request) {
+        UserResponse response = userService.moveStudentCourses(request.getNewCourseId());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/course/{id}")
+    public ResponseEntity<List<UserResponse>> getByCourseId(@PathVariable Long id) {
+        List<UserResponse> result = userService.getStudentByCourseId(id);
+        return ResponseEntity.ok(result);
     }
 }

@@ -3,6 +3,7 @@ package com.team.exeteamup.service.inter;
 import com.team.exeteamup.dto.request.CourseRequest;
 import com.team.exeteamup.dto.request.CourseUpdateRequest;
 import com.team.exeteamup.dto.response.CourseResponse;
+import com.team.exeteamup.entity.Course;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface CourseService {
     CourseResponse updateCourse(CourseUpdateRequest request);
     List<CourseResponse> importCoursesFromExcel(MultipartFile file);
     void deleteCourse(Long courseId);
+    Course findById(Long courseId);
 }

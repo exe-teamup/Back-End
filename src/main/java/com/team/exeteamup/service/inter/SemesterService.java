@@ -11,4 +11,5 @@ public interface SemesterService {
     SemesterResponse getSemesterById(Long semesterId);
     SemesterResponse updateSemester(Long semesterId, SemesterRequest semesterRequest);
     void deleteSemester(Long semesterId);
+    List<SemesterResponse> getSemestersOfCurrentLecturer();
 }
