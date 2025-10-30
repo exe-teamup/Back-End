@@ -1,11 +1,10 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.dto.response.group.LecturerPendingGroupsResponse;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.LecturerRequest;
 import com.team.exeteamup.dto.response.lecturer.LecturerResponse;
 import com.team.exeteamup.entity.Lecturer;
-import com.team.exeteamup.service.LecturerService;
+import com.team.exeteamup.service.inter.LecturerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

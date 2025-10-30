@@ -5,7 +5,7 @@ import com.team.exeteamup.dto.response.GroupTemplateResponse;
 import com.team.exeteamup.entity.GroupTemplate;
 import com.team.exeteamup.mapper.GroupTemplateMapper;
 import com.team.exeteamup.repository.GroupTemplateRepository;
-import com.team.exeteamup.service.GroupTemplateService;
+import com.team.exeteamup.service.inter.GroupTemplateService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

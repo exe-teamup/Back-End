@@ -9,8 +9,8 @@ import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.entity.*;
 import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
-import com.team.exeteamup.service.GroupService;
-import com.team.exeteamup.service.TokenService;
+import com.team.exeteamup.service.inter.GroupService;
+import com.team.exeteamup.service.inter.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GroupServiceImpl implements GroupService {
 
     private final StudentRepository studentRepository;
@@ -177,7 +178,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User currentLeader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -196,7 +197,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse kickMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User currentLeader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Group group = groupRepository.findById(groupId)
@@ -229,7 +230,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void leaveGroup(Long groupId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User user = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User user = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (Boolean.TRUE.equals(user.getIsLeader())) {
@@ -247,7 +248,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse addMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User leader = studentRepository.findByAccount_AccountId(account.getAccountId())
+        User leader = studentRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (!leader.getIsLeader()) {
@@ -284,5 +285,18 @@ public class GroupServiceImpl implements GroupService {
         };
 
         return groupMapper.toResponseList(groups);
+    }
+
+    @Override
+    public List<GroupResponse> getGroupsByLecturer(long lecturerId) {
+
+        List<Group> groups = groupRepository.findAll();
+        List<Group> filteredGroups = new ArrayList<>();
+        for (Group group : groups) {
+            if (group.getCourse().getLecturer().getLecturerId().equals(lecturerId)) {
+                filteredGroups.add(group);
+            }
+        }
+        return groupMapper.toResponseList(filteredGroups);
     }
 }

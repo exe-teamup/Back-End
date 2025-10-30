@@ -12,8 +12,7 @@ import com.team.exeteamup.mapper.CourseMapper;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.SemesterRepository;
-import com.team.exeteamup.service.CourseService;
-import com.team.exeteamup.service.LecturerService;
+import com.team.exeteamup.service.inter.CourseService;
 import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -28,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

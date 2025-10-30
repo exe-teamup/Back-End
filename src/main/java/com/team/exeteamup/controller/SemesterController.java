@@ -2,7 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.SemesterRequest;
 import com.team.exeteamup.dto.response.SemesterResponse;
-import com.team.exeteamup.service.SemesterService;
+import com.team.exeteamup.service.inter.SemesterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

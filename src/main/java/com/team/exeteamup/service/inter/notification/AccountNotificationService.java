@@ -1,4 +1,4 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter.notification;
 
 import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;
@@ -15,4 +15,5 @@ public interface AccountNotificationService {
     AccountNotificationResponse checkNotification(long accountNotificationId);
     AccountNotificationResponse deleteAccountNotification(long accountNotificationId);
     AccountNotification findById(long accountNotificationId);
+    void saveAccountNotification(AccountNotification accountNotification);
 }

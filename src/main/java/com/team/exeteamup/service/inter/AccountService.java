@@ -1,4 +1,4 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
 import com.team.exeteamup.dto.request.AccountRequest;
 import com.team.exeteamup.dto.response.AccountResponse;
@@ -9,8 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface AccountService extends UserDetailsService {
-    public Account createAccount(AccountRequest email);
-    public AccountResponse loginWithEmail(String email);
+    Account createAccount(AccountRequest email);
+    AccountResponse loginWithEmail(String email);
     List<Account> presentAccounts(@NotEmpty List<Long> accountIds);
     Account getAccountById(Long accountId);
+    Account findAccountByUserId(Long userId);
 }

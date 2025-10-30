@@ -2,7 +2,9 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.NotificationRequest;
 import com.team.exeteamup.dto.response.NotificationResponse;
-import com.team.exeteamup.service.NotificationService;
+import com.team.exeteamup.service.inter.notification.NotificationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,35 +15,44 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PostMapping("")
-    public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest request) {
+
+    @GetMapping
+    public ResponseEntity<List<NotificationResponse>> getAllNotifications() {
+        List<NotificationResponse> notifications = notificationService.findAllNotifications();
+        return ResponseEntity.ok(notifications);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NotificationResponse> getNotificationById(@PathVariable("id") long id) {
+        NotificationResponse response = notificationService.findResponseById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<NotificationResponse> createNotification(@Valid @RequestBody NotificationRequest request) {
         NotificationResponse response = notificationService.saveNotification(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<NotificationResponse>> getAllNotifications() {
-        return ResponseEntity.ok(notificationService.getNotifications());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<NotificationResponse> getNotification(@PathVariable long id) {
-        return ResponseEntity.ok(notificationService.findNotificationResponseById(id));
-    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NotificationResponse> updateNotification(@PathVariable long id,
-                                                                   @RequestBody NotificationRequest request)
-    {
-        return ResponseEntity.ok(notificationService.updateNotification(id, request));
+    public ResponseEntity<NotificationResponse> updateNotification(@PathVariable("id") long id,
+                                                                   @Valid @RequestBody NotificationRequest request) {
+        NotificationResponse response = notificationService.updateNotification(id, request);
+        return ResponseEntity.ok(response);
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<NotificationResponse> deleteNotification(@PathVariable long id) {
-        return ResponseEntity.ok(notificationService.deleteNotification(id));
+    public ResponseEntity<NotificationResponse> deleteNotification(@PathVariable("id") long id) {
+        NotificationResponse response = notificationService.deleteNotification(id);
+        return ResponseEntity.ok(response);
     }
 }

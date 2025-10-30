@@ -6,14 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class NotificationResponse {
-    private long notificationId;
-    private String title;
-    private String notificationDetail;
+    private long id;
+    private String templateCode;
+    private String templateContent;
     private NotificationType notificationType;
 }

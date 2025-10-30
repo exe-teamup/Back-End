@@ -1,4 +1,4 @@
-package com.team.exeteamup.service;
+package com.team.exeteamup.service.inter;
 
 import com.team.exeteamup.dto.request.LoginRequest;
 import com.team.exeteamup.dto.response.LoginResponse;

@@ -3,7 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.joinRequest.HandleJoinRequestRequest;
 import com.team.exeteamup.dto.request.joinRequest.JoinRequestRequest;
 import com.team.exeteamup.dto.response.JoinRequestResponse;
-import com.team.exeteamup.service.JoinRequestService;
+import com.team.exeteamup.service.inter.JoinRequestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
