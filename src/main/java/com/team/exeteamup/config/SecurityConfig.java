@@ -28,35 +28,35 @@ public class SecurityConfig {
     };
 
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-
-    // dùng để test public tất cả API
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        http
-//                // Tắt CSRF để test nhanh
 //                .csrf(AbstractHttpConfigurer::disable)
-//                // Cho phép tất cả request public
 //                .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers("/**").permitAll()
-//                )
-//                // Stateless session
-//                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//        // Comment filter để test public tất cả API
-//        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+//                        .anyRequest().authenticated())
+//                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 //
 //        return http.build();
 //    }
+
+    // dùng để test public tất cả API
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                // Tắt CSRF để test nhanh
+                .csrf(AbstractHttpConfigurer::disable)
+                // Cho phép tất cả request public
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/**").permitAll()
+                )
+                // Stateless session
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Comment filter để test public tất cả API
+        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }
