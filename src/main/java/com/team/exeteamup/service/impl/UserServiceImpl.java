@@ -10,11 +10,11 @@ import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.MajorRepository;
-import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserService;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.CourseService;
-import com.team.exeteamup.service.inter.TokenService;
+import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.Cell;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private UserRepository userRepository;
     @Autowired
     private StudentMapper studentMapper;
     @Autowired
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private TokenService tokenService;
+    private UserUtils userUtils;
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
@@ -63,20 +63,20 @@ public class UserServiceImpl implements UserService {
     private CourseService courseService;
 
 
-    public UserServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<UserResponse> getAllStudents() {
-        List<User> users = studentRepository.findAll();
+        List<User> users = userRepository.findAll();
         return users.stream()
                 .map(studentMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     public Page<UserResponse> getAllStudents(Pageable pageable) {
-        Page<User> studentPage = studentRepository.findAll(pageable);
+        Page<User> studentPage = userRepository.findAll(pageable);
         return studentPage.map(studentMapper::toResponse);
     }
 
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
                 String courseCode = currentRow.getCell(6).getStringCellValue().trim();
 
                 if (accountRepository.existsByEmail(email)) continue;
-                if (studentRepository.existsByUserCode(userCode)) continue;
+                if (userRepository.existsByUserCode(userCode)) continue;
 
                 if (studentsToSave.stream().anyMatch(s -> s.getUserCode().equals(userCode))) {
                     throw new RuntimeException("Duplicate student code in file: " + userCode);
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        List<User> savedUsers = studentRepository.saveAll(studentsToSave);
+        List<User> savedUsers = userRepository.saveAll(studentsToSave);
 
         List<UserResponse> responses = savedUsers.stream()
                 .map(studentMapper::toResponse)
@@ -174,9 +174,9 @@ public class UserServiceImpl implements UserService {
 
                 String email = emailCell.getStringCellValue().trim();
 
-                studentRepository.findByAccount_Email(email).ifPresentOrElse(student -> {
+                userRepository.findByAccount_Email(email).ifPresentOrElse(student -> {
                     student.setUserStatus(UserStatus.NOT_ELIGIBLE);
-                    studentRepository.save(student);
+                    userRepository.save(student);
                     System.out.println("✅ Đổi trạng thái: " + email);
                 }, () -> {
                     System.out.println("⚠️ Không tìm thấy sinh viên: " + email);
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteStudentById(long studentId) {
-        User user = studentRepository.findByUserId(studentId)
+        User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
         if (!user.getUserStatus().equals(UserStatus.ELIGIBLE)) {
@@ -198,12 +198,12 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setUserStatus(UserStatus.NOT_ELIGIBLE);
-        studentRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public User findById(long studentId) {
-        return studentRepository.findById(studentId)
+        return userRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Student not found: " + studentId)
                 );
@@ -211,19 +211,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getStudentWithoutGroup() {
-        return studentMapper.toResponseList(studentRepository.findByGroupIsNull());
+        return studentMapper.toResponseList(userRepository.findByGroupIsNull());
     }
 
     @Override
     public UserResponse getStudentById(long studentId) {
-        User user = studentRepository.findByUserId(studentId)
+        User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
         return studentMapper.toResponse(user);
     }
 
     @Override
     public List<UserResponse> searchStudents(String keyword) {
-        List<User> users = studentRepository.searchStudents(keyword);
+        List<User> users = userRepository.searchStudents(keyword);
         if (users.isEmpty()) {
             throw new AppException("Không tìm thấy sinh viên");
         }
@@ -242,10 +242,10 @@ public class UserServiceImpl implements UserService {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException("Yêu cầu thiếu token xác thực.");
         }
-        String token = authHeader.substring(7);
+        //String token = authHeader.substring(7);
 
-        Account currentAccount = tokenService.getAccountByToken(token);
-        User student = studentRepository.findByAccount_AccountId(currentAccount.getAccountId())
+        Account currentAccount = userUtils.getCurrentAccount();
+        User student = userRepository.findByAccountId(currentAccount.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Course newCourse = courseRepository.findByCourseId(newCourseId)
@@ -260,7 +260,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Bạn đã ở lớp học này");
         }
 
-        int currentStudentCount = studentRepository.countByCourse_CourseId(newCourse.getCourseId());
+        int currentStudentCount = userRepository.countByCourse_CourseId(newCourse.getCourseId());
         if (newCourse.getMaxStudents() != null && newCourse.getMaxStudents() > 0) {
             if (currentStudentCount > newCourse.getMaxStudents()) {
                 throw new AppException("Lớp này đã đạt giới hạn thành viên");
@@ -272,7 +272,7 @@ public class UserServiceImpl implements UserService {
             if (student.getIsLeader()) {
                 throw new AppException("Vui lòng chuyển quyền nhóm trưởng cho thành viên khác");
             }
-            int memberCount = studentRepository.countByGroup_GroupId(currentGroup.getGroupId());
+            int memberCount = userRepository.countByGroup_GroupId(currentGroup.getGroupId());
             if (memberCount <= 3) {
                 throw new AppException("Nhóm bạn dưới 3 thành viên. Vui lòng giải tán trước khi rời");
             }
@@ -289,7 +289,7 @@ public class UserServiceImpl implements UserService {
         courseChangeRepository.save(log);
 
         student.setCourse(newCourse);
-        User savedStudent = studentRepository.save(student);
+        User savedStudent = userRepository.save(student);
 
         return studentMapper.toResponse(savedStudent);
     }
