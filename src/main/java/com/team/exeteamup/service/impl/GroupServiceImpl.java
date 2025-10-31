@@ -2,6 +2,7 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.enums.GroupStatus;
+import com.team.exeteamup.event.user.CreateGroupEvent;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
@@ -12,6 +13,7 @@ import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.GroupService;
 import com.team.exeteamup.service.inter.TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +24,18 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class GroupServiceImpl implements GroupService {
 
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
     private final GroupTemplateRepository groupTemplateRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
     public GroupResponse createGroup(GroupRequest groupRequest) {
-        User leader = studentRepository.findById(groupRequest.getStudentId())
+        User leader = userRepository.findById(groupRequest.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
 
         if (leader.getGroup() != null) {
@@ -63,14 +66,14 @@ public class GroupServiceImpl implements GroupService {
         group = groupRepository.save(group);
         leader.setGroup(group);
         leader.setIsLeader(true);
-        studentRepository.save(leader);
+        userRepository.save(leader);
 
         List<User> members = new ArrayList<>();
         members.add(leader);
 
         if (groupRequest.getMemberEmails() != null && !groupRequest.getMemberEmails().isEmpty()) {
             for (String email : groupRequest.getMemberEmails()) {
-                User member = studentRepository.findByAccount_Email(email)
+                User member = userRepository.findByAccount_Email(email)
                         .orElseThrow(() -> new AppException("Không tìm thấy sinh viên với email: " + email));
 
                 if (member.getGroup() != null) {
@@ -91,13 +94,19 @@ public class GroupServiceImpl implements GroupService {
             throw new AppException("Nhóm phải có ít nhất 3 thành viên");
         }
 
-        studentRepository.saveAll(members);
+        userRepository.saveAll(members);
         group.setUsers(members);
         group.setMemberCount(members.size());
         groupRepository.save(group);
 
         course.setGroupCount(course.getGroupCount() + 1);
         courseRepository.save(course);
+
+        // publish event after creating group
+        CreateGroupEvent event = new CreateGroupEvent(groupRequest.getStudentId(),
+                                                      groupRequest.getGroupName());
+        eventPublisher.publishEvent(event);
+
         return groupMapper.toResponse(group);
     }
 
@@ -107,12 +116,12 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
-        List<User> users = studentRepository.findAllByGroup(group);
+        List<User> users = userRepository.findAllByGroup(group);
         for (User user : users) {
             user.setGroup(null);
             user.setIsLeader(false);
         }
-        studentRepository.saveAll(users);
+        userRepository.saveAll(users);
         groupRepository.delete(group);
     }
 
@@ -178,18 +187,18 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccountId(account.getId())
+        User currentLeader = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
 
-        User newLeader = studentRepository.findById(newLeaderId)
+        User newLeader = userRepository.findById(newLeaderId)
                 .orElseThrow(() -> new AppException("Không tìm thấy leader mới"));
 
         currentLeader.setIsLeader(false);
         newLeader.setIsLeader(true);
-        studentRepository.save(currentLeader);
-        studentRepository.save(newLeader);
+        userRepository.save(currentLeader);
+        userRepository.save(newLeader);
         return groupMapper.toResponse(group);
     }
 
@@ -197,28 +206,28 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponse kickMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User currentLeader = studentRepository.findByAccountId(account.getId())
+        User currentLeader = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
 
-        User member = studentRepository.findById(memberId)
+        User member = userRepository.findById(memberId)
                 .orElseThrow(() -> new AppException("Không tìm thấy thành viên"));
 
         if (member.getUserId().equals(currentLeader.getUserId())) {
             throw new AppException("Bạn không thể tự mời mình ra khỏi nhóm");
         }
 
-        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        int memberCount = userRepository.countByGroup_GroupId(groupId);
         if (memberCount <= 3) {
             throw new AppException("Nhóm cần ít nhất 3 thành viên");
         }
 
         member.setGroup(null);
-        studentRepository.save(member);
+        userRepository.save(member);
 
-        List<User> updatedMembers = studentRepository.findAllByGroup(group);
+        List<User> updatedMembers = userRepository.findAllByGroup(group);
         group.setMemberCount(updatedMembers.size());
 
         groupRepository.save(group);
@@ -230,25 +239,25 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void leaveGroup(Long groupId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User user = studentRepository.findByAccountId(account.getId())
+        User user = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (Boolean.TRUE.equals(user.getIsLeader())) {
             throw new AppException("Leader không thể rời nhóm. Vui lòng chuyển quyền cho thành viên");
         }
 
-        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        int memberCount = userRepository.countByGroup_GroupId(groupId);
         if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
 
         user.setGroup(null);
-        studentRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
     public GroupResponse addMember(Long groupId, Long memberId, String token) {
         Account account = tokenService.getAccountByToken(token);
-        User leader = studentRepository.findByAccountId(account.getId())
+        User leader = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 
         if (!leader.getIsLeader()) {
@@ -258,18 +267,18 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
-        User member = studentRepository.findById(memberId)
+        User member = userRepository.findById(memberId)
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         if (member.getGroup() != null) {
             throw new AppException("Thành viên này đã thuộc nhóm khác");
         }
 
-        int memberCount = studentRepository.countByGroup_GroupId(groupId);
+        int memberCount = userRepository.countByGroup_GroupId(groupId);
         if (memberCount >= 6) throw new AppException("Nhóm đã đạt tối đa 6 thành viên");
 
         member.setGroup(group);
-        studentRepository.save(member);
+        userRepository.save(member);
 
         Group updatedGroup = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm sau khi thêm"));

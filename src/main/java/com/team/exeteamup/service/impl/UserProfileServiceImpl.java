@@ -6,8 +6,7 @@ import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.mapper.StudentProfileMapper;
-import com.team.exeteamup.repository.StudentRepository;
-import com.team.exeteamup.service.inter.TokenService;
+import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
 
-    private final TokenService tokenService;
-    private final StudentRepository studentRepository;
+    private final TokenServiceImpl tokenService;
+    private final UserRepository userRepository;
     private final StudentProfileMapper studentProfileMapper;
 
     @Override
     public StudentProfileResponse getStudentProfile(String token) {
         Account account = tokenService.getAccountByToken(token);
 
-        User user = studentRepository.findByAccountId(account.getId())
+        User user = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         return studentProfileMapper.toResponse(user);
@@ -34,13 +33,13 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public StudentProfileResponse updateStudentProfile(Long studentId, StudentProfileRequest request) {
-        User user = studentRepository.findById(studentId)
+        User user = userRepository.findById(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(user::setPhoneNumber);
         Optional.ofNullable(request.getBio()).ifPresent(user::setBio);
 
-        User updatedUser = studentRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
         return studentProfileMapper.toResponse(updatedUser);
     }

@@ -32,7 +32,7 @@ public class NotificationBuilderImpl implements NotificationBuilder {
 
         Notification template = findByTemplateCode(templateCode);
 
-        String formattedContent = String.format(template.getTemplateCode(), args);
+        String formattedContent = String.format(template.getTemplateContent(), args);
 
         AccountNotification accountNotification = buildAccountNotification(receiverAccount, template, formattedContent);
 
