@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCourseEvent {
-    private String userCode;
+    private long receiverAccountId;
     private String courseCode;
     private UserCourseEventType eventType;
 }

@@ -2,6 +2,7 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.enums.GroupStatus;
+import com.team.exeteamup.event.user.CreateGroupEvent;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
@@ -12,6 +13,7 @@ import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.GroupService;
 import com.team.exeteamup.service.inter.TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ public class GroupServiceImpl implements GroupService {
     private final CourseRepository courseRepository;
     private final TokenService tokenService;
     private final GroupTemplateRepository groupTemplateRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -98,6 +101,12 @@ public class GroupServiceImpl implements GroupService {
 
         course.setGroupCount(course.getGroupCount() + 1);
         courseRepository.save(course);
+
+        // publish event after creating group
+        CreateGroupEvent event = new CreateGroupEvent(groupRequest.getStudentId(),
+                                                      groupRequest.getGroupName());
+        eventPublisher.publishEvent(event);
+
         return groupMapper.toResponse(group);
     }
 
