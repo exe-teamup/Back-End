@@ -17,6 +17,7 @@ import com.team.exeteamup.service.inter.CourseService;
 import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -41,31 +42,19 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private StudentMapper studentMapper;
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private MajorRepository majorRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private UserUtils userUtils;
-    @Autowired
-    private GroupRepository groupRepository;
-    @Autowired
-    private CourseChangeRepository courseChangeRepository;
-    @Autowired
-    private CourseService courseService;
+    private final UserRepository userRepository;
+    private final StudentMapper studentMapper;
+    private final AccountRepository accountRepository;
+    private final MajorRepository majorRepository;
+    private final CourseRepository courseRepository;
+    private final UserUtils userUtils;
+    private final GroupRepository groupRepository;
+    private final CourseChangeRepository courseChangeRepository;
+    private final CourseService courseService;
 
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public List<UserResponse> getAllStudents() {
@@ -156,7 +145,6 @@ public class UserServiceImpl implements UserService {
 
         return responses;
     }
-
 
     @Override
     @Transactional
