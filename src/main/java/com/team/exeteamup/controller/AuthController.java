@@ -22,6 +22,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping("logout")
     public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

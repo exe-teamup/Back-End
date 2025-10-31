@@ -34,20 +34,21 @@ public class UserController {
             "studentId", "fullName", "studentCode", "studentStatus", "createdAt", "leader"
     ));
 
+
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
         StudentProfileResponse response = userProfileService.getStudentProfile(token);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<StudentProfileResponse> updateStudentProfile(
-            @PathVariable Long id,
-            @RequestBody StudentProfileRequest studentProfileRequest) {
 
+    @PutMapping("{id}")
+    public ResponseEntity<StudentProfileResponse> updateStudentProfile(@PathVariable Long id,
+                                                                       @RequestBody StudentProfileRequest studentProfileRequest) {
         StudentProfileResponse response = userProfileService.updateStudentProfile(id, studentProfileRequest);
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long id) {
@@ -55,11 +56,13 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "Xóa sinh viên thành công"));
     }
 
+
     @GetMapping("")
     public ResponseEntity<List<UserResponse>> getAllStudents() {
         List<UserResponse> students = userService.getAllStudents();
         return ResponseEntity.ok(students);
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<UserResponse> getStudentById(@PathVariable Long id) {
@@ -67,24 +70,26 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("without-group")
     public ResponseEntity<List<UserResponse>> getStudentsWithoutGroup() {
         List<UserResponse> users = userService.getStudentWithoutGroup();
         return ResponseEntity.ok(users);
     }
 
+
     @GetMapping("/search")
-    public ResponseEntity<List<UserResponse>> searchStudents(
-            @RequestParam("keyword") String keyword) {
+    public ResponseEntity<List<UserResponse>> searchStudents(@RequestParam("keyword") String keyword) {
         List<UserResponse> result = userService.searchStudents(keyword);
         return ResponseEntity.ok(result);
     }
 
+
     @GetMapping("/page")
-    public ResponseEntity<Page<UserResponse>> getAllStudents(
-            @PageableDefault(size = 10, sort = "studentId", direction = Sort.Direction.ASC)
-            Pageable pageable,
-            @RequestParam(required = false) String sort) {
+    public ResponseEntity<Page<UserResponse>> getAllStudents(@PageableDefault(size = 10,
+                                                                              sort = "studentId",
+                                                                              direction = Sort.Direction.ASC) Pageable pageable,
+                                                             @RequestParam(required = false) String sort) {
         if (sort != null) {
             String[] sortParams = sort.split(",");
             if (sortParams.length > 0 && !VALID_SORT_FIELDS.contains(sortParams[0])) {
@@ -100,8 +105,9 @@ public class UserController {
         return ResponseEntity.ok(studentPage);
     }
 
+
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
             List<UserResponse> response = userService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
@@ -109,6 +115,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
 
     @PostMapping(value = "import-not-eligible", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> importStudentNotEligible(@RequestParam("file") MultipartFile file) {
@@ -121,13 +128,14 @@ public class UserController {
         }
     }
 
+
     @PutMapping("/move-course")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public ResponseEntity<UserResponse> moveStudentCourse(
-            @Valid @RequestBody MoveCourseRequest request) {
+    public ResponseEntity<UserResponse> moveStudentCourse(@Valid @RequestBody MoveCourseRequest request) {
         UserResponse response = userService.moveStudentCourses(request.getNewCourseId());
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/course/{id}")
     public ResponseEntity<List<UserResponse>> getByCourseId(@PathVariable Long id) {

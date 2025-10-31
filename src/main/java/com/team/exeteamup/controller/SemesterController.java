@@ -14,7 +14,9 @@ import java.util.Map;
 @RequestMapping("/api/semesters")
 @RequiredArgsConstructor
 public class SemesterController {
+
     private final SemesterService semesterService;
+
 
     @PostMapping("")
     public ResponseEntity<SemesterResponse> createSemester(@RequestBody SemesterRequest semesterRequest) {
@@ -22,20 +24,25 @@ public class SemesterController {
         return ResponseEntity.ok(semesterResponse);
     }
 
+
     @GetMapping("")
     public ResponseEntity<List<SemesterResponse>> getAllSemesters() {
         return ResponseEntity.ok(semesterService.getAllSemesters());
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<SemesterResponse> getSemesterById(@PathVariable Long id) {
         return ResponseEntity.ok(semesterService.getSemesterById(id));
     }
 
+
     @PutMapping("{id}")
-    public ResponseEntity<SemesterResponse> updateSemesterById(@PathVariable Long id, @RequestBody SemesterRequest semesterRequest) {
+    public ResponseEntity<SemesterResponse> updateSemesterById(@PathVariable Long id,
+                                                               @RequestBody SemesterRequest semesterRequest) {
         return ResponseEntity.ok(semesterService.updateSemester(id, semesterRequest));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteSemesterById(@PathVariable Long id) {

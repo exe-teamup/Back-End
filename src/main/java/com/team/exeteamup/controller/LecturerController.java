@@ -32,10 +32,10 @@ public class LecturerController {
         }
     }
 
+
     @PutMapping("{id}")
-    public ResponseEntity<?> updateLecturer(
-            @PathVariable Long id,
-            @RequestBody LecturerRequest request) {
+    public ResponseEntity<?> updateLecturer(@PathVariable Long id,
+                                            @RequestBody LecturerRequest request) {
         try {
             LecturerResponse response = lecturerService.updateLecturer(id, request);
             return ResponseEntity.ok(response);
@@ -46,11 +46,13 @@ public class LecturerController {
         }
     }
 
+
     @GetMapping()
     public ResponseEntity<List<LecturerResponse>> getAllLecturers() {
         List<LecturerResponse> lecturerResponses = lecturerService.getAllLecturers();
         return ResponseEntity.ok(lecturerResponses);
     }
+
 
     @GetMapping("/profile")
     public ResponseEntity<LecturerResponse> getCurrentLecturer() {
@@ -58,10 +60,12 @@ public class LecturerController {
         return ResponseEntity.ok(lecturer);
     }
 
+
     @GetMapping("{id}")
     public ResponseEntity<LecturerResponse> getLecturer(@PathVariable Long id) {
         return ResponseEntity.ok(lecturerService.getLecturer(id));
     }
+
   
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLecturer(@PathVariable Long id) {

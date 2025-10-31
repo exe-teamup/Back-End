@@ -41,22 +41,15 @@ public class SecurityConfig {
 //        return http.build();
 //    }
 
-    // dùng để test public tất cả API
+    // Public all API for testing purpose
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Tắt CSRF để test nhanh
                 .csrf(AbstractHttpConfigurer::disable)
-                // Cho phép tất cả request public
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/**").permitAll()
                 )
-                // Stateless session
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        // Comment filter để test public tất cả API
-        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }

@@ -14,15 +14,18 @@ public class AccountNotificationController {
 
     private final AccountNotificationService accountNotificationService;
 
+
     public AccountNotificationController(AccountNotificationService accountNotificationService) {
         this.accountNotificationService = accountNotificationService;
     }
+
 
     @GetMapping
     public ResponseEntity<List<AccountNotificationResponse>> getAllAccountNotifications() {
         List<AccountNotificationResponse> responses = accountNotificationService.getAccountNotifications();
         return ResponseEntity.ok(responses);
     }
+
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<List<AccountNotificationResponse>> getAccountNotificationsByAccountId(
@@ -32,6 +35,7 @@ public class AccountNotificationController {
         return ResponseEntity.ok(responses);
     }
 
+
     @PostMapping("/notify")
     public ResponseEntity<List<AccountNotificationResponse>> notifyToAccounts(
             @RequestBody AccountNotificationRequest request) {
@@ -39,6 +43,7 @@ public class AccountNotificationController {
                 accountNotificationService.sendNotificationToAccounts(request);
         return ResponseEntity.ok(responses);
     }
+
 
     @PutMapping("/check")
     public ResponseEntity<List<AccountNotificationResponse>> checkNotifications(
@@ -48,6 +53,7 @@ public class AccountNotificationController {
         return ResponseEntity.ok(responses);
     }
 
+
     @PutMapping("/check/{id}")
     public ResponseEntity<AccountNotificationResponse> checkNotification(
             @PathVariable("id") long accountNotificationId) {
@@ -56,6 +62,7 @@ public class AccountNotificationController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<AccountNotificationResponse> getAccountNotificationById(
             @PathVariable("id") long accountNotificationId) {
@@ -63,6 +70,7 @@ public class AccountNotificationController {
                 accountNotificationService.findResponseById(accountNotificationId);
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<AccountNotificationResponse> deleteAccountNotification(

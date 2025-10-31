@@ -23,11 +23,13 @@ public class PostController {
 
     private final PostService postService;
 
+
     @PostMapping("/group-post")
     public ResponseEntity<GroupPostResponse> createGroupPost(@RequestBody GroupPostRequest groupPostRequest) {
         GroupPostResponse groupPostResponse = postService.createGroupPost(groupPostRequest);
         return ResponseEntity.ok(groupPostResponse);
     }
+
 
     @GetMapping("/group-post")
     public ResponseEntity<List<GroupPostResponse>> getGroupPost() {
@@ -35,11 +37,13 @@ public class PostController {
         return ResponseEntity.ok(groupPostResponse);
     }
 
+
     @PostMapping("/user-post")
     public ResponseEntity<UserPostResponse> createUserPost(@RequestBody UserPostRequest userPostRequest) {
         UserPostResponse userPostResponse = postService.createUserPost(userPostRequest);
         return ResponseEntity.ok(userPostResponse);
     }
+
 
     @GetMapping("")
     public ResponseEntity<List<PostResponse>> getAllPosts() {
@@ -47,17 +51,19 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+
     @GetMapping("group/{groupId}")
-    public ResponseEntity<List<PostResponse>> getPostsByGroupId(
-            @PathVariable("groupId") Long groupId,
-            @RequestParam PostStatus postStatus) {
+    public ResponseEntity<List<PostResponse>> getPostsByGroupId(@PathVariable("groupId") Long groupId,
+                                                                @RequestParam PostStatus postStatus) {
         return ResponseEntity.ok(postService.getPostsByGroupId(groupId, postStatus));
     }
+
 
     @GetMapping("{postId}")
     public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postService.getPostById(postId));
     }
+
 
     @PutMapping("{id}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable("id") Long id,
@@ -65,6 +71,7 @@ public class PostController {
         PostResponse response = postService.updatePost(id, request);
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deletePost(@PathVariable("id") Long id) {

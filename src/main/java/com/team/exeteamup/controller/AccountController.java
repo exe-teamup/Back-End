@@ -3,6 +3,8 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.AccountRequest;
 import com.team.exeteamup.dto.response.AccountResponse;
 import com.team.exeteamup.service.inter.AccountService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/accounts")
+@RequiredArgsConstructor
 public class AccountController {
-    @Autowired
-    private AccountService accountService;
 
-    @GetMapping("")
-    public ResponseEntity<?> getm() {
-        return ResponseEntity.ok("test controller 1111 ");
-    }
+    private final AccountService accountService;
+
 
     @PostMapping("")
     public ResponseEntity<AccountResponse> login(@RequestBody AccountRequest accountRequest) {
@@ -25,8 +24,4 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("test")
-    public ResponseEntity<?> getmtest() {
-        return ResponseEntity.ok("test controller 1111 ");
-    }
 }

@@ -14,10 +14,10 @@ public class ModeratorController {
 
     private final ModeratorService moderatorService;
 
+
     @PutMapping("{courseId}/lecturer")
-    public ResponseEntity<CourseResponse> updateCourseLecturer(
-            @PathVariable Long courseId,
-            @RequestBody ModeratorUpdateCourseRequest request) {
+    public ResponseEntity<CourseResponse> updateCourseLecturer(@PathVariable Long courseId,
+                                                               @RequestBody ModeratorUpdateCourseRequest request) {
         CourseResponse response = moderatorService.updateCourseLecturer(courseId, request);
         return ResponseEntity.ok(response);
     }
