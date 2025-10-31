@@ -15,7 +15,7 @@ import java.util.List;
     
 @RestController
 @RequestMapping("api/majors")
-@SecurityRequirement(name = "bearerAuth")
+//@SecurityRequirement(name = "bearerAuth")
 public class MajorController {
     @Autowired
     private MajorService majorService;
@@ -32,14 +32,12 @@ public class MajorController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<List<MajorResponse>> getAllMajors() {
         List<MajorResponse> response = majorService.getAllMajors();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("level/{level}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MajorResponse>> getMajorsByLevel(@PathVariable Long level) {
         List<MajorResponse> response = majorService.getMajorsByLevel(level);
         return ResponseEntity.ok(response);

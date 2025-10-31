@@ -23,7 +23,6 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountMapper accountMapper;
     private final UserService userService;
 
     @Override
