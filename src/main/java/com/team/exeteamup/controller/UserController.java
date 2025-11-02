@@ -2,6 +2,9 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.MoveCourseRequest;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
+import com.team.exeteamup.dto.response.AdminProfileResponse;
+import com.team.exeteamup.dto.response.LecturerProfileResponse;
+import com.team.exeteamup.dto.response.ModeratorProfileResponse;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.service.inter.UserProfileService;
@@ -37,6 +40,18 @@ public class UserController {
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
         StudentProfileResponse response = userProfileService.getStudentProfile(token);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("profile/admin")
+    public ResponseEntity<AdminProfileResponse> getAdminProfile(@RequestHeader(value = "Authorization", required = false) String token) {
+        AdminProfileResponse response = userProfileService.getAdminProfile(token);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("profile/moderator")
+    public ResponseEntity<ModeratorProfileResponse> getModeratorProfile(@RequestHeader(value = "Authorization", required = false) String token) {
+        ModeratorProfileResponse response = userProfileService.getModeratorProfile(token);
         return ResponseEntity.ok(response);
     }
 
@@ -101,7 +116,7 @@ public class UserController {
     }
 
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
             List<UserResponse> response = userService.importStudentsFromExcel(file);
             return ResponseEntity.ok(response);
