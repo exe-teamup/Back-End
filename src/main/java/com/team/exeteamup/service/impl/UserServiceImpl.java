@@ -1,5 +1,6 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.dto.request.SwapRequest;
 import com.team.exeteamup.entity.*;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.UserResponse;
@@ -24,7 +25,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -289,5 +287,66 @@ public class UserServiceImpl implements UserService {
         return course.getUsers()
                 .stream().map(studentMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public Map<String, UserResponse> swapStudentCourse(SwapRequest request) {
+        if (request.getStudentId1().equals(request.getStudentId2())) {
+            throw new AppException("Không thể hoán đổi với chính mình");
+        }
+
+        User student1 = userRepository.findById(request.getStudentId1())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên 1"));
+        User student2 = userRepository.findById(request.getStudentId2())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên 2"));
+
+        Course course1 = student1.getCourse();
+        Course course2 = student2.getCourse();
+        Group group1 = student1.getGroup();
+        Group group2 = student2.getGroup();
+
+        if (course1.getCourseId() == course2.getCourseId()) {
+            throw new AppException("Hai sinh viên cùng lớp, không thể hoán đổi");
+        }
+
+        if(student1.getIsLeader()) {
+            throw new AppException(student1.getFullName() + "là nhóm trưởng. Vui lòng chuyển quyền trước khi hoán đổi");
+        }
+
+        if(student2.getIsLeader()) {
+            throw new AppException(student1.getFullName() + "là nhóm trưởng. Vui lòng chuyển quyền trước khi hoán đổi");
+        }
+
+        if (group1 != null) {
+            student1.setGroup(null);
+            group1.setMemberCount(group1.getMemberCount() - 1);
+            groupRepository.save(group1);
+        }
+
+        if (group2 != null) {
+            student2.setGroup(null);
+            group2.setMemberCount(group2.getMemberCount() - 1);
+            groupRepository.save(group2);
+        }
+
+        student1.setCourse(course2);
+        student2.setCourse(course1);
+
+        courseChangeRepository.save(CourseChange.builder()
+                .user(student1)
+                .oldCourse(course1)
+                .newCourse(course2)
+                .build());
+        courseChangeRepository.save(CourseChange.builder()
+                .user(student2)
+                .oldCourse(course2)
+                .newCourse(course1)
+                .build());
+        userRepository.save(student1);
+        userRepository.save(student2);
+        Map<String, UserResponse> response = new HashMap<>();
+        response.put("student1", studentMapper.toResponse(student1));
+        response.put("student2", studentMapper.toResponse(student2));
+        return response;
     }
 }
