@@ -267,6 +267,10 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
 
+        if (group.getGroupStatus() == GroupStatus.LOCKED) {
+            throw new AppException("Nhóm đã bị khóa, không thể thêm thành viên");
+        }
+
         User member = userRepository.findById(memberId)
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 

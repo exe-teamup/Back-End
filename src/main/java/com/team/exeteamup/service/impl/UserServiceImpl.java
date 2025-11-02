@@ -2,6 +2,7 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.dto.request.SwapRequest;
 import com.team.exeteamup.entity.*;
+import com.team.exeteamup.enums.CourseStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.enums.account.AccountRole;
@@ -242,6 +243,13 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Sinh viên chưa thuộc lớp nào");
         }
 
+        if (oldCourse.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Lớp học hiện tại của bạn (" + oldCourse.getCourseCode() + ") đã bị khóa, không thể chuyển đi.");
+        }
+        if (newCourse.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Lớp học bạn muốn chuyển đến (" + newCourse.getCourseCode() + ") đã bị khóa, không thể chuyển đến.");
+        }
+
         if (oldCourse.getCourseId() == newCourse.getCourseId()) {
             throw new AppException("Bạn đã ở lớp học này");
         }
@@ -304,6 +312,10 @@ public class UserServiceImpl implements UserService {
         Course course2 = student2.getCourse();
         Group group1 = student1.getGroup();
         Group group2 = student2.getGroup();
+
+        if (course1.getStatus() == CourseStatus.LOCKED || course2.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Đã hết thời hạn chuyển lớp");
+        }
 
         if (course1.getCourseId() == course2.getCourseId()) {
             throw new AppException("Hai sinh viên cùng lớp, không thể hoán đổi");
