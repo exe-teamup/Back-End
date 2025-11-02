@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AccountNotificationRepository extends JpaRepository<AccountNotification, Long> {
     List<AccountNotification> findByAccount(Account account);
+    List<AccountNotification> findTop5ByOrderByCreatedAtDesc();
 }
