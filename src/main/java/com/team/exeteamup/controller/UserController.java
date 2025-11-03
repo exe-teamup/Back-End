@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
-        StudentProfileResponse response = userProfileService.getStudentProfile(token);
+        Object response = userProfileService.getProfile(token);
         return ResponseEntity.ok(response);
     }
 
