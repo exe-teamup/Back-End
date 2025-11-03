@@ -59,6 +59,7 @@ public class LecturerServiceImpl implements LecturerService {
 
                 String email = currentRow.getCell(0).getStringCellValue();
                 String fullName = currentRow.getCell(1).getStringCellValue();
+                if (accountRepository.existsByEmail(email)) continue;
 
                 Account account = Account.builder()
                         .email(email)
