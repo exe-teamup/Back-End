@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +31,7 @@ public class MajorServiceImpl implements MajorService {
     private final MajorMapper majorMapper;
 
     @Override
+    @CacheEvict(cacheNames = "major", allEntries = true)
     public MajorResponse createMajor(MajorRequest majorRequest) {
         Major major = new Major();
         major.setMajorName(majorRequest.getMajorName());
@@ -58,6 +61,7 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "majors", allEntries = true)
     public List<MajorResponse> importMajors(MultipartFile file) {
         List<MajorResponse> result = new ArrayList<>();
 
@@ -104,6 +108,7 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    @Cacheable("majors")
     public List<MajorResponse> getAllMajors() {
         List<Major> majors = majorRepository.findByMajorStatusIsTrue();
         return majors.stream()
@@ -113,6 +118,7 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "majors_by_level", key = "#level")
     public List<MajorResponse> getMajorsByLevel(Long level) {
         List<Major> majors = majorRepository.findByLevelAndMajorStatusIsTrue(level);
         return majorMapper.toResponseList(majors);
@@ -120,6 +126,7 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "majors_by_parent", key = "#parentMajorId")
     public List<MajorResponse> getMajorsByParentMajorId(Long parentMajorId) {
         List<Major> majors = majorRepository.findByParentMajor_MajorIdAndMajorStatusIsTrue(parentMajorId);
         return majorMapper.toResponseList(majors);
@@ -127,6 +134,7 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "major", allEntries = true)
     public MajorResponse updateMajor(Long id, MajorRequest majorRequest) {
         Major major = majorRepository.findById(id)
                 .orElseThrow(() -> new AppException("Chuyên ngành không tồn tại"));
@@ -156,12 +164,14 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "major", allEntries = true)
     public void deleteMajor(Long majorId) {
         Major major = findById(majorId);
         majorRepository.delete(major);
     }
 
     @Override
+    @Cacheable(value = "major", key = "#majorId")
     public Major findById(Long majorId) {
         return majorRepository.findById(majorId)
                 .orElseThrow(() -> new AppException("Chuyên ngành không tồn tại"));

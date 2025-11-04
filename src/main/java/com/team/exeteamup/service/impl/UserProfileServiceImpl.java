@@ -14,6 +14,7 @@ import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +57,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @CacheEvict(value = "user", key = "#studentId")
     public StudentProfileResponse updateStudentProfile(Long studentId, StudentProfileRequest request) {
         User user = userRepository.findById(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
