@@ -8,6 +8,7 @@ import com.team.exeteamup.mapper.SemesterMapper;
 import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.inter.SemesterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class SemesterServiceImpl implements SemesterService {
     private final SemesterRepository semesterRepository;
 
     @Override
+    @Cacheable("createSemester")
     public SemesterResponse createSemester(SemesterRequest semesterRequest) {
         if (semesterRepository.existsBySemesterCode(semesterRequest.getSemesterCode())) {
             throw new AppException("Semester already exists");
