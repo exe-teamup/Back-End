@@ -92,6 +92,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 .toResponse(joinRequestRepository.save(joinRequest));
     }
 
+
     private void checkGroupCapacityAndResponse(Group group, JoinRequestType joinRequestType) {
         if(group.getMemberCount() == 6) {
             if(joinRequestType == JoinRequestType.STUDENT_REQUEST) {
@@ -158,6 +159,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
 
         return result;
     }
+
 
     private JoinRequest handleGroupInvitationJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
 
