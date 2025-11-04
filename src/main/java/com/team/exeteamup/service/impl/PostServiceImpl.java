@@ -15,6 +15,8 @@ import com.team.exeteamup.repository.PostRepository;
 import com.team.exeteamup.service.inter.PostService;
 import com.team.exeteamup.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "group_post", allEntries = true)
     public GroupPostResponse createGroupPost(GroupPostRequest groupPostRequest) {
 
         endIfUserHasNoGroup(groupPostRequest.getUserId());
@@ -45,6 +48,8 @@ public class PostServiceImpl implements PostService {
         return postMapper.toGroupPostResponse(savedPost);
     }
 
+    @Transactional(readOnly = true)
+    @Cacheable("group_posts")
     public List<GroupPostResponse> getGroupPosts() {
         List<Post> posts = postRepository.findByPostTypeAndPostStatus(
                 com.team.exeteamup.enums.post.PostType.GROUP_POST,
@@ -56,6 +61,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "group", allEntries = true)
     public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
 
         Post post = postMapper.toEntity(userPostRequest);
@@ -72,14 +78,15 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-
     @Override
+    @Cacheable("posts")
     public List<PostResponse> getAllPosts() {
         List<Post> posts = postRepository.findByPostStatus(PostStatus.ACTIVE);
         return postMapper.toResponseList(posts);
     }
 
     @Override
+    @Cacheable(value = "posts_by_group", key = "#groupId + '_' + #postStatus")
     public List<PostResponse> getPostsByGroupId(Long groupId, PostStatus postStatus) {
         List<Post> post = postRepository.findPostsByGroupIdAndPostStatus(groupId, postStatus);
 
@@ -91,6 +98,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Cacheable(value = "post", key = "#id")
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
@@ -99,6 +107,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "post", allEntries = true)
     public PostResponse updatePost(Long id, PostUpdateRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
@@ -114,6 +123,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "post", allEntries = true)
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
@@ -134,6 +144,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Cacheable(value = "post", key = "#postId")
     public Post findById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
