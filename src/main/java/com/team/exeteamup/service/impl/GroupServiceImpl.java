@@ -12,6 +12,7 @@ import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.GroupService;
 import com.team.exeteamup.service.inter.TokenService;
+import com.team.exeteamup.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class GroupServiceImpl implements GroupService {
     private final TokenService tokenService;
     private final GroupTemplateRepository groupTemplateRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserUtils userUtils;
 
     @Override
     @Transactional
@@ -255,8 +257,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupResponse addMember(Long groupId, Long memberId, String token) {
-        Account account = tokenService.getAccountByToken(token);
+    public GroupResponse addMember(Long groupId, Long memberId) {
+        Account account = userUtils.getCurrentAccount();
         User leader = userRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
 

@@ -20,7 +20,7 @@ public interface GroupService {
     GroupResponse transferLeader(Long groupId, Long newLeaderId, String token);
     GroupResponse kickMember(Long groupId, Long memberId, String token);
     void leaveGroup(Long groupId, String token);
-    GroupResponse addMember(Long groupId, Long memberId, String token);
+    GroupResponse addMember(Long groupId, Long memberId);
     List<GroupResponse> filterGroups(GroupFilterStatus status);
     List<GroupResponse> getGroupsByLecturer(long lecturerId);
 }
