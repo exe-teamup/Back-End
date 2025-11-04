@@ -37,9 +37,8 @@ public class GroupController {
     @PostMapping("{id}/add-member/{memberId}")
     public ResponseEntity<GroupResponse> addMember(
             @PathVariable Long id,
-            @PathVariable Long memberId,
-            @RequestHeader(value = "Authorization", required = false) String token) {
-        GroupResponse response = groupService.addMember(id, memberId, token);
+            @PathVariable Long memberId) {
+        GroupResponse response = groupService.addMember(id, memberId);
         return ResponseEntity.ok(response);
     }
 
