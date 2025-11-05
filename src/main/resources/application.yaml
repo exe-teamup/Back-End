@@ -20,7 +20,7 @@ spring:
 
 # uses for database connection
   profiles:
-    active: prod
+    active: dev
 
 springdoc:
   api-docs:
@@ -36,7 +36,7 @@ server:
 notification:
   template:
     user:
-      create-group-success: USER_CREATE_GROUP_SUCCESS
+      create-group-success: USER_CREATE_GROUP_SUCCESS_V1
 
       join-group: USER_ADD_MEMBER_SUCCESS # user nhận được khi tham gia nhóm thành công
       removed-from-group: USER_REMOVE_MEMBER_SUCCESS # user nhận được khi bị xóa khỏi nhóm

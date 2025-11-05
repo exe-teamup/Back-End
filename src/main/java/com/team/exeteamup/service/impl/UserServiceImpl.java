@@ -1,6 +1,8 @@
 package com.team.exeteamup.service.impl;
 
+import com.team.exeteamup.dto.request.SwapRequest;
 import com.team.exeteamup.entity.*;
+import com.team.exeteamup.enums.CourseStatus;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.enums.account.AccountRole;
@@ -10,20 +12,22 @@ import com.team.exeteamup.mapper.StudentMapper;
 import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.CourseRepository;
 import com.team.exeteamup.repository.MajorRepository;
-import com.team.exeteamup.repository.StudentRepository;
+import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserService;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.CourseService;
 import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,54 +38,42 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private StudentMapper studentMapper;
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private MajorRepository majorRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private UserUtils userUtils;
-    @Autowired
-    private GroupRepository groupRepository;
-    @Autowired
-    private CourseChangeRepository courseChangeRepository;
-    @Autowired
-    private CourseService courseService;
+    private final UserRepository userRepository;
+    private final StudentMapper studentMapper;
+    private final AccountRepository accountRepository;
+    private final MajorRepository majorRepository;
+    private final CourseRepository courseRepository;
+    private final UserUtils userUtils;
+    private final GroupRepository groupRepository;
+    private final CourseChangeRepository courseChangeRepository;
+    private final CourseService courseService;
 
-
-    public UserServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
 
     @Override
+    @Cacheable(cacheNames = "user", key = "#id")
     public List<UserResponse> getAllStudents() {
-        List<User> users = studentRepository.findAll();
+        List<User> users = userRepository.findAll();
         return users.stream()
                 .map(studentMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     public Page<UserResponse> getAllStudents(Pageable pageable) {
-        Page<User> studentPage = studentRepository.findAll(pageable);
+        Page<User> studentPage = userRepository.findAll(pageable);
         return studentPage.map(studentMapper::toResponse);
     }
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "users", allEntries = true)
     public List<UserResponse> importStudentsFromExcel(MultipartFile file) throws IOException {
         List<User> studentsToSave = new ArrayList<>();
 
@@ -107,7 +99,7 @@ public class UserServiceImpl implements UserService {
                 String courseCode = currentRow.getCell(6).getStringCellValue().trim();
 
                 if (accountRepository.existsByEmail(email)) continue;
-                if (studentRepository.existsByUserCode(userCode)) continue;
+                if (userRepository.existsByUserCode(userCode)) continue;
 
                 if (studentsToSave.stream().anyMatch(s -> s.getUserCode().equals(userCode))) {
                     throw new RuntimeException("Duplicate student code in file: " + userCode);
@@ -148,7 +140,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        List<User> savedUsers = studentRepository.saveAll(studentsToSave);
+        List<User> savedUsers = userRepository.saveAll(studentsToSave);
 
         List<UserResponse> responses = savedUsers.stream()
                 .map(studentMapper::toResponse)
@@ -157,9 +149,9 @@ public class UserServiceImpl implements UserService {
         return responses;
     }
 
-
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "users", allEntries = true)
     public void importStudentsNotEligible(MultipartFile file) throws IOException {
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
@@ -174,9 +166,9 @@ public class UserServiceImpl implements UserService {
 
                 String email = emailCell.getStringCellValue().trim();
 
-                studentRepository.findByAccount_Email(email).ifPresentOrElse(student -> {
+                userRepository.findByAccount_Email(email).ifPresentOrElse(student -> {
                     student.setUserStatus(UserStatus.NOT_ELIGIBLE);
-                    studentRepository.save(student);
+                    userRepository.save(student);
                     System.out.println("✅ Đổi trạng thái: " + email);
                 }, () -> {
                     System.out.println("⚠️ Không tìm thấy sinh viên: " + email);
@@ -189,8 +181,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "user", allEntries = true)
     public void deleteStudentById(long studentId) {
-        User user = studentRepository.findByUserId(studentId)
+        User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
 
         if (!user.getUserStatus().equals(UserStatus.ELIGIBLE)) {
@@ -198,32 +191,35 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setUserStatus(UserStatus.NOT_ELIGIBLE);
-        studentRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
+    @Cacheable(value = "user", key = "#studentId")
     public User findById(long studentId) {
-        return studentRepository.findById(studentId)
+        return userRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Student not found: " + studentId)
                 );
     }
 
     @Override
+    @Cacheable("users_no_group")
     public List<UserResponse> getStudentWithoutGroup() {
-        return studentMapper.toResponseList(studentRepository.findByGroupIsNull());
+        return studentMapper.toResponseList(userRepository.findByGroupIsNull());
     }
 
     @Override
+    @Cacheable(value = "user", key = "#studentId")
     public UserResponse getStudentById(long studentId) {
-        User user = studentRepository.findByUserId(studentId)
+        User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
         return studentMapper.toResponse(user);
     }
 
     @Override
     public List<UserResponse> searchStudents(String keyword) {
-        List<User> users = studentRepository.searchStudents(keyword);
+        List<User> users = userRepository.searchStudents(keyword);
         if (users.isEmpty()) {
             throw new AppException("Không tìm thấy sinh viên");
         }
@@ -234,6 +230,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "user", allEntries = true)
     public UserResponse moveStudentCourses(Long newCourseId) {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attr.getRequest();
@@ -242,10 +239,10 @@ public class UserServiceImpl implements UserService {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException("Yêu cầu thiếu token xác thực.");
         }
-        String token = authHeader.substring(7);
+        //String token = authHeader.substring(7);
 
         Account currentAccount = userUtils.getCurrentAccount();
-        User student = studentRepository.findByAccountId(currentAccount.getId())
+        User student = userRepository.findByAccountId(currentAccount.getId())
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
 
         Course newCourse = courseRepository.findByCourseId(newCourseId)
@@ -256,11 +253,18 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Sinh viên chưa thuộc lớp nào");
         }
 
+        if (oldCourse.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Lớp học hiện tại của bạn (" + oldCourse.getCourseCode() + ") đã bị khóa, không thể chuyển đi.");
+        }
+        if (newCourse.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Lớp học bạn muốn chuyển đến (" + newCourse.getCourseCode() + ") đã bị khóa, không thể chuyển đến.");
+        }
+
         if (oldCourse.getCourseId() == newCourse.getCourseId()) {
             throw new AppException("Bạn đã ở lớp học này");
         }
 
-        int currentStudentCount = studentRepository.countByCourse_CourseId(newCourse.getCourseId());
+        int currentStudentCount = userRepository.countByCourse_CourseId(newCourse.getCourseId());
         if (newCourse.getMaxStudents() != null && newCourse.getMaxStudents() > 0) {
             if (currentStudentCount > newCourse.getMaxStudents()) {
                 throw new AppException("Lớp này đã đạt giới hạn thành viên");
@@ -272,7 +276,7 @@ public class UserServiceImpl implements UserService {
             if (student.getIsLeader()) {
                 throw new AppException("Vui lòng chuyển quyền nhóm trưởng cho thành viên khác");
             }
-            int memberCount = studentRepository.countByGroup_GroupId(currentGroup.getGroupId());
+            int memberCount = userRepository.countByGroup_GroupId(currentGroup.getGroupId());
             if (memberCount <= 3) {
                 throw new AppException("Nhóm bạn dưới 3 thành viên. Vui lòng giải tán trước khi rời");
             }
@@ -289,17 +293,84 @@ public class UserServiceImpl implements UserService {
         courseChangeRepository.save(log);
 
         student.setCourse(newCourse);
-        User savedStudent = studentRepository.save(student);
+        User savedStudent = userRepository.save(student);
 
         return studentMapper.toResponse(savedStudent);
     }
 
     @Override
+    @Cacheable(value = "users_by_course", key = "#courseId")
     public List<UserResponse> getStudentByCourseId(long courseId) {
         Course course = courseService.findById(courseId);
 
         return course.getUsers()
                 .stream().map(studentMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @CacheEvict(cacheNames = "users", allEntries = true)
+    public Map<String, UserResponse> swapStudentCourse(SwapRequest request) {
+        if (request.getStudentId1().equals(request.getStudentId2())) {
+            throw new AppException("Không thể hoán đổi với chính mình");
+        }
+
+        User student1 = userRepository.findById(request.getStudentId1())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên 1"));
+        User student2 = userRepository.findById(request.getStudentId2())
+                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên 2"));
+
+        Course course1 = student1.getCourse();
+        Course course2 = student2.getCourse();
+        Group group1 = student1.getGroup();
+        Group group2 = student2.getGroup();
+
+        if (course1.getStatus() == CourseStatus.LOCKED || course2.getStatus() == CourseStatus.LOCKED) {
+            throw new AppException("Đã hết thời hạn chuyển lớp");
+        }
+
+        if (course1.getCourseId() == course2.getCourseId()) {
+            throw new AppException("Hai sinh viên cùng lớp, không thể hoán đổi");
+        }
+
+        if(student1.getIsLeader()) {
+            throw new AppException(student1.getFullName() + "là nhóm trưởng. Vui lòng chuyển quyền trước khi hoán đổi");
+        }
+
+        if(student2.getIsLeader()) {
+            throw new AppException(student1.getFullName() + "là nhóm trưởng. Vui lòng chuyển quyền trước khi hoán đổi");
+        }
+
+        if (group1 != null) {
+            student1.setGroup(null);
+            group1.setMemberCount(group1.getMemberCount() - 1);
+            groupRepository.save(group1);
+        }
+
+        if (group2 != null) {
+            student2.setGroup(null);
+            group2.setMemberCount(group2.getMemberCount() - 1);
+            groupRepository.save(group2);
+        }
+
+        student1.setCourse(course2);
+        student2.setCourse(course1);
+
+        courseChangeRepository.save(CourseChange.builder()
+                .user(student1)
+                .oldCourse(course1)
+                .newCourse(course2)
+                .build());
+        courseChangeRepository.save(CourseChange.builder()
+                .user(student2)
+                .oldCourse(course2)
+                .newCourse(course1)
+                .build());
+        userRepository.save(student1);
+        userRepository.save(student2);
+        Map<String, UserResponse> response = new HashMap<>();
+        response.put("student1", studentMapper.toResponse(student1));
+        response.put("student2", studentMapper.toResponse(student2));
+        return response;
     }
 }

@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.exeteamup.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

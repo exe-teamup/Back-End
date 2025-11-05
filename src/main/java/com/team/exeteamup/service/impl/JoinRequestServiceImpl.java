@@ -8,6 +8,8 @@ import com.team.exeteamup.entity.JoinRequest;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
 import com.team.exeteamup.enums.joinRequest.JoinRequestType;
+import com.team.exeteamup.exception.EmptyDeniedReasonException;
+import com.team.exeteamup.exception.FullGroupException;
 import com.team.exeteamup.mapper.JoinRequestMapper;
 import com.team.exeteamup.repository.JoinRequestRepository;
 import com.team.exeteamup.service.inter.GroupService;
@@ -76,15 +78,29 @@ public class JoinRequestServiceImpl implements JoinRequestService {
         Group group = groupService.findGroupById(request.getGroupId());
         User user = userService.findById(request.getStudentId());
 
+        checkGroupCapacityAndResponse(group, request.getRequestType());
+
         JoinRequest joinRequest = new JoinRequest(user,
                 group,
                 LocalDateTime.now(),
                 JoinRequestStatus.PENDING,
                 null,
-                request.getRequestType());
+                request.getRequestType(),
+                LocalDateTime.now());
 
         return joinRequestMapper
                 .toResponse(joinRequestRepository.save(joinRequest));
+    }
+
+
+    private void checkGroupCapacityAndResponse(Group group, JoinRequestType joinRequestType) {
+        if(group.getMemberCount() == 6) {
+            if(joinRequestType == JoinRequestType.STUDENT_REQUEST) {
+                throw new FullGroupException("Nhóm đã đầy, không thể gửi yêu cầu tham gia");
+            } else {
+                throw new FullGroupException("Nhóm đã đầy, không thể mời sinh viên vào nhóm");
+            }
+        }
     }
 
 
@@ -94,12 +110,12 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                                                  HandleJoinRequestRequest handleJoinRequestRequest) {
 
         JoinRequest joinRequest = findById(joinRequestId);
-        JoinRequest updatedJoinRequest = new JoinRequest();
+        JoinRequest updatedJoinRequest;
 
         if(joinRequest.getRequestType() == JoinRequestType.STUDENT_REQUEST) {
             updatedJoinRequest = handleStudentJoinRequest(joinRequest, handleJoinRequestRequest);
         } else  {
-            updatedJoinRequest = handleGropuInvitationJoinRequest(joinRequest, handleJoinRequestRequest);
+            updatedJoinRequest = handleGroupInvitationJoinRequest(joinRequest, handleJoinRequestRequest);
         }
 
         return joinRequestMapper.toResponse(updatedJoinRequest);
@@ -109,33 +125,78 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     private JoinRequest handleStudentJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
 
         JoinRequestStatus status = handleJoinRequestRequest.getRequestStatus();
+        String denyReason = handleJoinRequestRequest.getDenyReason();
+
+        User user = joinRequest.getUser();
+        Group group = joinRequest.getGroup();
+
+        JoinRequest result;
 
         switch (status) {
-            case APPROVED -> {
+            case APPROVED -> { // group-leader approved
+                groupService.addMember(group.getGroupId(), user.getUserId());
+                joinRequest.setRequestStatus(JoinRequestStatus.APPROVED);
+                // add event listener
             }
-            case DENIED -> {
+            case DENIED -> { // group-leader denied
+                if (denyReason == null || denyReason.isBlank()) {
+                    throw new EmptyDeniedReasonException("Vui lòng điền lý do khi từ chối");
+                }
+                joinRequest.setRequestStatus(JoinRequestStatus.DENIED);
+                joinRequest.setDenyReason(handleJoinRequestRequest.getDenyReason());
+                    // add event listener
             }
-            case WITHDRAWN -> {
+            case WITHDRAWN -> { // user withdrawn
+                joinRequest.setRequestStatus(JoinRequestStatus.WITHDRAWN);
+            }
+            default -> {
+                throw new IllegalStateException("Trạng thai xử lý không hợp lệ " + status);
             }
         }
 
-        return null;
+        joinRequest.setUpdatedAt(LocalDateTime.now());
+        result = joinRequestRepository.save(joinRequest);
+
+        return result;
     }
 
-    private JoinRequest handleGropuInvitationJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
+
+    private JoinRequest handleGroupInvitationJoinRequest(JoinRequest joinRequest, HandleJoinRequestRequest handleJoinRequestRequest) {
 
         JoinRequestStatus status = handleJoinRequestRequest.getRequestStatus();
+        String denyReason = handleJoinRequestRequest.getDenyReason();
+
+        User user = joinRequest.getUser();
+        Group group = joinRequest.getGroup();
+
+        JoinRequest result;
 
         switch (status) {
-            case APPROVED -> {
+            case APPROVED -> { // user approved
+                groupService.addMember(group.getGroupId(), user.getUserId());
+                joinRequest.setRequestStatus(JoinRequestStatus.APPROVED);
+                // add event listener
             }
-            case DENIED -> {
+            case DENIED -> { // user denied
+                if (denyReason == null || denyReason.isBlank()) {
+                    throw new EmptyDeniedReasonException("Vui lòng điền lý do khi từ chối");
+                }
+                joinRequest.setRequestStatus(JoinRequestStatus.DENIED);
+                joinRequest.setDenyReason(handleJoinRequestRequest.getDenyReason());
+                // add event listener
             }
-            case WITHDRAWN -> {
+            case WITHDRAWN -> { // group-leader withdrawn
+                joinRequest.setRequestStatus(JoinRequestStatus.WITHDRAWN);
+            }
+            default -> {
+                throw new IllegalStateException("Trạng thai xử lý không hợp lệ " + status);
             }
         }
 
-        return null;
+        joinRequest.setUpdatedAt(LocalDateTime.now());
+        result = joinRequestRepository.save(joinRequest);
+
+        return result;
     }
 
 

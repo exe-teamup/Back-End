@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByAccount_Email(String email);
     Optional<User> findByAccountId(Long accountId);
     Optional<User> findByUserId(Long userId);

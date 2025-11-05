@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -50,6 +51,11 @@ public class Group {
     @Column(name = "image_url")
     private String imageUrl;
 
-//    @OneToMany(mappedBy = "group")
-//    private List<GroupLecturer> groupLecturers;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

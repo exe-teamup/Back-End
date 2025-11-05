@@ -35,6 +35,10 @@ public class JoinRequest {
     @NotNull
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
+    @NotNull
+    private LocalDateTime updatedAt;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "request_status")
     @NotNull
@@ -53,12 +57,14 @@ public class JoinRequest {
                        LocalDateTime createdAt,
                        JoinRequestStatus requestStatus,
                        String denyReason,
-                       JoinRequestType requestType) {
+                       JoinRequestType requestType,
+                       LocalDateTime updatedAt) {
         this.user = user;
         this.group = group;
         this.createdAt = createdAt;
         this.requestStatus = requestStatus;
         this.denyReason = denyReason;
         this.requestType = requestType;
+        this.updatedAt = updatedAt;
     }
 }

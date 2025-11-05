@@ -2,6 +2,7 @@ package com.team.exeteamup.controller;
 
 import com.team.exeteamup.dto.request.MoveCourseRequest;
 import com.team.exeteamup.dto.request.StudentProfileRequest;
+import com.team.exeteamup.dto.request.SwapRequest;
 import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.service.inter.UserProfileService;
@@ -36,7 +37,7 @@ public class UserController {
 
     @GetMapping("profile")
     public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
-        StudentProfileResponse response = userProfileService.getStudentProfile(token);
+        Object response = userProfileService.getProfile(token);
         return ResponseEntity.ok(response);
     }
 
@@ -119,6 +120,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi thêm  sinh viên " + e.getMessage());
         }
+    }
+
+    @PostMapping("/swap-course")
+    public ResponseEntity<Map<String, UserResponse>> swapStudentCourse(
+            @Valid @RequestBody SwapRequest request) {
+        Map<String, UserResponse> responses =  userService.swapStudentCourse(request);
+        return ResponseEntity.ok(responses);
     }
 
     @PutMapping("/move-course")
