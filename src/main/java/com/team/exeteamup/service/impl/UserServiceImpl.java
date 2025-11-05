@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Cacheable(cacheNames = "user", key = "#id")
+    @Cacheable(cacheNames = "users_list", key = "'allStudents'")
     public List<UserResponse> getAllStudents() {
         List<User> users = userRepository.findAll();
         return users.stream()
