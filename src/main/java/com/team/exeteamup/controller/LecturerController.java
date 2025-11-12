@@ -55,7 +55,7 @@ public class LecturerController {
 
 
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER'})")
+    @PreAuthorize("hasAnyAuthority({'ADMIN', 'MODERATOR'})")
     public ResponseEntity<List<LecturerResponse>> getAllLecturers() {
         List<LecturerResponse> lecturerResponses = lecturerService.getAllLecturers();
         return ResponseEntity.ok(lecturerResponses);
