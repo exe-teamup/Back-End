@@ -77,8 +77,8 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     @Transactional
     public JoinRequestResponse save(JoinRequestRequest request) {
 
-        Group group = groupService.findGroupById(request.getGroupId());
         User user = userService.findById(request.getStudentId());
+        Group group = groupService.findGroupById(request.getGroupId());
 
         checkGroupCapacityAndResponse(group, request.getRequestType());
 

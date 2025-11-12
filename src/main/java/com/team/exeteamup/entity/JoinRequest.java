@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
 import com.team.exeteamup.enums.joinRequest.JoinRequestType;
 import jakarta.persistence.*;

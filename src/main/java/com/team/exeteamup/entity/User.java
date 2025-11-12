@@ -1,5 +1,7 @@
 package com.team.exeteamup.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.exeteamup.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,9 +63,11 @@ public class User {
     private Boolean isLeader;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<JoinRequest> joinRequests;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Post> posts;
 
 }
