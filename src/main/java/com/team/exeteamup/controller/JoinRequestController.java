@@ -39,7 +39,7 @@ public class JoinRequestController {
 
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN'})")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'STUDENT'})")
     public ResponseEntity<List<JoinRequestResponse>> getAll() {
         return ResponseEntity.ok(joinRequestService.findAll());
     }
