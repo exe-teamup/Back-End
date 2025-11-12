@@ -20,10 +20,7 @@ import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -76,6 +73,9 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "users", allEntries = true)
     public List<UserResponse> importStudentsFromExcel(MultipartFile file) throws IOException {
         List<User> studentsToSave = new ArrayList<>();
+        List<UserResponse> responses = new ArrayList<>();
+
+        DataFormatter dataFormatter = new DataFormatter();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -90,29 +90,31 @@ public class UserServiceImpl implements UserService {
                     continue;
                 }
 
-                String email = currentRow.getCell(0).getStringCellValue().trim();
-                String fullName = currentRow.getCell(1).getStringCellValue().trim();
-                String userCode = currentRow.getCell(2).getStringCellValue().trim();
-                String phone = currentRow.getCell(3).getStringCellValue().trim();
-                String bio = currentRow.getCell(4) != null ? currentRow.getCell(4).getStringCellValue().trim() : null;
-                String majorName = currentRow.getCell(5).getStringCellValue().trim();
-                String courseCode = currentRow.getCell(6).getStringCellValue().trim();
+                String email = getSafeCellValue(currentRow, 0, dataFormatter);
+                String fullName = getSafeCellValue(currentRow, 1, dataFormatter);
+                String userCode = getSafeCellValue(currentRow, 2, dataFormatter);
+                String phone = getSafeCellValue(currentRow, 3, dataFormatter);
+                String bio = getSafeCellValue(currentRow, 4, dataFormatter);
+                String majorName = getSafeCellValue(currentRow, 5, dataFormatter);
+                String courseCode = getSafeCellValue(currentRow, 6, dataFormatter);
+
+                if (email.isEmpty() && userCode.isEmpty()) continue;
 
                 if (accountRepository.existsByEmail(email)) continue;
                 if (userRepository.existsByUserCode(userCode)) continue;
 
                 if (studentsToSave.stream().anyMatch(s -> s.getUserCode().equals(userCode))) {
-                    throw new RuntimeException("Duplicate student code in file: " + userCode);
+                    throw new AppException("File chứa mã sinh viên trùng lặp: " + userCode);
                 }
                 if (studentsToSave.stream().anyMatch(s -> s.getAccount().getEmail().equals(email))) {
-                    throw new RuntimeException("Duplicate email in file: " + email);
+                    throw new AppException("File chứa email trùng lặp: " + email);
                 }
 
                 Major major = majorRepository.findByMajorName(majorName)
-                        .orElseThrow(() -> new RuntimeException("Major not found: " + majorName));
+                        .orElseThrow(() -> new AppException("Ngành học không tồn tại: " + majorName));
 
                 Course course = courseRepository.findByCourseCode(courseCode)
-                        .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
+                        .orElseThrow(() -> new AppException("Lớp học không tồn tại: " + courseCode));
 
                 Account account = Account.builder()
                         .email(email)
@@ -138,15 +140,25 @@ public class UserServiceImpl implements UserService {
 
                 studentsToSave.add(user);
             }
+
+            if (!studentsToSave.isEmpty()) {
+                List<User> savedUsers = userRepository.saveAll(studentsToSave);
+
+                responses = savedUsers.stream()
+                        .map(studentMapper::toResponse)
+                        .collect(Collectors.toList());
+            }
         }
 
-        List<User> savedUsers = userRepository.saveAll(studentsToSave);
-
-        List<UserResponse> responses = savedUsers.stream()
-                .map(studentMapper::toResponse)
-                .collect(Collectors.toList());
-
         return responses;
+    }
+
+    private String getSafeCellValue(Row row, int index, DataFormatter formatter) {
+        Cell cell = row.getCell(index);
+        if (cell == null) {
+            return "";
+        }
+        return formatter.formatCellValue(cell).trim();
     }
 
     @Override
