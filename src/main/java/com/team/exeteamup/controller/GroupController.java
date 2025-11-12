@@ -61,7 +61,7 @@ public class GroupController {
 
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyAuthority({'ADMIN', 'LECTURER', 'STUDENT'})")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LECTURER', 'STUDENT')")
     public ResponseEntity<?> getGroupById(@PathVariable long id) {
         GroupResponse response = groupService.getGroupById(id);
         return ResponseEntity.ok(response);
