@@ -19,7 +19,9 @@ public class SemesterResponse {
     private long semesterId;
     private String semesterCode;
     private String semesterName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate endDate;
     private SemesterStatus semesterStatus;
 }

@@ -35,17 +35,18 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostMapper postMapper;
-    private final UserService userService;
     private final UserUtils userUtils;
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_post", allEntries = true)
+    @CacheEvict(cacheNames = "group_posts", allEntries = true)
     public GroupPostResponse createGroupPost(GroupPostRequest groupPostRequest) {
 
-        endIfUserHasNoGroup(groupPostRequest.getUserId());
+        User user = userUtils.getCurrentUser();
 
-        Post post = postMapper.toEntity(groupPostRequest);
+        endIfUserHasNoGroup(user);
+
+        Post post = postMapper.toEntity(groupPostRequest, user);
 
         Post savedPost = postRepository.save(post);
 
@@ -61,10 +62,17 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    @Override
+    @Transactional
+    @CacheEvict(cacheNames = "group_posts", allEntries = true)
+    public GroupPostResponse updateGroupPost(Long id, GroupPostRequest request) {
+        return null;
+    }
+
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group", allEntries = true)
+    @CacheEvict(cacheNames = "user_posts", allEntries = true)
     public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
         User user = userUtils.getCurrentUser();
         Post post = postMapper.toEntity(userPostRequest, user);
@@ -73,9 +81,24 @@ public class PostServiceImpl implements PostService {
         return postMapper.toUserPostResponse(savedPost);
     }
 
+    @Override
+    @Cacheable("user_posts")
+    public List<UserPostResponse> getUserPosts() {
+        List<Post> posts = postRepository.findByPostTypeAndPostStatus(PostType.USER_POST, PostStatus.ACTIVE);
+        return posts.stream()
+                .map(postMapper::toUserPostResponse)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
-    private void endIfUserHasNoGroup(long userId) {
-        User user = userService.findById(userId);
+    @Override
+    @Transactional
+    @CacheEvict(cacheNames = "user_posts", allEntries = true)
+    public UserPostResponse updateUserPost(Long id, UserPostRequest request) {
+        return null;
+    }
+
+
+    private void endIfUserHasNoGroup(User user) {
         if(user.getGroup() == null) {
             throw new AppException("User has no group");
         }

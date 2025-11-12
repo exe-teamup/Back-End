@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -191,7 +192,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByCourse_CourseId(courseId)
                 .stream()
                 .map(groupMapper::toCourseResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

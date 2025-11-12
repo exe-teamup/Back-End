@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.exeteamup.entity.Account;
 import com.team.exeteamup.enums.UserStatus;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class UserResponse {
     private String userCode;
     private String phoneNumber;
     private String bio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private Boolean isLeader;
     private UserStatus userStatus;

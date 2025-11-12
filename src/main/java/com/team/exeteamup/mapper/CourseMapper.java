@@ -9,6 +9,7 @@ import com.team.exeteamup.entity.Semester;
 import com.team.exeteamup.enums.CourseStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class CourseMapper {
     public List<CourseResponse> toResponseList(List<Course> courses) {
         return courses.stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void updateEntity(Course course, CourseUpdateRequest request) {

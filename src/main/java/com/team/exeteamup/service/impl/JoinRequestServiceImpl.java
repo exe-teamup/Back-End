@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -57,7 +59,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 .findAll()
                 .stream()
                 .map(joinRequestMapper::toResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 
@@ -67,7 +69,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
                 .findByUser(userService.findById(studentId))
                 .stream()
                 .map(joinRequestMapper::toResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 

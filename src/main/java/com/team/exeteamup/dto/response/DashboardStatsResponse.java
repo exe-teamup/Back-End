@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class DashboardStatsResponse {
     @Builder
     public static class RecentActivityResponse {
         private String content;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
         private LocalDateTime createdAt;
     }
 }
