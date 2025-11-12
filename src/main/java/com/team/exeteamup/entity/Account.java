@@ -41,9 +41,11 @@ public class Account implements UserDetails {
     private List<AccountNotification> accountNotifications;
 
     @OneToOne(mappedBy = "account")
+    @JsonIgnore
     private User user;
 
     @OneToOne(mappedBy = "account")
+    @JsonIgnore
     private Lecturer lecturer;
 
     @Enumerated(EnumType.STRING)

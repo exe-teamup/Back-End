@@ -1,5 +1,6 @@
 package com.team.exeteamup.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.exeteamup.enums.GroupStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,12 +33,15 @@ public class Group {
     private GroupStatus groupStatus;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private List<User> users;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<JoinRequest> joinRequests;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private List<Post> posts;
 
     @ManyToOne
