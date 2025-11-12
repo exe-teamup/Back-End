@@ -7,6 +7,7 @@ import com.team.exeteamup.dto.response.StudentProfileResponse;
 import com.team.exeteamup.dto.response.UserResponse;
 import com.team.exeteamup.service.inter.UserProfileService;
 import com.team.exeteamup.service.inter.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserProfileService userProfileService;
@@ -35,13 +37,17 @@ public class UserController {
             "studentId", "fullName", "studentCode", "studentStatus", "createdAt", "leader"
     ));
 
+
     @GetMapping("profile")
-    public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String token) {
-        Object response = userProfileService.getProfile(token);
+    @PreAuthorize("hasAuthority({'STUDENT'})")
+    public ResponseEntity<?> getProfile() {
+        Object response = userProfileService.getProfile();
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("{id}")
+    @PreAuthorize("hasAuthority({'STUDENT'})")
     public ResponseEntity<StudentProfileResponse> updateStudentProfile(
             @PathVariable Long id,
             @RequestBody StudentProfileRequest studentProfileRequest) {
@@ -50,38 +56,50 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN'})")
     public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long id) {
         userService.deleteStudentById(id);
         return ResponseEntity.ok(Map.of("message", "Xóa sinh viên thành công"));
     }
 
+
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER'})")
     public ResponseEntity<List<UserResponse>> getAllStudents() {
         List<UserResponse> students = userService.getAllStudents();
         return ResponseEntity.ok(students);
     }
 
+
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
     public ResponseEntity<UserResponse> getStudentById(@PathVariable Long id) {
         UserResponse response = userService.getStudentById(id);
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("without-group")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER'})")
     public ResponseEntity<List<UserResponse>> getStudentsWithoutGroup() {
         List<UserResponse> users = userService.getStudentWithoutGroup();
         return ResponseEntity.ok(users);
     }
 
+
     @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
     public ResponseEntity<List<UserResponse>> searchStudents(
             @RequestParam("keyword") String keyword) {
         List<UserResponse> result = userService.searchStudents(keyword);
         return ResponseEntity.ok(result);
     }
 
+
     @GetMapping("/page")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER'})")
     public ResponseEntity<Page<UserResponse>> getAllStudents(
             @PageableDefault(size = 10, sort = "studentId", direction = Sort.Direction.ASC)
             Pageable pageable,
@@ -101,7 +119,9 @@ public class UserController {
         return ResponseEntity.ok(studentPage);
     }
 
+
     @PostMapping(value = "import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN'})")
         public ResponseEntity<List<UserResponse>> importStudents(@RequestParam("file") MultipartFile file) {
         try {
             List<UserResponse> response = userService.importStudentsFromExcel(file);
@@ -111,7 +131,9 @@ public class UserController {
         }
     }
 
+
     @PostMapping(value = "import-not-eligible", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN'})")
     public ResponseEntity<?> importStudentNotEligible(@RequestParam("file") MultipartFile file) {
         try {
             userService.importStudentsNotEligible(file);
@@ -122,12 +144,14 @@ public class UserController {
         }
     }
 
+
     @PostMapping("/swap-course")
     public ResponseEntity<Map<String, UserResponse>> swapStudentCourse(
             @Valid @RequestBody SwapRequest request) {
         Map<String, UserResponse> responses =  userService.swapStudentCourse(request);
         return ResponseEntity.ok(responses);
     }
+
 
     @PutMapping("/move-course")
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -137,7 +161,9 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/course/{id}")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
     public ResponseEntity<List<UserResponse>> getByCourseId(@PathVariable Long id) {
         List<UserResponse> result = userService.getStudentByCourseId(id);
         return ResponseEntity.ok(result);

@@ -53,35 +53,6 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
     @Override
     @Transactional
-    public List<AccountNotificationResponse> sendNotificationToAccounts(
-            AccountNotificationRequest accountNotificationRequest) {
-
-//        List<Account> presentAccounts =
-//                accountService.presentAccounts(accountNotificationRequest.getAccountIds());
-//        Notification notification =
-//                notificationService.findNotificationById(accountNotificationRequest.getNotificationId());
-//
-//        List<AccountNotification> saved = accountNotificationRepository.saveAll(
-//                presentAccounts.stream()
-//                        .map(account -> new AccountNotification(
-//                                account,
-//                                notification,
-//                                LocalDateTime.now(),
-//                                false))
-//                        .toList()
-//        );
-//
-//        return saved
-//                .stream()
-//                .map(accountNotificationMapper::toResponse)
-//                .toList();
-        return null;
-
-    }
-
-
-    @Override
-    @Transactional
     public List<AccountNotificationResponse> checkNotifications(List<Long> accountNotificationIds) {
         List<AccountNotification> accountNotifications =
                 accountNotificationRepository.findAllById(accountNotificationIds);

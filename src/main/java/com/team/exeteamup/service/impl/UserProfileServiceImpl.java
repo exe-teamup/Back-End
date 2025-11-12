@@ -13,6 +13,7 @@ import com.team.exeteamup.repository.AccountRepository;
 import com.team.exeteamup.repository.LecturerRepository;
 import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserProfileService;
+import com.team.exeteamup.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,16 @@ import java.util.Optional;
 @Transactional
 public class UserProfileServiceImpl implements UserProfileService {
 
-    private final TokenServiceImpl tokenService;
     private final UserRepository userRepository;
     private final StudentProfileMapper studentProfileMapper;
     private final LecturerRepository lecturerRepository;
     private final LecturerMapper lecturerMapper;
     private final AccountMapper accountMapper;
+    private final UserUtils userUtils;
 
     @Override
-    public Object getProfile(String token) {
-        Account account = tokenService.getAccountByToken(token);
+    public Object getProfile() {
+        Account account = userUtils.getCurrentAccount();
 
         switch (account.getRole()) {
             case STUDENT:

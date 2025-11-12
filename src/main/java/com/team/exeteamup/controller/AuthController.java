@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/authentication")
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -21,6 +21,7 @@ public class AuthController {
         LoginResponse response = loginService.loginGoogle(loginRequest);
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("logout")
     public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
