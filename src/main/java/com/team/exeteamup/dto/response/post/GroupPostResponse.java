@@ -23,7 +23,7 @@ public class GroupPostResponse {
     private String title;
     private String postDetail;
     private PostStatus postStatus;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private PostType postType;
     private List<PostMajorResponse> postMajors;

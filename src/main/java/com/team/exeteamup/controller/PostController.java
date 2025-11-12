@@ -27,7 +27,7 @@ public class PostController {
 
 
     @PostMapping("/group-post")
-    @PreAuthorize("hasAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
     public ResponseEntity<GroupPostResponse> createGroupPost(@RequestBody GroupPostRequest groupPostRequest) {
         GroupPostResponse groupPostResponse = postService.createGroupPost(groupPostRequest);
         return ResponseEntity.ok(groupPostResponse);
@@ -35,7 +35,7 @@ public class PostController {
 
 
     @GetMapping("/group-post")
-    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<GroupPostResponse>> getGroupPost() {
         List<GroupPostResponse> groupPostResponse = postService.getGroupPosts();
         return ResponseEntity.ok(groupPostResponse);

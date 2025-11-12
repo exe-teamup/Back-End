@@ -23,24 +23,23 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig {
 
-    // Cấu hình ObjectMapper RIÊNG cho Redis (quan trọng nhất)
     private ObjectMapper redisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        // Dòng này QUAN TRỌNG: giúp Redis biết data là class nào để ko bị lỗi LinkedHashMap
         mapper.activateDefaultTyping(
                 mapper.getPolymorphicTypeValidator(),
                 ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY
+                JsonTypeInfo.As.WRAPPER_ARRAY
         );
         return mapper;
     }
 
+
     @Bean
     public RedisCacheManager cacheManager(LettuceConnectionFactory connectionFactory) {
-        // Sử dụng mapper đã cấu hình ở trên
+
         GenericJackson2JsonRedisSerializer serializer =
                 new GenericJackson2JsonRedisSerializer(redisObjectMapper());
 
@@ -55,7 +54,7 @@ public class RedisConfig {
                 .build();
     }
 
-    // Bean redisTemplate (nếu bạn dùng thủ công ngoài @Cacheable)
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
