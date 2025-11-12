@@ -13,12 +13,16 @@ import java.util.List;
 
 public interface PostService {
     GroupPostResponse createGroupPost(GroupPostRequest groupPostRequest);
+    List<GroupPostResponse> getGroupPosts();
+    GroupPostResponse updateGroupPost(Long id, GroupPostRequest request);
     UserPostResponse createUserPost(UserPostRequest userPostRequest);
+    List<UserPostResponse> getUserPosts();
+    UserPostResponse updateUserPost(Long id, UserPostRequest request);
     List<PostResponse> getAllPosts();
     PostResponse updatePost(Long id, PostUpdateRequest request);
     void deletePost(Long id);
     Post findById(Long postId);
     List<PostResponse> getPostsByGroupId(Long groupId, PostStatus postStatus);
     PostResponse getPostById(Long id);
-    List<GroupPostResponse> getGroupPosts();
+
 }

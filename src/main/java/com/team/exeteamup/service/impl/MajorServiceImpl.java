@@ -113,7 +113,7 @@ public class MajorServiceImpl implements MajorService {
         List<Major> majors = majorRepository.findByMajorStatusIsTrue();
         return majors.stream()
                 .map(majorMapper::toResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -182,6 +182,6 @@ public class MajorServiceImpl implements MajorService {
         return majorIds
                 .stream()
                 .map(id -> findById(id))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

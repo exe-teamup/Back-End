@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(studentMapper::toResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Page<UserResponse> getAllStudents(Pageable pageable) {
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
 
                 responses = savedUsers.stream()
                         .map(studentMapper::toResponse)
-                        .collect(Collectors.toList());
+                        .collect(Collectors.toCollection(ArrayList::new));
             }
         }
 
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
         }
         return users.stream()
                 .map(studentMapper::toResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService {
 
         return course.getUsers()
                 .stream().map(studentMapper::toResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

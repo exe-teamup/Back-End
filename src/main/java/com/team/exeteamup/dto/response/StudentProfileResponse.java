@@ -1,5 +1,6 @@
 package com.team.exeteamup.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class StudentProfileResponse {
     private String email;
     private String phoneNumber;
     private String bio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private boolean isLeader;
     private String studentStatus;

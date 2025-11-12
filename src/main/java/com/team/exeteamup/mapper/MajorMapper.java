@@ -4,6 +4,7 @@ import com.team.exeteamup.dto.response.MajorResponse;
 import com.team.exeteamup.entity.Major;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,6 @@ public class MajorMapper {
     public List<MajorResponse> toResponseList(List<Major> majors) {
         return majors.stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
