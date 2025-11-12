@@ -9,7 +9,6 @@ import java.util.List;
 public interface AccountNotificationService {
     List<AccountNotificationResponse> getAccountNotifications();
     List<AccountNotificationResponse> getAccountNotificationsByAccountId(long accountId); // remove parameter after config authorization
-    List<AccountNotificationResponse> sendNotificationToAccounts(AccountNotificationRequest accountNotificationRequest);
     List<AccountNotificationResponse> checkNotifications(List<Long> accountNotificationIds);
     AccountNotificationResponse findResponseById(long accountNotificationId);
     AccountNotificationResponse checkNotification(long accountNotificationId);

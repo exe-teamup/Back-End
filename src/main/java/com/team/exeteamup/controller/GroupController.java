@@ -6,8 +6,10 @@ import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.service.inter.GroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/groups")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class GroupController {
 
     private final GroupService groupService;
+
 
     @PostMapping("")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody GroupRequest groupRequest) {
@@ -26,13 +30,14 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
+
     @PostMapping("{id}/leave")
-    public ResponseEntity<String> leaveGroup(
-            @PathVariable Long id,
-            @RequestHeader(value = "Authorization", required = false) String token) {
+    public ResponseEntity<String> leaveGroup(@PathVariable Long id,
+                                             @RequestHeader(value = "Authorization", required = false) String token) {
         groupService.leaveGroup(id, token);
         return ResponseEntity.ok("Rời nhóm thành công");
     }
+
 
     @PostMapping("{id}/add-member/{memberId}")
     public ResponseEntity<GroupResponse> addMember(
@@ -42,10 +47,9 @@ public class GroupController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("")
-    public ResponseEntity<List<GroupResponse>> getAllGroups(
-            @RequestParam(required = false) String status
-    ) {
+    public ResponseEntity<List<GroupResponse>> getAllGroups(@RequestParam(required = false) String status) {
         List<GroupResponse> groups;
         if (status != null) {
             groups = groupService.getGroupsByStatus(status);
@@ -55,11 +59,14 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
+
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyAuthority({'ADMIN', 'LECTURER', 'STUDENT'})")
     public ResponseEntity<?> getGroupById(@PathVariable long id) {
         GroupResponse response = groupService.getGroupById(id);
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("{id}/course")
     public ResponseEntity<List<GroupResponse>> getGroupsByCourseId(@PathVariable("id") Long id) {
@@ -67,44 +74,46 @@ public class GroupController {
         return ResponseEntity.ok(responses);
     }
 
+
     @GetMapping("/filter")
-    public ResponseEntity<List<GroupResponse>> filterGroups(
-            @RequestParam GroupFilterStatus status) {
+    public ResponseEntity<List<GroupResponse>> filterGroups(@RequestParam GroupFilterStatus status) {
         List<GroupResponse> response = groupService.filterGroups(status);
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("{id}")
-    public ResponseEntity<GroupResponse> updateGroup(
-            @PathVariable long id,
-            @RequestBody GroupUpdateRequest request) {
+    public ResponseEntity<GroupResponse> updateGroup(@PathVariable long id,
+                                                     @RequestBody GroupUpdateRequest request) {
         GroupResponse response = groupService.updateGroup(id, request);
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("{id}/transfer-leader")
-    public ResponseEntity<GroupResponse> transferLeader(
-            @PathVariable Long id,
-            @RequestBody TransferLeaderRequest request,
-            @RequestHeader(value = "Authorization", required = false) String token) {
+    public ResponseEntity<GroupResponse> transferLeader(@PathVariable Long id,
+                                                        @RequestBody TransferLeaderRequest request,
+                                                        @RequestHeader(value = "Authorization", required = false) String token) {
         GroupResponse response = groupService.transferLeader(id, request.getNewLeaderId(), token);
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("{id}/kick/{memberId}")
-    public ResponseEntity<GroupResponse> kickMember(
-            @PathVariable Long id,
-            @PathVariable Long memberId,
-            @RequestHeader(value = "Authorization", required = false) String token) {
+    public ResponseEntity<GroupResponse> kickMember(@PathVariable Long id,
+                                                    @PathVariable Long memberId,
+                                                    @RequestHeader(value = "Authorization", required = false) String token) {
         GroupResponse response = groupService.kickMember(id, memberId, token);
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Map<String, String>> deleteGroup(@PathVariable long id) {
         groupService.deleteGroup(id);
         return ResponseEntity.ok(Map.of("message", "Đã xóa nhóm thành công"));
     }
+
 
     @GetMapping("/lecturer/{id}")
     public ResponseEntity<List<GroupResponse>> getGroupByLecturer(@PathVariable long id) {
