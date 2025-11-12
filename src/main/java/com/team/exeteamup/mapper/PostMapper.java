@@ -28,7 +28,7 @@ public class PostMapper {
     private final PostMajorMapper postMajorMapper;
     private final GroupService groupService;
 
-    public Post toEntity(GroupPostRequest request) {
+    public Post toEntity(GroupPostRequest request, User user) {
         Post post = new Post();
 
         List<PostMajor> postMajors = request.getPostMajorRequests().stream()
@@ -42,8 +42,8 @@ public class PostMapper {
         post.setPostDetail(request.getPostDetail());
         post.setPostStatus(PostStatus.ACTIVE);
         post.setPostType(PostType.GROUP_POST);
-        post.setUser(userService.findById(request.getUserId()));
-        post.setGroup(groupService.findGroupById(request.getGroupId()));
+        post.setUser(user);
+        post.setGroup(user.getGroup());
         post.setPostMajors(postMajors);
 
         return post;

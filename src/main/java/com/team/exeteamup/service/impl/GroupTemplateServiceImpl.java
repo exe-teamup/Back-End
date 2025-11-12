@@ -13,7 +13,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,7 +47,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
     public List<GroupTemplateResponse> getAll() {
         return groupTemplateRepository.findAll().stream()
                 .map(groupTemplateMapper::toResponse)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 
