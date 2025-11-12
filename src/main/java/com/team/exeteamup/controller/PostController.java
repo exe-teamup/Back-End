@@ -51,7 +51,7 @@ public class PostController {
 
 
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         List<PostResponse> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
