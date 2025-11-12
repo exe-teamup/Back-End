@@ -7,6 +7,7 @@ import com.team.exeteamup.dto.response.post.PostResponse;
 import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.PostMajor;
+import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
 import com.team.exeteamup.enums.post.PostType;
 import com.team.exeteamup.service.inter.GroupService;
@@ -14,6 +15,7 @@ import com.team.exeteamup.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,14 +48,15 @@ public class PostMapper {
         return post;
     }
 
-    public Post toEntity(UserPostRequest request) {
+    public Post toEntity(UserPostRequest request, User user ) {
         return Post.builder()
                 .title(request.getTitle())
                 .postDetail(request.getPostDetail())
                 .postStatus(PostStatus.ACTIVE)
                 .postType(PostType.USER_POST)
-                .user(userService.findById(request.getUserId()))
+                .user(user)
                 .group(null)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

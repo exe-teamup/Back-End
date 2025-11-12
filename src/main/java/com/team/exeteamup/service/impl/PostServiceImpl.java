@@ -14,6 +14,7 @@ import com.team.exeteamup.mapper.PostMapper;
 import com.team.exeteamup.repository.PostRepository;
 import com.team.exeteamup.service.inter.PostService;
 import com.team.exeteamup.service.inter.UserService;
+import com.team.exeteamup.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final UserUtils userUtils;
 
     @Override
     @Transactional
@@ -63,8 +65,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @CacheEvict(cacheNames = "group", allEntries = true)
     public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
-
-        Post post = postMapper.toEntity(userPostRequest);
+        User user = userUtils.getCurrentUser();
+        Post post = postMapper.toEntity(userPostRequest, user);
         Post savedPost = postRepository.save(post);
 
         return postMapper.toUserPostResponse(savedPost);

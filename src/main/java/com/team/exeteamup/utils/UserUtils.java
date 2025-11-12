@@ -30,7 +30,6 @@ public class UserUtils implements ApplicationContextAware {
 
     public Account getCurrentAccount() {
         String mail = SecurityContextHolder.getContext().getAuthentication().getName();
-
         return accountRepository.findByEmail(mail).get();
     }
 
