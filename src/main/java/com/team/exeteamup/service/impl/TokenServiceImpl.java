@@ -36,7 +36,6 @@ public class TokenServiceImpl implements TokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 ngày
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println(account.getId() + " token: " + token);
         return token;
     }
 

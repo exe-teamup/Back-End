@@ -11,9 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserPostRequest {
-    private Long userId;
     private String title;
     private String postDetail;
     private PostStatus postStatus;
-    private LocalDateTime createdAt;
 }
