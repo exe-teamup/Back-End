@@ -22,7 +22,7 @@ public class GroupTemplateController {
 
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority({'ADMIN', 'MODERATOR'})")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<GroupTemplateResponse>> getAll() {
         List<GroupTemplateResponse> templates = groupTemplateService.getAll();
         return ResponseEntity.ok(templates);
