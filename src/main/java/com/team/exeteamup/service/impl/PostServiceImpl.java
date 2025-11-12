@@ -9,6 +9,7 @@ import com.team.exeteamup.dto.response.post.UserPostResponse;
 import com.team.exeteamup.entity.Post;
 import com.team.exeteamup.entity.User;
 import com.team.exeteamup.enums.post.PostStatus;
+import com.team.exeteamup.enums.post.PostType;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.mapper.PostMapper;
 import com.team.exeteamup.repository.PostRepository;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,11 +55,10 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     @Cacheable("group_posts")
     public List<GroupPostResponse> getGroupPosts() {
-        List<Post> posts = postRepository.findByPostTypeAndPostStatus(
-                com.team.exeteamup.enums.post.PostType.GROUP_POST,
-                PostStatus.ACTIVE
-        );
-        return posts.stream().map(postMapper::toGroupPostResponse).collect(Collectors.toList());
+        List<Post> posts = postRepository.findByPostTypeAndPostStatus(PostType.GROUP_POST, PostStatus.ACTIVE);
+        return posts.stream()
+                .map(postMapper::toGroupPostResponse)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 
