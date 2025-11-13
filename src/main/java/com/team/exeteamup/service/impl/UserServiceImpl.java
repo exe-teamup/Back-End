@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Cacheable(cacheNames = "users_list", key = "'allStudents'")
+    //@Cacheable(cacheNames = "users_list", key = "'allStudents'")
     public List<UserResponse> getAllStudents() {
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "users", allEntries = true)
+    //@CacheEvict(cacheNames = "users", allEntries = true)
     public List<UserResponse> importStudentsFromExcel(MultipartFile file) throws IOException {
         List<User> studentsToSave = new ArrayList<>();
         List<UserResponse> responses = new ArrayList<>();
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "users", allEntries = true)
+    //@CacheEvict(cacheNames = "users", allEntries = true)
     public void importStudentsNotEligible(MultipartFile file) throws IOException {
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "user", allEntries = true)
+    //@CacheEvict(cacheNames = "user", allEntries = true)
     public void deleteStudentById(long studentId) {
         User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));
@@ -217,13 +217,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable("users_no_group")
+    //@Cacheable("users_no_group")
     public List<UserResponse> getStudentWithoutGroup() {
         return studentMapper.toResponseList(userRepository.findByGroupIsNull());
     }
 
     @Override
-    @Cacheable(value = "user", key = "#studentId")
+    //@Cacheable(value = "user", key = "#studentId")
     public UserResponse getStudentById(long studentId) {
         User user = userRepository.findByUserId(studentId)
                 .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
@@ -243,7 +243,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "user", allEntries = true)
+    //@CacheEvict(cacheNames = "user", allEntries = true)
     public UserResponse moveStudentCourses(Long newCourseId) {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attr.getRequest();
@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "users_by_course", key = "#courseId")
+    //@Cacheable(value = "users_by_course", key = "#courseId")
     public List<UserResponse> getStudentByCourseId(long courseId) {
         Course course = courseService.findById(courseId);
 
@@ -322,7 +322,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "users", allEntries = true)
+    //@CacheEvict(cacheNames = "users", allEntries = true)
     public Map<String, UserResponse> swapStudentCourse(SwapRequest request) {
         if (request.getStudentId1().equals(request.getStudentId2())) {
             throw new AppException("Không thể hoán đổi với chính mình");

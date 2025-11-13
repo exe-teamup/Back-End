@@ -44,7 +44,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "lecturers", allEntries = true)
+    //@CacheEvict(cacheNames = "lecturers", allEntries = true)
     public List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException {
         List<Lecturer> lecturers = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
+    //@CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
     public LecturerResponse updateLecturer(Long lecturerId, LecturerRequest request) {
         Lecturer lecturer = lecturerRepository.findById(lecturerId)
                 .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
@@ -112,7 +112,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    @Cacheable("lecturers")
+    //@Cacheable("lecturers")
     public List<LecturerResponse> getAllLecturers() {
         List<Lecturer> lecturers = lecturerRepository.findAll();
 
@@ -122,7 +122,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    @Cacheable(value = "lecturer", key = "#lecturerId")
+    //@Cacheable(value = "lecturer", key = "#lecturerId")
     public LecturerResponse getLecturer(Long lecturerId) {
         Lecturer lecturer = lecturerRepository.findById(lecturerId)
                 .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
@@ -132,7 +132,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
+    //@CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
     public LecturerResponse deleteLecturer(Long lecturerId) {
 
         Lecturer lecturer = findById(lecturerId);
@@ -148,7 +148,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    @Cacheable(value = "lecturer", key = "#lecturerId")
+    //@Cacheable(value = "lecturer", key = "#lecturerId")
     public Lecturer findById(Long lecturerId) {
         return lecturerRepository.findById(lecturerId)
                 .orElseThrow(() ->

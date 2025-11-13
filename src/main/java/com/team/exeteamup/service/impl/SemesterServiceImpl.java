@@ -24,7 +24,7 @@ public class SemesterServiceImpl implements SemesterService {
     private final SemesterRepository semesterRepository;
 
     @Override
-    @CacheEvict(value = "semesters", allEntries = true)
+    //@CacheEvict(value = "semesters", allEntries = true)
     public SemesterResponse createSemester(SemesterRequest semesterRequest) {
         if (semesterRepository.existsBySemesterCode(semesterRequest.getSemesterCode())) {
             throw new AppException("Semester already exists");
@@ -42,7 +42,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    @Cacheable("semesters")
+    //@Cacheable("semesters")
     public List<SemesterResponse> getAllSemesters() {
         return semesterRepository.findAll()
                 .stream()
@@ -51,7 +51,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    @Cacheable(value = "semesters", key = "#semesterId")
+    //@Cacheable(value = "semesters", key = "#semesterId")
     public SemesterResponse getSemesterById(Long semesterId) {
         Semester semester = semesterRepository.findById(semesterId)
                 .orElseThrow(() -> new AppException("Semester not found"));
@@ -59,7 +59,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    @CacheEvict(value = {"semesters", "semester"}, key = "#semesterId", allEntries = true)
+    //@CacheEvict(value = {"semesters", "semester"}, key = "#semesterId", allEntries = true)
     public SemesterResponse updateSemester(Long semesterId, SemesterRequest semesterRequest) {
         Semester semester = semesterRepository.findById(semesterId)
                 .orElseThrow(() -> new AppException("Kì học không tồn tại"));
@@ -75,7 +75,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    @CacheEvict(value = {"semesters", "semester"}, key = "#semesterId", allEntries = true)
+    //@CacheEvict(value = {"semesters", "semester"}, key = "#semesterId", allEntries = true)
     public void deleteSemester(Long semesterId) {
         Semester semester = semesterRepository.findById(semesterId)
                 .orElseThrow(() -> new AppException("Kì học không tồn tại"));
