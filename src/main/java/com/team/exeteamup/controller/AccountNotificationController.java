@@ -28,9 +28,9 @@ public class AccountNotificationController {
     }
 
 
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/my-notifications")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<AccountNotificationResponse>> getAccountNotificationsByAccountId() {
+    public ResponseEntity<List<AccountNotificationResponse>> getMyAccountNotifications() {
         List<AccountNotificationResponse> responses =
                 accountNotificationService.getMyNotification();
         return ResponseEntity.ok(responses);
