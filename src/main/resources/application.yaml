@@ -38,8 +38,8 @@ notification:
     user:
       create-group-success: USER_CREATE_GROUP_SUCCESS_V1
 
-      join-group: USER_ADD_MEMBER_SUCCESS # user nhận được khi tham gia nhóm thành công
-      removed-from-group: USER_REMOVE_MEMBER_SUCCESS # user nhận được khi bị xóa khỏi nhóm
+      join-group: USER_JOIN_GROUP_SUCCESS # user nhận được khi tham gia nhóm thành công
+      removed-from-group: USER_REMOVE_FROM_GROUP_SUCCESS # user nhận được khi bị xóa khỏi nhóm
       leave-group: USER_LEAVE_GROUP_SUCCESS # user nhận được khi rời khỏi nhóm
 
       user-create-request: USER_GROUP_INVITATION # user nhận được khi tạo request vào nhóm

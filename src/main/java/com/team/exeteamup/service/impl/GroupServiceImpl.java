@@ -2,7 +2,9 @@ package com.team.exeteamup.service.impl;
 
 import com.team.exeteamup.enums.GroupFilterStatus;
 import com.team.exeteamup.enums.GroupStatus;
+import com.team.exeteamup.enums.event.UserGroupEventType;
 import com.team.exeteamup.event.user.CreateGroupEvent;
+import com.team.exeteamup.event.user.UserGroupEvent;
 import com.team.exeteamup.exception.AppException;
 import com.team.exeteamup.dto.request.GroupRequest;
 import com.team.exeteamup.dto.request.GroupUpdateRequest;
@@ -35,7 +37,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
     private final CourseRepository courseRepository;
-    private final TokenService tokenService;
     private final GroupTemplateRepository groupTemplateRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UserUtils userUtils;
@@ -241,6 +242,15 @@ public class GroupServiceImpl implements GroupService {
         group.setMemberCount(updatedMembers.size());
 
         groupRepository.save(group);
+
+        // public event
+        UserGroupEvent userGroupEvent = new UserGroupEvent(
+                member.getAccount().getId(),
+                member.getUserCode(),
+                group.getGroupName(),
+                UserGroupEventType.REMOVED_FROM_GROUP);
+        eventPublisher.publishEvent(userGroupEvent);
+
         return groupMapper.toResponse(group);
     }
 
@@ -259,6 +269,13 @@ public class GroupServiceImpl implements GroupService {
 
         user.setGroup(null);
         userRepository.save(user);
+
+        UserGroupEvent userGroupEvent = new UserGroupEvent(
+                user.getAccount().getId(),
+                user.getUserCode(),
+                user.getGroup().getGroupName(),
+                UserGroupEventType.LEAVE_GROUP);
+        eventPublisher.publishEvent(userGroupEvent);
     }
 
     @Override
