@@ -5,6 +5,7 @@ import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.request.TransferLeaderRequest;
 import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.enums.GroupFilterStatus;
+import com.team.exeteamup.enums.GroupStatus;
 import com.team.exeteamup.service.inter.GroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +50,9 @@ public class GroupController {
 
 
     @GetMapping("")
-    public ResponseEntity<List<GroupResponse>> getAllGroups(@RequestParam(required = false) String status) {
-        List<GroupResponse> groups;
-        if (status != null) {
-            groups = groupService.getGroupsByStatus(status);
-        } else {
-            groups = groupService.getAllGroups();
-        }
-        return ResponseEntity.ok(groups);
+    public ResponseEntity<List<GroupResponse>> getAllGroups(@RequestParam(required = false) GroupStatus status,
+                                                            @RequestParam(required = false) Long majorId) {
+        return ResponseEntity.ok(groupService.getGroupsWithFilter(status, majorId));
     }
 
 

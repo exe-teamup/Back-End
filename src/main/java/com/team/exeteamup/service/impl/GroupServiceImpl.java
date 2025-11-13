@@ -12,14 +12,17 @@ import com.team.exeteamup.mapper.GroupMapper;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.GroupService;
 import com.team.exeteamup.service.inter.TokenService;
+import com.team.exeteamup.specification.GroupSpecification;
 import com.team.exeteamup.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,9 +89,9 @@ public class GroupServiceImpl implements GroupService {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
 
-                if (!course.getUsers().contains(member)) {
-                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
-                }
+//                if (!course.getUsers().contains(member)) {
+//                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
+//                }
 
                 member.setGroup(group);
                 member.setIsLeader(false);
@@ -177,9 +180,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GroupResponse> getGroupsByStatus(String groupStatus) {
-        GroupStatus status = GroupStatus.valueOf(groupStatus.toUpperCase());
-        List<Group> groups = groupRepository.findGroupByStatus(status);
+    public List<GroupResponse> getGroupsByStatus(GroupStatus groupStatus) {
+        List<Group> groups = groupRepository.findGroupByStatus(groupStatus);
         return groupMapper.toResponseList(groups);
     }
 
@@ -324,5 +326,17 @@ public class GroupServiceImpl implements GroupService {
             }
         }
         return groupMapper.toResponseList(filteredGroups);
+    }
+
+    @Override
+    public List<GroupResponse> getGroupsWithFilter(GroupStatus status, Long majorId) {
+
+        Specification<Group> specification = GroupSpecification.filterGroups(status, majorId);
+
+        List<Group> groups = groupRepository.findAll(specification);
+
+        return groups.stream()
+                .map(groupMapper::toResponse)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

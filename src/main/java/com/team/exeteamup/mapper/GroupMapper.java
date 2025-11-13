@@ -25,6 +25,7 @@ public class GroupMapper {
                             .studentId(user.getUserId())
                             .studentName(user.getFullName())
                             .isLeader(true)
+                            .majorId(user.getMajor() != null ? user.getMajor().getMajorId() : null)
                             .majorName(user.getMajor() != null ? user.getMajor().getMajorName() : null)
                             .build())
                     .orElse(null);
@@ -36,6 +37,7 @@ public class GroupMapper {
                                 .studentId(user.getUserId())
                                 .studentName(user.getFullName())
                                 .isLeader(user.getIsLeader())
+                                .majorId(user.getMajor() != null ? user.getMajor().getMajorId() : null)
                                 .majorName(user.getMajor() != null ? user.getMajor().getMajorName() : null)
                                 .build()
                 ).collect(Collectors.toList());
