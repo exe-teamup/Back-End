@@ -6,8 +6,10 @@ import com.team.exeteamup.dto.response.JoinRequestResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.JoinRequest;
 import com.team.exeteamup.entity.User;
+import com.team.exeteamup.enums.event.UserGroupEventType;
 import com.team.exeteamup.enums.joinRequest.JoinRequestStatus;
 import com.team.exeteamup.enums.joinRequest.JoinRequestType;
+import com.team.exeteamup.event.user.UserGroupEvent;
 import com.team.exeteamup.exception.EmptyDeniedReasonException;
 import com.team.exeteamup.exception.FullGroupException;
 import com.team.exeteamup.mapper.JoinRequestMapper;
@@ -18,6 +20,7 @@ import com.team.exeteamup.service.inter.UserService;
 import com.team.exeteamup.specification.JoinRequestSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     private final JoinRequestMapper joinRequestMapper;
     private final GroupService groupService;
     private final UserService userService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Override
@@ -140,7 +144,14 @@ public class JoinRequestServiceImpl implements JoinRequestService {
             case APPROVED -> { // group-leader approved
                 groupService.addMember(group.getGroupId(), user.getUserId());
                 joinRequest.setRequestStatus(JoinRequestStatus.APPROVED);
-                // add event listener
+
+                UserGroupEvent userGroupEvent = new UserGroupEvent(
+                        user.getAccount().getId(),
+                        user.getUserCode(),
+                        group.getGroupName(),
+                        UserGroupEventType.JOIN_GROUP
+                );
+                applicationEventPublisher.publishEvent(userGroupEvent);
             }
             case DENIED -> { // group-leader denied
                 if (denyReason == null || denyReason.isBlank()) {

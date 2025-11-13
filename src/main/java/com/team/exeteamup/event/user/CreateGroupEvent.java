@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateGroupEvent {
-    private long receiverAccountId;
+    private Long receiverAccountId;
     private String groupName;
 }
