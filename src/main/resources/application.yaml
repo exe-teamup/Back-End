@@ -18,7 +18,7 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
     date-format: dd-MM-yyyy
 
-# uses for database connection
+  # uses for database connection
   profiles:
     active: dev
 
