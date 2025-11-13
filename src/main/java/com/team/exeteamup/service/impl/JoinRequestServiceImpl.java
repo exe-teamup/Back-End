@@ -15,8 +15,10 @@ import com.team.exeteamup.repository.JoinRequestRepository;
 import com.team.exeteamup.service.inter.GroupService;
 import com.team.exeteamup.service.inter.JoinRequestService;
 import com.team.exeteamup.service.inter.UserService;
+import com.team.exeteamup.specification.JoinRequestSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -211,5 +213,20 @@ public class JoinRequestServiceImpl implements JoinRequestService {
 
         return joinRequestMapper
                 .toResponse(joinRequest);
+    }
+
+    @Override
+    public List<JoinRequestResponse> findAllByFilter(Long userId, JoinRequestType joinRequestType) {
+
+        // 1. Tạo Specification
+        Specification<JoinRequest> spec = JoinRequestSpecification.filterJoinRequests(userId, joinRequestType);
+
+        // 2. Gọi Repository (Tự động sinh Query động)
+        List<JoinRequest> joinRequests = joinRequestRepository.findAll(spec);
+
+        // 3. Map sang Response (Dùng ArrayList để an toàn cho Serialization/Redis)
+        return joinRequests.stream()
+                .map(joinRequestMapper::toResponse)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
