@@ -33,9 +33,8 @@ public class GroupController {
 
 
     @PostMapping("{id}/leave")
-    public ResponseEntity<String> leaveGroup(@PathVariable Long id,
-                                             @RequestHeader(value = "Authorization", required = false) String token) {
-        groupService.leaveGroup(id, token);
+    public ResponseEntity<String> leaveGroup() {
+        groupService.leaveGroup();
         return ResponseEntity.ok("Rời nhóm thành công");
     }
 
