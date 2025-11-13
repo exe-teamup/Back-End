@@ -12,7 +12,7 @@ import org.springframework.cache.annotation.EnableCaching;
 public class ExeTeamupApplication {
 
     public static void main(String[] args) {
-//        DotEnvConfig.loadEnv();
+        DotEnvConfig.loadEnv();
         SpringApplication.run(ExeTeamupApplication.class, args);
     }
 }

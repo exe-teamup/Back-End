@@ -89,9 +89,9 @@ public class GroupServiceImpl implements GroupService {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
 
-//                if (!course.getUsers().contains(member)) {
-//                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
-//                }
+                if (!course.getUsers().contains(member)) {
+                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
+                }
 
                 member.setGroup(group);
                 member.setIsLeader(false);
