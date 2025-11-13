@@ -58,7 +58,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    @CacheEvict(value = "user", key = "#studentId")
+    //@CacheEvict(value = "user", key = "#studentId")
     public StudentProfileResponse updateStudentProfile(Long studentId, StudentProfileRequest request) {
         User user = userRepository.findById(studentId)
                 .orElseThrow(() -> new AppException("Sinh viên không tồn tại"));

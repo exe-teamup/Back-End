@@ -42,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
     private final UserUtils userUtils;
 
     @Override
-    @CacheEvict(cacheNames = "courses", allEntries = true)
+    //@CacheEvict(cacheNames = "courses", allEntries = true)
     public CourseResponse createCourse(CourseRequest courseRequest) {
         Course course = courseMapper.toEntity(courseRequest);
 
@@ -67,14 +67,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Cacheable("courses")
+    //@Cacheable("courses")
     public List<CourseResponse> getAllCourses() {
         List<Course> courses = courseRepository.findAll();
         return courseMapper.toResponseList(courses);
     }
 
     @Override
-    @Cacheable(value = "course", key = "#id")
+    //@Cacheable(value = "course", key = "#id")
     public CourseResponse getCourseById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new AppException("Lớp không tồn tại"));
@@ -82,21 +82,21 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Cacheable(value = "courses_by_semester", key = "#semesterId")
+    //@Cacheable(value = "courses_by_semester", key = "#semesterId")
     public List<CourseResponse> getCoursesBySemesterId(Long semesterId) {
         List<Course> courses = courseRepository.findBySemester_SemesterId(semesterId);
         return courseMapper.toResponseList(courses);
     }
 
     @Override
-    @Cacheable(value = "courses_by_lecturer", key = "#lecturerId")
+    //@Cacheable(value = "courses_by_lecturer", key = "#lecturerId")
     public List<CourseResponse> getCoursesByLecturerId(Long lecturerId) {
         List<Course> courses = courseRepository.findByLecturer_LecturerId(lecturerId);
         return courseMapper.toResponseList(courses);
     }
 
     @Override
-    @CacheEvict(cacheNames = "course", allEntries = true)
+    //@CacheEvict(cacheNames = "course", allEntries = true)
     public CourseResponse updateCourse(CourseUpdateRequest request) {
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new AppException("Lớp không tồn tại"));
@@ -123,7 +123,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "courses", allEntries = true)
+    //@CacheEvict(cacheNames = "courses", allEntries = true)
     public List<CourseResponse> importCoursesFromExcel(MultipartFile file) {
         List<CourseResponse> importedCourses = new ArrayList<>();
 
@@ -178,7 +178,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "course", allEntries = true)
+    //@CacheEvict(cacheNames = "course", allEntries = true)
     public void deleteCourse(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
@@ -187,7 +187,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Cacheable(value = "course", key = "#courseId")
+    //@Cacheable(value = "course", key = "#courseId")
     public Course findById(Long courseId) {
         return courseRepository.findByCourseId(courseId)
                 .orElseThrow(() ->
