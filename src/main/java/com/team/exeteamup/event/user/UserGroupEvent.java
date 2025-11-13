@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserGroupEvent {
+    private Long receiverAccountId;
     private String userCode;
     private String groupName;
     private UserGroupEventType eventType;
