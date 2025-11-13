@@ -24,9 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostMapper {
 
-    private final UserService userService;
     private final PostMajorMapper postMajorMapper;
-    private final GroupService groupService;
 
     public Post toEntity(GroupPostRequest request, User user) {
         Post post = new Post();
@@ -45,6 +43,7 @@ public class PostMapper {
         post.setUser(user);
         post.setGroup(user.getGroup());
         post.setPostMajors(postMajors);
+        post.setCreatedAt(LocalDateTime.now());
 
         return post;
     }

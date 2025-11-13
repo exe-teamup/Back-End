@@ -13,5 +13,6 @@ public class GroupMemberResponse {
     private Long studentId;
     private String studentName;
     private Boolean isLeader;
+    private Long majorId;
     private String majorName;
 }
