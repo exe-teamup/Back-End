@@ -3,6 +3,7 @@ package com.team.exeteamup.controller;
 import com.team.exeteamup.dto.request.joinRequest.HandleJoinRequestRequest;
 import com.team.exeteamup.dto.request.joinRequest.JoinRequestRequest;
 import com.team.exeteamup.dto.response.JoinRequestResponse;
+import com.team.exeteamup.enums.joinRequest.JoinRequestType;
 import com.team.exeteamup.service.inter.JoinRequestService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -40,8 +41,9 @@ public class JoinRequestController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'STUDENT'})")
-    public ResponseEntity<List<JoinRequestResponse>> getAll() {
-        return ResponseEntity.ok(joinRequestService.findAll());
+    public ResponseEntity<List<JoinRequestResponse>> getAll(@RequestParam(required = false) Long userId,
+                                                            @RequestParam(required = false) JoinRequestType joinRequestType) {
+        return ResponseEntity.ok(joinRequestService.findAllByFilter(userId, joinRequestType));
     }
 
 
