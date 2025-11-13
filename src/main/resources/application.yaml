@@ -41,28 +41,3 @@ notification:
       join-group: USER_JOIN_GROUP_SUCCESS # user nhận được khi tham gia nhóm thành công
       removed-from-group: USER_REMOVE_FROM_GROUP_SUCCESS # user nhận được khi bị xóa khỏi nhóm
       leave-group: USER_LEAVE_GROUP_SUCCESS # user nhận được khi rời khỏi nhóm
-
-      user-create-request: USER_GROUP_INVITATION # user nhận được khi tạo request vào nhóm
-      join-request-approved: USER_JOIN_REQUEST_APPROVED # user nhận được khi yêu cầu tham gia nhóm được chấp thuận
-      join-request-rejected: USER_JOIN_REQUEST_REJECTED # user nhận được khi yêu cầu tham gia nhóm bị từ chối
-      join-request-withdrawn: USER_JOIN_REQUEST_WITHDRAWN # user nhận được khi yêu cầu tham gia nhóm bị rút lại
-
-      leave-course: USER_LEAVE_COURSE_SUCCESS # user nhận được khi rời khỏi khóa học
-      enroll-course-success: USER_ENROLL_COURSE_SUCCESS # user nhận được khi đăng ký khóa học thành công
-      enroll-course-failed: USER_ENROLL_COURSE_FAILED # user nhận được khi đăng ký khóa học thất bại
-    group-leader:
-      group-invitation-sent: USER_GROUP_INVITATION_SENT # leader nhận được khi gửi lời mời vào nhóm
-      group-invitation-accepted: USER_GROUP_INVITATION_ACCEPTED # leader nhận được khi user chấp nhận lời mời vào nhóm
-      group-invitation-rejected: USER_GROUP_INVITATION_REJECTED # leader nhận được khi user chối lời mời vào nhóm
-    group:
-      new-member: GROUP_NEW_MEMBER # các thành viên trong nhóm nhận được khi có thành viên mới tham gia nhóm
-      member-left: GROUP_MEMBER_LEFT # các thành viên trong nhóm nhận được khi có thành viên rời khỏi nhóm
-      member-removed: GROUP_MEMBER_REMOVED # các thành viên trong nhóm nhận được khi có thành viên bị xóa khỏi nhóm
-      course-moderator-added-user: GROUP_COURSE_MODERATOR_ADDED_USER # các thành viên trong nhóm nhận được khi có giảng viên hoặc trợ giảng thêm thành viên vào nhóm
-
-      update-group-success: USER_UPDATE_GROUP_SUCCESS # các thành viên trong nhóm nhận được khi nhóm được cập nhật thành công
-
-      locked-by-lecturer: GROUP_LECTURER_LOCKED_GROUP # các thành viên trong nhóm nhận được khi nhóm bị giảng viên khóa
-      unlocked-by-lecturer: GROUP_LECTURER_UNLOCKED_GROUP # các thành viên trong nhóm nhận được khi nhóm bị giảng viên mở khóa
-      unqualified-member-quantity: GROUP_UNQUALIFIED_MEMBER_QUANTITY # cac thành viên trong nhóm nhận được khi số lượng thành viên không đủ
-      unqualified-major-quantity: GROUP_UNQUALIFIED_MAJOR_QUANTITY # các thành viên trong nhóm nhận được khi số lượng thành viên theo chuyên ngành không đủ

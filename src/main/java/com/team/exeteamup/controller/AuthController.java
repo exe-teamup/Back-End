@@ -1,5 +1,6 @@
 package com.team.exeteamup.controller;
 
+import com.team.exeteamup.dto.request.LoginDemoRequest;
 import com.team.exeteamup.dto.request.LoginRequest;
 import com.team.exeteamup.dto.response.LoginResponse;
 import com.team.exeteamup.service.inter.LoginService;
@@ -19,6 +20,12 @@ public class AuthController {
     @PostMapping("login-google")
     public ResponseEntity<LoginResponse> loginGoogle(@RequestBody LoginRequest loginRequest) {
         LoginResponse response = loginService.loginGoogle(loginRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("login-google-demo")
+    public ResponseEntity<LoginResponse> loginGoogle(@RequestBody LoginDemoRequest request) {
+        LoginResponse response = loginService.loginDemoGoogle(request);
         return ResponseEntity.ok(response);
     }
 
