@@ -163,8 +163,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Transactional
-    @Cacheable(value = "group", key = "#groupId")
     public GroupResponse getGroupById(long groupId) {
         Group group = groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -172,7 +170,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Cacheable(value = "group", key = "#groupId")
     public Group findGroupById(long groupId) {
         return groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));

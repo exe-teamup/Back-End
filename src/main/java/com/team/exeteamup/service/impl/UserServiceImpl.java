@@ -209,7 +209,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "user", key = "#studentId")
     public User findById(long studentId) {
         return userRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(
