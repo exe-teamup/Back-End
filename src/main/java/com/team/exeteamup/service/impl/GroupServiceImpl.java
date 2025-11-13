@@ -199,10 +199,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
-        Account account = tokenService.getAccountByToken(token);
-        User currentLeader = userRepository.findByAccountId(account.getId())
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+    public GroupResponse transferLeader(Long groupId, Long newLeaderId) {
+        User currentLeader = userUtils.getCurrentUser();
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
 
@@ -218,10 +216,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupResponse kickMember(Long groupId, Long memberId, String token) {
-        Account account = tokenService.getAccountByToken(token);
-        User currentLeader = userRepository.findByAccountId(account.getId())
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+    public GroupResponse kickMember(Long groupId, Long memberId) {
+        User currentLeader = userUtils.getCurrentUser();
 
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));

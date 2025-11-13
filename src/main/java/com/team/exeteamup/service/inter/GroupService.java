@@ -18,8 +18,8 @@ public interface GroupService {
     Group findGroupById(long groupId);
     List<GroupResponse> getGroupsByStatus(GroupStatus groupStatus);
     List<GroupResponse> getGroupsByCourseId(Long courseId);
-    GroupResponse transferLeader(Long groupId, Long newLeaderId, String token);
-    GroupResponse kickMember(Long groupId, Long memberId, String token);
+    GroupResponse transferLeader(Long groupId, Long newLeaderId);
+    GroupResponse kickMember(Long groupId, Long memberId);
     void leaveGroup();
     GroupResponse addMember(Long groupId, Long memberId);
     List<GroupResponse> filterGroups(GroupFilterStatus status);

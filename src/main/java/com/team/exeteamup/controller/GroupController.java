@@ -34,7 +34,7 @@ public class GroupController {
     }
 
 
-    @PostMapping("/leave")
+    @PutMapping("/leave")
     @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<String> leaveGroup() {
         groupService.leaveGroup();
@@ -96,9 +96,8 @@ public class GroupController {
     @PutMapping("{id}/transfer-leader")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'LECTURER', 'STUDENT')")
     public ResponseEntity<GroupResponse> transferLeader(@PathVariable Long id,
-                                                        @RequestBody TransferLeaderRequest request,
-                                                        @RequestHeader(value = "Authorization", required = false) String token) {
-        GroupResponse response = groupService.transferLeader(id, request.getNewLeaderId(), token);
+                                                        @RequestBody TransferLeaderRequest request) {
+        GroupResponse response = groupService.transferLeader(id, request.getNewLeaderId());
         return ResponseEntity.ok(response);
     }
 
@@ -106,9 +105,8 @@ public class GroupController {
     @PutMapping("{id}/kick/{memberId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'LECTURER', 'STUDENT')")
     public ResponseEntity<GroupResponse> kickMember(@PathVariable Long id,
-                                                    @PathVariable Long memberId,
-                                                    @RequestHeader(value = "Authorization", required = false) String token) {
-        GroupResponse response = groupService.kickMember(id, memberId, token);
+                                                    @PathVariable Long memberId) {
+        GroupResponse response = groupService.kickMember(id, memberId);
         return ResponseEntity.ok(response);
     }
 

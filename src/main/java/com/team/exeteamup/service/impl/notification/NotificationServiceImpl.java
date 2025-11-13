@@ -23,9 +23,6 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final AccountNotificationService accountNotificationService;
-    private final AccountNotificationMapper accountNotificationMapper;
-    private final AccountService accountService;
     private final NotificationMapper notificationMapper;
 
 
