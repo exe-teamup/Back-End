@@ -16,6 +16,7 @@ import com.team.exeteamup.repository.UserRepository;
 import com.team.exeteamup.service.inter.UserService;
 import com.team.exeteamup.repository.*;
 import com.team.exeteamup.service.inter.CourseService;
+import com.team.exeteamup.specification.UserSpecification;
 import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -384,5 +386,17 @@ public class UserServiceImpl implements UserService {
         response.put("student1", studentMapper.toResponse(student1));
         response.put("student2", studentMapper.toResponse(student2));
         return response;
+    }
+
+    @Override
+    public List<UserResponse> getUserByFilter(Long majorId, Long courseId, Boolean isLeader, Boolean hasGroup) {
+
+        Specification<User> spec = UserSpecification.filterUsers(majorId, courseId, isLeader, hasGroup);
+
+        List<User> users = userRepository.findAll(spec);
+
+        return users.stream()
+                .map(studentMapper::toResponse)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

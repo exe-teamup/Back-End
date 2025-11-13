@@ -24,4 +24,5 @@ public interface UserService {
     UserResponse moveStudentCourses(Long newCourseId);
     List<UserResponse> getStudentByCourseId(long courseId);
     Map<String, UserResponse> swapStudentCourse(SwapRequest request);
+    List<UserResponse> getUserByFilter(Long majorId, Long courseId, Boolean isLeader, Boolean hasGroup);
 }
