@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_posts", allEntries = true)
+    @CacheEvict(cacheNames = "posts", allEntries = true)
     public GroupPostResponse createGroupPost(GroupPostRequest groupPostRequest) {
 
         User user = userUtils.getCurrentUser();
@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable("group_posts")
+    //@Cacheable("group_posts")
     public List<GroupPostResponse> getGroupPosts() {
         List<Post> posts = postRepository.findByPostTypeAndPostStatus(PostType.GROUP_POST, PostStatus.ACTIVE);
         return posts.stream()
@@ -64,7 +64,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_posts", allEntries = true)
+    @CacheEvict(cacheNames = "posts", allEntries = true)
     public GroupPostResponse updateGroupPost(Long id, GroupPostRequest request) {
         return null;
     }
@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "user_posts", allEntries = true)
+    @CacheEvict(cacheNames = "posts", allEntries = true)
     public UserPostResponse createUserPost(UserPostRequest userPostRequest) {
         User user = userUtils.getCurrentUser();
         Post post = postMapper.toEntity(userPostRequest, user);
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Cacheable("user_posts")
+    //@Cacheable("user_posts")
     public List<UserPostResponse> getUserPosts() {
         List<Post> posts = postRepository.findByPostTypeAndPostStatus(PostType.USER_POST, PostStatus.ACTIVE);
         return posts.stream()
@@ -92,7 +92,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "user_posts", allEntries = true)
+    @CacheEvict(cacheNames = "posts", allEntries = true)
     public UserPostResponse updateUserPost(Long id, UserPostRequest request) {
         return null;
     }

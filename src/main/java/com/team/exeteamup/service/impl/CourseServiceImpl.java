@@ -15,7 +15,6 @@ import com.team.exeteamup.repository.SemesterRepository;
 import com.team.exeteamup.service.inter.CourseService;
 import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -24,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
@@ -39,10 +39,10 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final SemesterRepository semesterRepository;
     private final LecturerRepository lecturerRepository;
-    private final UserUtils userUtils;
 
     @Override
-    //@CacheEvict(cacheNames = "courses", allEntries = true)
+    @Transactional
+    @CacheEvict(cacheNames = "courses", allEntries = true)
     public CourseResponse createCourse(CourseRequest courseRequest) {
         Course course = courseMapper.toEntity(courseRequest);
 
@@ -67,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    //@Cacheable("courses")
+    @Cacheable("courses")
     public List<CourseResponse> getAllCourses() {
         List<Course> courses = courseRepository.findAll();
         return courseMapper.toResponseList(courses);
@@ -96,7 +96,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    //@CacheEvict(cacheNames = "course", allEntries = true)
+    @Transactional
+    @CacheEvict(cacheNames = "courses", allEntries = true)
     public CourseResponse updateCourse(CourseUpdateRequest request) {
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new AppException("Lớp không tồn tại"));
@@ -123,7 +124,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    //@CacheEvict(cacheNames = "courses", allEntries = true)
+    @Transactional
+    @CacheEvict(cacheNames = "courses", allEntries = true)
     public List<CourseResponse> importCoursesFromExcel(MultipartFile file) {
         List<CourseResponse> importedCourses = new ArrayList<>();
 
@@ -178,7 +180,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    //@CacheEvict(cacheNames = "course", allEntries = true)
+    @CacheEvict(cacheNames = "courses", allEntries = true)
     public void deleteCourse(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException("Lớp học không tồn tại"));
