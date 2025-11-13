@@ -18,7 +18,7 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
     date-format: dd-MM-yyyy
 
-# uses for database connection
+  # uses for database connection
   profiles:
     active: dev
 
@@ -66,4 +66,3 @@ notification:
       unlocked-by-lecturer: GROUP_LECTURER_UNLOCKED_GROUP # các thành viên trong nhóm nhận được khi nhóm bị giảng viên mở khóa
       unqualified-member-quantity: GROUP_UNQUALIFIED_MEMBER_QUANTITY # cac thành viên trong nhóm nhận được khi số lượng thành viên không đủ
       unqualified-major-quantity: GROUP_UNQUALIFIED_MAJOR_QUANTITY # các thành viên trong nhóm nhận được khi số lượng thành viên theo chuyên ngành không đủ
-
