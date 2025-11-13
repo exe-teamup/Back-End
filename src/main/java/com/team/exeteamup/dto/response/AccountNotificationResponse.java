@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,5 @@ public class AccountNotificationResponse {
     private long accountId;
     private boolean isChecked;
     private String formattedContent;
+    private LocalDateTime createdAt;
 }

@@ -18,6 +18,7 @@ public class AccountNotificationMapper {
                 .accountNotificationId(accountNotification.getId())
                 .isChecked(accountNotification.isChecked())
                 .formattedContent(accountNotification.getFormattedContent())
+                .createdAt(accountNotification.getCreatedAt())
                 .build();
     }
 
