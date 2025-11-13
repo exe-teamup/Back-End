@@ -90,9 +90,9 @@ public class GroupServiceImpl implements GroupService {
                     throw new AppException("Sinh viên với email " + email + " đã ở trong một nhóm");
                 }
 
-//                if (!course.getUsers().contains(member)) {
-//                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
-//                }
+                if (!course.getUsers().contains(member)) {
+                    throw new AppException("Sinh viên với email " + email + " không thuộc lớp học này");
+                }
 
                 member.setGroup(group);
                 member.setIsLeader(false);
@@ -260,11 +260,17 @@ public class GroupServiceImpl implements GroupService {
     public void leaveGroup() {
         User user = userUtils.getCurrentUser();
 
+        if(user.getGroup() == null) {
+            throw new AppException("Bạn không thuộc nhóm nào");
+        }
+
         if (Boolean.TRUE.equals(user.getIsLeader())) {
             throw new AppException("Leader không thể rời nhóm. Vui lòng chuyển quyền cho thành viên");
         }
 
-        int memberCount = user.getGroup().getMemberCount();
+        Group group = user.getGroup();
+
+        int memberCount = group.getMemberCount();
         if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
 
         user.setGroup(null);

@@ -14,4 +14,5 @@ public class AccountNotificationResponse {
     private long notificationId;
     private long accountId;
     private boolean isChecked;
+    private String formattedContent;
 }
