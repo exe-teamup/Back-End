@@ -5,6 +5,7 @@ import com.team.exeteamup.dto.request.GroupUpdateRequest;
 import com.team.exeteamup.dto.response.group.GroupResponse;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.enums.GroupFilterStatus;
+import com.team.exeteamup.enums.GroupStatus;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface GroupService {
     GroupResponse updateGroup(long groupId, GroupUpdateRequest request);
     GroupResponse getGroupById(long groupId);
     Group findGroupById(long groupId);
-    List<GroupResponse> getGroupsByStatus(String groupStatus);
+    List<GroupResponse> getGroupsByStatus(GroupStatus groupStatus);
     List<GroupResponse> getGroupsByCourseId(Long courseId);
     GroupResponse transferLeader(Long groupId, Long newLeaderId, String token);
     GroupResponse kickMember(Long groupId, Long memberId, String token);
@@ -23,4 +24,5 @@ public interface GroupService {
     GroupResponse addMember(Long groupId, Long memberId);
     List<GroupResponse> filterGroups(GroupFilterStatus status);
     List<GroupResponse> getGroupsByLecturer(long lecturerId);
+    List<GroupResponse> getGroupsWithFilter(GroupStatus status, Long majorId);
 }

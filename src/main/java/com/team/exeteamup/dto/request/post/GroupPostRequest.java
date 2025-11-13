@@ -14,7 +14,5 @@ import java.util.List;
 public class GroupPostRequest {
     private String title;
     private String postDetail;
-    private PostStatus postStatus;
-    private LocalDateTime createdAt;
     private List<PostMajorRequest> postMajorRequests;
 }
