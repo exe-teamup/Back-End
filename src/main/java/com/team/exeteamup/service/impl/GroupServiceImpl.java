@@ -279,7 +279,7 @@ public class GroupServiceImpl implements GroupService {
         UserGroupEvent userGroupEvent = new UserGroupEvent(
                 user.getAccount().getId(),
                 user.getUserCode(),
-                user.getGroup().getGroupName(),
+                group.getGroupName(),
                 UserGroupEventType.LEAVE_GROUP);
         eventPublisher.publishEvent(userGroupEvent);
     }
