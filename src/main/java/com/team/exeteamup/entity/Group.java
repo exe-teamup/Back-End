@@ -55,6 +55,9 @@ public class Group {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     @Column(
             name = "created_at",
             nullable = false,

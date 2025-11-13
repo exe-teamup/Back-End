@@ -32,5 +32,7 @@ public interface GroupRepository extends JpaRepository<Group, Long>, JpaSpecific
             "FROM GroupTemplate gt)")
     List<Group> findNotFullGroups();
     long countByCreatedAtAfter(LocalDateTime dateTime);
+
+    List<Group> findAllByIsDeletedFalse();
 }
 

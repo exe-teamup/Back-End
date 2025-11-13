@@ -30,7 +30,7 @@ public class LecturerController {
     @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN'})")
     public ResponseEntity<List<Lecturer>> importLecturers(@RequestParam("file") MultipartFile file) {
         try {
-            List<Lecturer> response = lecturerService.importStudentsFromExcel(file);
+            List<Lecturer> response = lecturerService.importLecturersFromExcel(file);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

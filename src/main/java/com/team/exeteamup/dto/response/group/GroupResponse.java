@@ -21,4 +21,5 @@ public class GroupResponse {
     private int memberCount;
     private GroupStatus groupStatus;
     private GroupCourseResponse course;
+    private boolean isDeleted;
 }
