@@ -42,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group", allEntries = true)
+    //@CacheEvict(cacheNames = "group", allEntries = true)
     public GroupResponse createGroup(GroupRequest groupRequest) {
         User leader = userRepository.findById(groupRequest.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
@@ -121,7 +121,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group", allEntries = true)
+    //@CacheEvict(cacheNames = "group", allEntries = true)
     public void deleteGroup(long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
@@ -137,7 +137,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("groups")
+    //@Cacheable("groups")
     public List<GroupResponse> getAllGroups() {
         List<Group> groups = groupRepository.findAll();
         return groupMapper.toResponseList(groups);
@@ -145,7 +145,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group", allEntries = true)
+    //@CacheEvict(cacheNames = "group", allEntries = true)
     public GroupResponse updateGroup(long groupId, GroupUpdateRequest request) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Nhóm không tồn tại"));
@@ -163,6 +163,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
+    //@Cacheable(value = "group", key = "#groupId")
     public GroupResponse getGroupById(long groupId) {
         Group group = groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -170,6 +172,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    //@Cacheable(value = "group", key = "#groupId")
     public Group findGroupById(long groupId) {
         return groupRepository.findByGroupIdAndGroupStatusTrue(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -183,7 +186,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Cacheable(value = "groups_by_course", key = "#courseId")
+    //@Cacheable(value = "groups_by_course", key = "#courseId")
     public List<GroupResponse> getGroupsByCourseId(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException("Lớp không tồn tại"));
@@ -312,7 +315,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Cacheable(value = "groups_by_lecturer", key = "#lecturerId")
+    //@Cacheable(value = "groups_by_lecturer", key = "#lecturerId")
     public List<GroupResponse> getGroupsByLecturer(long lecturerId) {
 
         List<Group> groups = groupRepository.findAll();
@@ -329,9 +332,7 @@ public class GroupServiceImpl implements GroupService {
     public List<GroupResponse> getGroupsWithFilter(GroupStatus status, Long majorId) {
 
         Specification<Group> specification = GroupSpecification.filterGroups(status, majorId);
-
         List<Group> groups = groupRepository.findAll(specification);
-
         return groups.stream()
                 .map(groupMapper::toResponse)
                 .collect(Collectors.toCollection(ArrayList::new));

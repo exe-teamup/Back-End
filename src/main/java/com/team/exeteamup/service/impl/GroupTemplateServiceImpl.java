@@ -27,7 +27,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
 
 
     @Override
-    @Cacheable(value = "group_template", key = "#groupTemplateId")
+    //@Cacheable(value = "group_template", key = "#groupTemplateId")
     public GroupTemplate findById(long groupTemplateId) {
         return groupTemplateRepository.findById(groupTemplateId)
                 .orElseThrow(() -> new EntityNotFoundException("Group Template not found with id " + groupTemplateId));
@@ -43,7 +43,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
 
 
     @Override
-    @Cacheable("group_templates")
+    //@Cacheable("group_templates")
     public List<GroupTemplateResponse> getAll() {
         return groupTemplateRepository.findAll().stream()
                 .map(groupTemplateMapper::toResponse)
@@ -53,7 +53,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_template", allEntries = true)
+    //@CacheEvict(cacheNames = "group_template", allEntries = true)
     public GroupTemplateResponse saveGroupTemplate(GroupTemplateRequest groupTemplateRequest) {
 
         validateGroupTemplateUniqueness(groupTemplateRequest.getTemplate());
@@ -68,7 +68,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_template", allEntries = true)
+    //@CacheEvict(cacheNames = "group_template", allEntries = true)
     public GroupTemplateResponse updateGroupTemplate(long groupTemplateId, GroupTemplateRequest groupTemplateRequest) {
 
         GroupTemplate groupTemplate = findById(groupTemplateId);
@@ -83,7 +83,7 @@ public class GroupTemplateServiceImpl implements GroupTemplateService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "group_template", allEntries = true)
+    //@CacheEvict(cacheNames = "group_template", allEntries = true)
     public GroupTemplateResponse deleteGroupTemplate(long groupTemplateId) {
 
         GroupTemplate groupTemplate = findById(groupTemplateId);

@@ -112,7 +112,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Cacheable(value = "posts_by_group", key = "#groupId + '_' + #postStatus")
+    //@Cacheable(value = "posts_by_group", key = "#groupId + '_' + #postStatus")
     public List<PostResponse> getPostsByGroupId(Long groupId, PostStatus postStatus) {
         List<Post> post = postRepository.findPostsByGroupIdAndPostStatus(groupId, postStatus);
 
@@ -124,7 +124,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Cacheable(value = "post", key = "#id")
+    //@Cacheable(value = "post", key = "#id")
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException("Không tìm thấy bài viết"));
