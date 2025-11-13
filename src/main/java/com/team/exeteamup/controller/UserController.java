@@ -67,14 +67,17 @@ public class UserController {
 
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER'})")
-    public ResponseEntity<List<UserResponse>> getAllStudents() {
-        List<UserResponse> students = userService.getAllStudents();
+    public ResponseEntity<List<UserResponse>> getAllStudents(@RequestParam(required = false) Long majorId,
+                                                             @RequestParam(required = false) Long courseId,
+                                                             @RequestParam(required = false) Boolean isLeader,
+                                                             @RequestParam(required = false) Boolean hasGroup) {
+        List<UserResponse> students = userService.getUserByFilter(majorId, courseId, isLeader, hasGroup);
         return ResponseEntity.ok(students);
     }
 
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyAuthority({'MODERATOR', 'ADMIN', 'LECTURER', 'STUDENT'})")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponse> getStudentById(@PathVariable Long id) {
         UserResponse response = userService.getStudentById(id);
         return ResponseEntity.ok(response);

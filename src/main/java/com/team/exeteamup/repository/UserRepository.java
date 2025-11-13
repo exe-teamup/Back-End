@@ -3,13 +3,14 @@ package com.team.exeteamup.repository;
 import com.team.exeteamup.entity.Group;
 import com.team.exeteamup.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     Optional<User> findByAccount_Email(String email);
     Optional<User> findByAccountId(Long accountId);
     Optional<User> findByUserId(Long userId);
