@@ -199,10 +199,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupResponse transferLeader(Long groupId, Long newLeaderId, String token) {
-        Account account = tokenService.getAccountByToken(token);
-        User currentLeader = userRepository.findByAccountId(account.getId())
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+    public GroupResponse transferLeader(Long groupId, Long newLeaderId) {
+        User currentLeader = userUtils.getCurrentUser();
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
 
@@ -218,10 +216,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupResponse kickMember(Long groupId, Long memberId, String token) {
-        Account account = tokenService.getAccountByToken(token);
-        User currentLeader = userRepository.findByAccountId(account.getId())
-                .orElseThrow(() -> new AppException("Không tìm thấy sinh viên"));
+    public GroupResponse kickMember(Long groupId, Long memberId) {
+        User currentLeader = userUtils.getCurrentUser();
 
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new AppException("Không tìm thấy nhóm"));
@@ -251,16 +247,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public void leaveGroup(Long groupId, String token) {
-        Account account = tokenService.getAccountByToken(token);
-        User user = userRepository.findByAccountId(account.getId())
-                .orElseThrow(() -> new AppException("Không tìm thấy người dùng"));
+    public void leaveGroup() {
+        User user = userUtils.getCurrentUser();
 
         if (Boolean.TRUE.equals(user.getIsLeader())) {
             throw new AppException("Leader không thể rời nhóm. Vui lòng chuyển quyền cho thành viên");
         }
 
-        int memberCount = userRepository.countByGroup_GroupId(groupId);
+        int memberCount = user.getGroup().getMemberCount();
         if (memberCount <= 3) throw new AppException("Nhóm cần ít nhất 3 thành viên");
 
         user.setGroup(null);
