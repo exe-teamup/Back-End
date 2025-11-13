@@ -8,6 +8,7 @@ import com.team.exeteamup.mapper.AccountNotificationMapper;
 import com.team.exeteamup.repository.AccountNotificationRepository;
 import com.team.exeteamup.service.inter.notification.AccountNotificationService;
 import com.team.exeteamup.service.inter.AccountService;
+import com.team.exeteamup.utils.UserUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
     private final AccountNotificationRepository accountNotificationRepository;
     private final AccountService accountService;
     private final AccountNotificationMapper accountNotificationMapper;
+    private final UserUtils userUtils;
 
 
     @Override
@@ -39,9 +41,9 @@ public class AccountNotificationServiceImpl implements AccountNotificationServic
 
 
     @Override
-    public List<AccountNotificationResponse> getAccountNotificationsByAccountId(long accountId) {
+    public List<AccountNotificationResponse> getMyNotification() {
 
-        Account account = accountService.getAccountById(accountId);
+        Account account = userUtils.getCurrentAccount();
 
         List<AccountNotification> accountNotifications =
                 accountNotificationRepository.findByAccount(account);

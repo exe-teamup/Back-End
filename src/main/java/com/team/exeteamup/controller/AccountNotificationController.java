@@ -1,6 +1,5 @@
 package com.team.exeteamup.controller;
 
-import com.team.exeteamup.dto.request.AccountNotificationRequest;
 import com.team.exeteamup.dto.response.AccountNotificationResponse;
 import com.team.exeteamup.service.inter.notification.AccountNotificationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,16 +30,15 @@ public class AccountNotificationController {
 
     @GetMapping("/account/{accountId}")
     @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER', 'STUDENT_LEADER', 'ADMIN', 'MODERATOR'})")
-    public ResponseEntity<List<AccountNotificationResponse>> getAccountNotificationsByAccountId(
-            @PathVariable long accountId) {
+    public ResponseEntity<List<AccountNotificationResponse>> getAccountNotificationsByAccountId() {
         List<AccountNotificationResponse> responses =
-                accountNotificationService.getAccountNotificationsByAccountId(accountId);
+                accountNotificationService.getMyNotification();
         return ResponseEntity.ok(responses);
     }
 
 
     @PutMapping("/check")
-    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER', 'STUDENT_LEADER'})")
+    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER'})")
     public ResponseEntity<List<AccountNotificationResponse>> checkNotifications(
             @RequestBody List<Long> accountNotificationIds) {
         List<AccountNotificationResponse> responses =
@@ -50,7 +48,7 @@ public class AccountNotificationController {
 
 
     @PutMapping("/check/{id}")
-    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER', 'STUDENT_LEADER'})")
+    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER'})")
     public ResponseEntity<AccountNotificationResponse> checkNotification(
             @PathVariable("id") long accountNotificationId) {
         AccountNotificationResponse response =
@@ -60,7 +58,7 @@ public class AccountNotificationController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER', 'STUDENT_LEADER'})")
+    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER'})")
     public ResponseEntity<AccountNotificationResponse> getAccountNotificationById(
             @PathVariable("id") long accountNotificationId) {
         AccountNotificationResponse response =
@@ -70,7 +68,7 @@ public class AccountNotificationController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER', 'STUDENT_LEADER'})")
+    @PreAuthorize("hasAnyAuthority({'STUDENT',  'LECTURER'})")
     public ResponseEntity<AccountNotificationResponse> deleteAccountNotification(
             @PathVariable("id") long accountNotificationId) {
         AccountNotificationResponse response =
