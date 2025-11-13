@@ -32,7 +32,7 @@ public class GroupController {
     }
 
 
-    @PostMapping("{id}/leave")
+    @PostMapping("/leave")
     public ResponseEntity<String> leaveGroup() {
         groupService.leaveGroup();
         return ResponseEntity.ok("Rời nhóm thành công");
