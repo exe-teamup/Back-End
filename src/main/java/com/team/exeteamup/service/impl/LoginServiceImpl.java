@@ -3,6 +3,7 @@ package com.team.exeteamup.service.impl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.team.exeteamup.dto.request.LoginDemoRequest;
 import com.team.exeteamup.dto.request.LoginRequest;
 import com.team.exeteamup.dto.response.LoginResponse;
 import com.team.exeteamup.entity.Account;
@@ -47,6 +48,23 @@ public class LoginServiceImpl implements LoginService {
             e.printStackTrace();
             throw new BadRequestException("Invalid Token");
         }
+    }
+
+    @Override
+    public LoginResponse loginDemoGoogle(LoginDemoRequest request) {
+        String email = request.getMail();
+        Optional<Account> optionalAccount = accountRepository.findByEmail(email);
+        if (optionalAccount.isEmpty()) {
+            throw new BadRequestException("Email not registered");
+        }
+        Account account = optionalAccount.get();
+        String accessToken = tokenService.generateToken(account);
+
+        return LoginResponse.builder()
+                .role(account.getRole())
+                .accountId(account.getId())
+                .accessToken(accessToken)
+                .build();
     }
 }
 
