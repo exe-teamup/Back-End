@@ -133,7 +133,8 @@ public class GroupServiceImpl implements GroupService {
             user.setIsLeader(false);
         }
         userRepository.saveAll(users);
-        groupRepository.delete(group);
+        group.setDeleted(true);
+        groupRepository.save(group);
     }
 
     @Override

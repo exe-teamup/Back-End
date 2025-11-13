@@ -17,6 +17,15 @@ public class GroupSpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            // --- MỚI THÊM: Luôn lọc bỏ các group đã bị xóa (isDeleted = false) ---
+            // Giả định field trong Entity Group tên là "isDeleted"
+            // Cách 1: Dùng isFalse (chuẩn cho Boolean)
+            predicates.add(criteriaBuilder.isFalse(root.get("isDeleted")));
+
+            // Cách 2: Nếu DB lưu là 0/1 nhưng Entity map là Integer (ít dùng hơn)
+            // predicates.add(criteriaBuilder.equal(root.get("isDeleted"), 0));
+
+
             // 1. Điều kiện Status (Nếu khác null thì mới thêm điều kiện)
             if (status != null) {
                 predicates.add(criteriaBuilder.equal(root.get("groupStatus"), status));

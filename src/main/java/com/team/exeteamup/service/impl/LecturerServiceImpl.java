@@ -44,8 +44,8 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    //@CacheEvict(cacheNames = "lecturers", allEntries = true)
-    public List<Lecturer> importStudentsFromExcel(MultipartFile file) throws IOException {
+    @CacheEvict(cacheNames = "lecturer", allEntries = true)
+    public List<Lecturer> importLecturersFromExcel(MultipartFile file) throws IOException {
         List<Lecturer> lecturers = new ArrayList<>();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
@@ -86,7 +86,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    //@CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
+    @CacheEvict(cacheNames = "lecturer", allEntries = true)
     public LecturerResponse updateLecturer(Long lecturerId, LecturerRequest request) {
         Lecturer lecturer = lecturerRepository.findById(lecturerId)
                 .orElseThrow(() -> new AppException("Không tìm thấy giảng viên"));
@@ -112,7 +112,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    //@Cacheable("lecturers")
+    @Cacheable("lecturers")
     public List<LecturerResponse> getAllLecturers() {
         List<Lecturer> lecturers = lecturerRepository.findAll();
 
@@ -132,7 +132,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     @Transactional
-    //@CacheEvict(cacheNames = "lecturer", allEntries = true, key = "#lecturerId")
+    @CacheEvict(cacheNames = "lecturer", allEntries = true)
     public LecturerResponse deleteLecturer(Long lecturerId) {
 
         Lecturer lecturer = findById(lecturerId);

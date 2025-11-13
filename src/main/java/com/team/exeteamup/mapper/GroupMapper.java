@@ -69,6 +69,7 @@ public class GroupMapper {
                 .memberCount(group.getUsers() != null ? group.getUsers().size() : 0)
                 .groupStatus(group.getGroupStatus())
                 .course(courseResponse)
+                .isDeleted(group.isDeleted())
                 .build();
     }
 
